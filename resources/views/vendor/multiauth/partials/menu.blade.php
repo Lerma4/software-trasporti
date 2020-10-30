@@ -16,7 +16,7 @@
                     <i class="nav-icon fas fa-fw fa-tachometer-alt">
 
                     </i>
-                    Change password
+                    Cambia password
                 </a>
             </li>
 
