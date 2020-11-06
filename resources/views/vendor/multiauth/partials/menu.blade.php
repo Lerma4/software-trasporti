@@ -7,7 +7,7 @@
                     <i class="nav-icon fas fa-fw fa-tachometer-alt">
 
                     </i>
-                    @lang('Home')
+                    @lang('Dashboard')
                 </a>
             </li>
 
