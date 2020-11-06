@@ -7,7 +7,7 @@
                     <i class="nav-icon fas fa-fw fa-tachometer-alt">
 
                     </i>
-                    Dashboard
+                    @lang('Dashboard')
                 </a>
             </li>
 
@@ -16,7 +16,7 @@
                     <i class="nav-icon fas fa-fw fa-tachometer-alt">
 
                     </i>
-                    Cambia password
+                    @lang('Change password')
                 </a>
             </li>
 
@@ -25,7 +25,7 @@
                     <i class="nav-icon fas fa-fw fa-sign-out-alt">
 
                     </i>
-                    Logout
+                    @lang('Logout')
                 </a>
             </li>
         </ul>
