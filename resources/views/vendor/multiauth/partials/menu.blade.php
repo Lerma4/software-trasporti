@@ -12,6 +12,15 @@
             </li>
 
             <li class="nav-item">
+                <a href="{{ route('admin.users') }}" class="nav-link">
+                    <i class="nav-icon fas fa-fw fa-tachometer-alt">
+
+                    </i>
+                    @lang('Users')
+                </a>
+            </li>
+
+            <li class="nav-item">
                 <a href="{{ route('admin.password.change') }}" class="nav-link">
                     <i class="nav-icon fas fa-fw fa-tachometer-alt">
 

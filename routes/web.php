@@ -18,3 +18,9 @@ Route::get('/', function () {
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// ADMIN SIDE
+
+Route::get('/admin/users', function () {
+    return view('admin.pages.users');
+})->name('admin.users');
