@@ -179,7 +179,6 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         // Aggiunti dopo
-        //Yajra\DataTables\DataTablesServiceProvider::class,
 
     ],
 
@@ -234,7 +233,6 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         // Aggiunti dopo
-        //'DataTables' => Yajra\DataTables\Facades\DataTables::class,
     ],
 
     'languages' => [
