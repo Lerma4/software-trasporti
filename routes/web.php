@@ -23,6 +23,4 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 // USERS
 
-Route::get('/admin/users', function () {
-    return view('admin.pages.users');
-})->name('admin.users');
+Route::get('/admin/users', [App\Http\Controllers\UsersController::class, 'index'])->name('admin.users');

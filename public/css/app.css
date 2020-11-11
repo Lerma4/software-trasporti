@@ -10907,3 +10907,9 @@ a.text-dark:focus {
   padding: 0 !important;
 }
 
+tfoot input {
+  width: 100%;
+  padding: 3px;
+  box-sizing: border-box;
+}
+
