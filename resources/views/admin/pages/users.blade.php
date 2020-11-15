@@ -9,10 +9,35 @@
     <div class="card">
         <div class="card-body">
             @include('multiauth::message')
+            <form method="post" enctype="multipart/form-data" action="{{ route('admin.users.importExcel') }}">
+                @csrf
+                <div class="form-group">
+                    <table class="table">
+                        <tr>
+                            <td width="40%" align="right"><label>@lang('Select File for Upload (limit of 1000 records, formats XLS and XLSX)') DA AGGIUNGERE REGOLE PASSWORD</label></td>
+                            <td width="30">
+                                <input type="file" name="import_file" required />
+                            </td>
+                            <td width="30%" align="left">
+                                <input type="submit" name="upload" class="btn btn-primary" value="Upload">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="40%" align="right"></td>
+                            <td width="30"><span class="text-muted">.xls, .xslx</span></td>
+                            <td width="30%" align="left"></td>
+                        </tr>
+                    </table>
+                </div>
+            </form>
             <div class="row">
                 <div class="form-group">
-                    <select name="" id="">
-                        <option value=""></option>
+                    <label>@lang('Search for group'):</label>
+                    <select class="form-control select-input" data-column="2">
+                        <option default value="">@lang('All')</option>
+                        @foreach ($groups as $group)
+                        <option value="{{$group->name}}">{{$group->name}}</option>
+                        @endforeach
                     </select>
                 </div>
             </div>
@@ -142,7 +167,7 @@
             //"scrollX": true,
         });
 
-        $('.filter-input').change(function() {
+        $('.select-input').change(function() {
             table.column($(this).data('column'))
                 .search($(this).val())
                 .draw();

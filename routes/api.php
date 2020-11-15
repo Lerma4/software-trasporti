@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\APIUsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,4 +19,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 // PAGINA UTENTI
-Route::get('/users', [APIUsersController::class, 'getUsers'])->name('api.users');
+Route::get('/users', [\App\Http\Controllers\Admin\API\APIUsersController::class, 'getUsers'])->name('api.users');
