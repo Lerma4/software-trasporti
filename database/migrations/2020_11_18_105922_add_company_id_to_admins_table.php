@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLicensesTable extends Migration
+class AddCompanyIdToAdminsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,8 @@ class CreateLicensesTable extends Migration
      */
     public function up()
     {
-        Schema::create('licenses', function (Blueprint $table) {
-            $table->id();
-            $table->string('name')->unique();
-            $table->date('deadline')->nullable();
-            $table->bigInteger('user_id');
+        Schema::table('admins', function (Blueprint $table) {
+            $table->bigInteger('companyId');
         });
     }
 
@@ -28,6 +25,8 @@ class CreateLicensesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('licenses');
+        Schema::table('admins', function (Blueprint $table) {
+            //
+        });
     }
 }

@@ -6,13 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Models\Group;
 use Illuminate\Http\Request;
 use App\Imports\UsersImport;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UsersController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:super;admin');
+    }
+
     public function index()
     {
-        $groups = Group::all();
+        $groups = Group::where('companyId', '=', auth('admin')->user()->companyId)->get();
 
         return view('admin.pages.users', ['groups' => $groups]);
     }
@@ -23,6 +29,6 @@ class UsersController extends Controller
             'import_file'  => 'required|mimes:xls,xlsx'
         ]);
 
-        return back()->withMessage('Successful import!');
+        return back()->withMessage(__('Successful import!'));
     }
 }
