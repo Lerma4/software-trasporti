@@ -4,10 +4,63 @@
 
 // DATATABLES
 
-tfoot input {
-    width: 100%;
-    padding: 3px;
-    box-sizing: border-box;
+.table-row {
+    #datatable_filter {
+        position: relative;
+        margin-top: auto;
+        label {
+            margin-bottom: 4px;
+        }
+    }
+    .table-col {
+        display: inline-flex;
+        #datatable_length {
+            position: relative;
+            margin-top: auto;
+            margin-right: 10px;
+            label {
+                margin-bottom: 4px;
+            }
+        }
+    }
+}
+
+#table-licenses {
+    margin: 0;
+}
+
+td.row-licenses {
+    padding: 0 !important;
 }
 
 // DATATABLES
+
+// PAGES
+
+.page-row {
+    margin-bottom: 15px;
+    margin-top: 15px;
+    @media (max-width: 576px) {
+        text-align: center;
+    }
+}
+
+#search_group {
+    @media (max-width: 576px) {
+        position: relative;
+        left: 36%;
+        margin-top: 8px;
+    }
+}
+
+.random_password,
+.show_password {
+    margin-bottom: 16px;
+    margin-right: 16px;
+}
+
+.btn-license {
+    margin-bottom: 16px;
+}
+
+// PAGES

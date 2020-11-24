@@ -2,6 +2,7 @@
 
 @section('styles')
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.bootstrap4.min.css">
 <link type="text/css" href="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" rel="stylesheet" />
 @endsection
 
@@ -31,26 +32,28 @@
                     </table>
                 </div>
             </form>
-            <div class="row">
-                <button id="btn-add" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add">
-                    @lang('New')
-                </button>
-                <button id="btn-edit" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modal-add" disabled>
-                    @lang('Edit')
-                </button>
-                <button type="button" class="btn btn-danger" id="btn-delete" disabled>
-                    @lang('Delete')
-                </button>
-            </div>
-            <div class="row">
-                <div class="form-group">
-                    <label>@lang('Search for group'):</label>
-                    <select class="form-control select-input" data-column="3">
-                        <option default value="">@lang('All')</option>
-                        @foreach ($groups as $group)
-                        <option value="{{$group->name}}">{{$group->name}}</option>
-                        @endforeach
-                    </select>
+            <div class="row justify-content-between page-row">
+                <div class="col-sm">
+                    <button id="btn-add" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add">
+                        @lang('New')
+                    </button>
+                    <button id="btn-edit" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modal-add" disabled>
+                        @lang('Edit')
+                    </button>
+                    <button type="button" class="btn btn-danger" id="btn-delete" disabled>
+                        @lang('Delete')
+                    </button>
+                </div>
+                <div class="col-sm-auto">
+                    <div class="form-inline">
+                        <label id="search_group">@lang('Search for group'):</label>
+                        <select class="form-control select-input" data-column="3">
+                            <option default value="">@lang('All')</option>
+                            @foreach ($groups as $group)
+                            <option value="{{$group->name}}">{{$group->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
             </div>
             <div class="table-responsive">
@@ -58,11 +61,11 @@
                     <thead>
                         <tr>
                             <th></th>
+                            <th></th>
                             <th>@lang('Name')</th>
                             <th>@lang('Email')</th>
                             <th>@lang('Group')</th>
                             <th>@lang('Licenses')</th>
-                            <th>@lang('Deadlines')</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -91,11 +94,11 @@
                     <input type="hidden" id="id_user" name="id_user" value="">
                     <div class="form-group">
                         <label for="email">@lang('Email')</label>
-                        <input type="email" id="email" value="{{ old('email') }}" class="form-control" name="email" required>
+                        <input type="email" id="email" value="{{ old('email') }}" class="form-control" name="email" autocomplete="email" required>
                     </div>
                     <div class="form-group">
                         <label for="password">@lang('Password')</label>
-                        <input type="password" id="password" class="form-control password" name="password" required>
+                        <input type="password" id="password" class="form-control password" name="password" autocomplete="new-password" required>
                         <span class="invalid-feedback" role="alert">
                             <strong id="password-error"></strong>
                         </span>
@@ -127,12 +130,18 @@
                             @lang('Licenses (Optional)')
                         </h5>
                     </div>
-                    <button id="buttonAdd" type="button" class="btn btn-success btn-license">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                    <button id="buttonRemove" type="button" class="btn btn-danger btn-license">
-                        <i class="fas fa-minus"></i>
-                    </button>
+                    <div id="row-licenses" class="row justify-content-center">
+                        <div class="col-auto">
+                            <button id="buttonAdd" type="button" class="btn btn-success btn-license">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="col-auto">
+                            <button id="buttonRemove" type="button" class="btn btn-danger btn-license">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
                     <div id="form-result"></div>
                     <div class="modal-footer">
                         <button id="btn-close" type="button" class="btn btn-secondary" data-dismiss="modal">@lang('Close')</button>
@@ -152,6 +161,8 @@
 <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js" defer></script>
 
 <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.6.4/js/dataTables.buttons.min.js" defer></script>
+<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.bootstrap4.min.js" defer></script>
+
 <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js" defer></script>
 <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js" defer></script>
 <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js" defer></script>
@@ -194,6 +205,13 @@
 
     $(document).ready(function() {
 
+        $("#btn-add").click(function() {
+            $("#modal-add").modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+        });
+
         $('.random_password').on('click', function(event) {
             var passwordField = $(event.target).closest('.modal-body').find('.password');
             var passwordFieldConfirm = $(event.target).closest('.modal-body').find('.passwordConfirm');
@@ -222,25 +240,38 @@
             }
         });
 
+        function format(d) {
+            console.log(d);
+            return;
+            /*return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+                '<tr>' +
+                '<td>' + d.name + ':</td>' +
+                '<td>' + d.deadline + '</td>' +
+                '</tr>' +
+                '</table>';*/
+        }
+
         var table = $('#datatable').DataTable({
-            dom: 'lBFfrtip',
+            "dom": '<"row justify-content-between table-row"<"col-sm table-col"lB><"col-sm-auto"f>>rtip',
             "order": [
-                [1, "asc"]
+                [2, "asc"]
             ],
             buttons: {
                 buttons: [{
                         extend: 'excelHtml5',
                         className: 'btn btn-success',
                         exportOptions: {
-                            columns: [1, 2, 3]
-                        }
+                            columns: [2, 3, 4]
+                        },
+                        text: '@lang("Export EXCEL")'
                     },
                     {
                         extend: 'pdfHtml5',
                         className: 'btn btn-danger',
                         exportOptions: {
-                            columns: [1, 2, 3]
+                            columns: [2, 3, 4]
                         },
+                        text: '@lang("Export PDF")',
                         customize: function(doc) {
                             doc.content[1].table.widths =
                                 Array(doc.content[1].table.body[0].length + 1).join('*').split('');
@@ -260,6 +291,12 @@
                     name: 'id'
                 },
                 {
+                    "className": 'details-control',
+                    "orderable": false,
+                    "data": null,
+                    "defaultContent": ''
+                },
+                {
                     data: 'name',
                     name: 'name'
                 },
@@ -273,24 +310,28 @@
                 },
                 {
                     data: 'licenses',
-                    "render": "[<br>].name"
+                    defaultContent: "",
+                    "render": function(data, type, row) {
+                        html = '<table id="table-licenses" class="table table-bordered"> <tbody>';
+                        data.forEach(element => {
+                            html += ' <tr> <td> ' + element.name + ' </td>';
+                            if (element.deadline != null) {
+                                html += '<td> ' + element.deadline + ' </td> </tr>';
+                            } else {
+                                html += '<td></td> </tr>';
+                            }
+                        });
+                        html += '</' + 'tbody' + '></table>';
+                        return html;
+                    },
                 },
-                {
-                    data: 'licenses',
-                    "render": "[<br>].deadline"
-                }
             ],
             "columnDefs": [{
-                    "targets": 4,
-                    "orderable": false,
-                    "searchable": false,
-                    "width": "5%",
-                },
-                {
                     "targets": 5,
                     "orderable": false,
                     "searchable": false,
-                    "width": "5%",
+                    "width": "10%",
+                    "className": "row-licenses"
                 },
                 {
                     'targets': 0,
@@ -308,6 +349,21 @@
             },
             "responsive": true,
             //"scrollX": true,
+        });
+
+        $('#datatable tbody').on('click', 'td.details-control', function() {
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            } else {
+                // Open this row
+                row.child(format(row.data())).show();
+                tr.addClass('shown');
+            }
         });
 
         $('#datatable').on('draw.dt', function() {
@@ -334,7 +390,7 @@
         }); // DESELEZIONA I BUTTONS EDIT E DELETE
 
         $('#buttonAdd').on('click', function(event) {
-            var lastInput = $('#buttonAdd').prev();
+            var lastInput = $('#row-licenses').prev();
             var id;
             var idNew = [];
             if (lastInput.attr('id') == 'license-title') {
@@ -352,11 +408,11 @@
             html += '<input type="date" id="deadline_' + id + '" class="form-control" name="deadline_' + id + '"' + ` min="{{ \Carbon\Carbon::today()->format('Y-m-d') }}">`
             html += '</div>'
 
-            $(this).before(html);
+            $('#row-licenses').before(html);
         });
 
         $('#buttonRemove').on('click', function(event) {
-            var lastInput = $('#buttonAdd').prev();
+            var lastInput = $('#row-licenses').prev();
 
             if (lastInput.attr('id') != 'license-title') {
                 lastInput.remove();
@@ -367,10 +423,10 @@
             if ($('#addUser').length != 0) $('#addUser')[0].reset(); //PER CONTROLLARE SE SONO IN EDIT O IN ADD E EVITARE ERRORI DEL JAVASCRIPT
             else $('#editUser')[0].reset();
 
-            var lastInput = $('#buttonAdd').prev();
+            var lastInput = $('#row-licenses').prev();
             while (lastInput.attr('id') != 'license-title') {
                 lastInput.remove();
-                lastInput = $('#buttonAdd').prev();
+                lastInput = $('#row-licenses').prev();
             }
         });
 
@@ -411,10 +467,10 @@
                         if ($('#addUser').length != 0) $('#addUser')[0].reset(); //PER CONTROLLARE SE SONO IN EDIT O IN ADD E EVITARE ERRORI DEL JAVASCRIPT
                         else $('#editUser')[0].reset();
 
-                        var lastInput = $('#buttonAdd').prev();
+                        var lastInput = $('#row-licenses').prev();
                         while (lastInput.attr('id') != 'license-title') {
                             lastInput.remove();
-                            lastInput = $('#buttonAdd').prev();
+                            lastInput = $('#row-licenses').prev();
                         }
 
                         $('#datatable').DataTable().ajax.reload();
@@ -486,7 +542,7 @@
                     html += '<input type="date" id="deadline_' + id + '" class="form-control" name="deadline_' + id + '"' + ` min="{{ \Carbon\Carbon::today()->format('Y-m-d') }}">`
                     html += '</div>'
 
-                    $('#buttonAdd').before(html);
+                    $('#row-licenses').before(html);
 
                     $('#licenseName_' + id).val(license['name']);
                     if (license['deadline'] != undefined) {
