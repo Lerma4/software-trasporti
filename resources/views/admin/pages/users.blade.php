@@ -43,11 +43,14 @@
                     <button type="button" class="btn btn-danger" id="btn-delete" disabled>
                         @lang('Delete')
                     </button>
+                    <button id="btn-show-licenses" type="button" class="btn btn-primary">
+                        @lang('Show expiring licenses')
+                    </button>
                 </div>
                 <div class="col-sm-auto">
                     <div class="form-inline">
                         <label id="search_group">@lang('Search for group'):</label>
-                        <select class="form-control select-input" data-column="3">
+                        <select class="form-control select-input" data-column="4">
                             <option default value="">@lang('All')</option>
                             @foreach ($groups as $group)
                             <option value="{{$group->name}}">{{$group->name}}</option>
@@ -65,7 +68,6 @@
                             <th>@lang('Name')</th>
                             <th>@lang('Email')</th>
                             <th>@lang('Group')</th>
-                            <th>@lang('Licenses')</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -203,6 +205,35 @@
         return newDate;
     }
 
+    function formatInternational(date) {
+        var dateAr = date.split('-');
+        var newDate = dateAr[2] + '-' + dateAr[1] + '-' + dateAr[0];
+        return newDate;
+    }
+
+    function formatLicenses(d) {
+        var today = new Date();
+        var deadline;
+        today.setDate(today.getDate() + 16);
+        var html = '<ul class="list-group list-group-flush list-licenses">';
+        d.forEach(element => {
+            if (element.deadline != null) {
+                deadline = new Date(formatInternational(element.deadline));
+                html += '<li class="list-group-item">' + element.name;
+                html += ' : ' + element.deadline;
+                if (deadline < today) {
+                    html += '<i class="fas fa-exclamation-triangle"></i>';
+                }
+            } else {
+                html += '<li class="list-group-item">' + element.name;
+            }
+            html += '</li>';
+        });
+        html += '</ul>';
+        return html;
+    }
+
+
     $(document).ready(function() {
 
         $("#btn-add").click(function() {
@@ -239,17 +270,6 @@
                 $(this).text('@lang("Show Password")');
             }
         });
-
-        function format(d) {
-            console.log(d);
-            return;
-            /*return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
-                '<tr>' +
-                '<td>' + d.name + ':</td>' +
-                '<td>' + d.deadline + '</td>' +
-                '</tr>' +
-                '</table>';*/
-        }
 
         var table = $('#datatable').DataTable({
             "dom": '<"row justify-content-between table-row"<"col-sm table-col"lB><"col-sm-auto"f>>rtip',
@@ -293,8 +313,32 @@
                 {
                     "className": 'details-control',
                     "orderable": false,
-                    "data": null,
-                    "defaultContent": ''
+                    "data": 'licenses',
+                    "defaultContent": '',
+                    "render": function(data, type, row) {
+                        var html = "",
+                            check = 0;
+
+                        if (data.length > 0) {
+                            html = '<button id="btn-details" type="button" class="btn btn-sm btn-success">' +
+                                '<i class="fas fa-plus"></i>' +
+                                '</button>';
+                            var today = new Date();
+                            var deadline;
+                            today.setDate(today.getDate() + 16);
+
+                            data.forEach(license => {
+                                if (license.deadline != null) {
+                                    deadline = new Date(formatInternational(license.deadline));
+                                    if (deadline < today) {
+                                        html += `<i title="@lang('There is at least one license expiring')"` +
+                                            'class="fas fa-exclamation-triangle fa-lg alert-license"></i>';
+                                    }
+                                }
+                            });
+                        }
+                        return html;
+                    },
                 },
                 {
                     data: 'name',
@@ -308,36 +352,18 @@
                     data: 'group',
                     name: 'group'
                 },
-                {
-                    data: 'licenses',
-                    defaultContent: "",
-                    "render": function(data, type, row) {
-                        html = '<table id="table-licenses" class="table table-bordered"> <tbody>';
-                        data.forEach(element => {
-                            html += ' <tr> <td> ' + element.name + ' </td>';
-                            if (element.deadline != null) {
-                                html += '<td> ' + element.deadline + ' </td> </tr>';
-                            } else {
-                                html += '<td></td> </tr>';
-                            }
-                        });
-                        html += '</' + 'tbody' + '></table>';
-                        return html;
-                    },
-                },
             ],
             "columnDefs": [{
-                    "targets": 5,
-                    "orderable": false,
-                    "searchable": false,
-                    "width": "10%",
-                    "className": "row-licenses"
-                },
-                {
                     'targets': 0,
                     'checkboxes': {
                         'selectRow': true
                     },
+                    'width': '1%'
+                },
+                {
+                    'targets': 1,
+                    "orderable": false,
+                    "searchable": false,
                     'width': '1%'
                 }
             ],
@@ -351,7 +377,7 @@
             //"scrollX": true,
         });
 
-        $('#datatable tbody').on('click', 'td.details-control', function() {
+        $('#datatable tbody').on('click', '#btn-details', function() {
             var tr = $(this).closest('tr');
             var row = table.row(tr);
 
@@ -359,10 +385,19 @@
                 // This row is already open - close it
                 row.child.hide();
                 tr.removeClass('shown');
+                $(this).find('.fas').removeClass('fa-minus');
+                $(this).find('.fas').addClass('fa-plus');
+                $(this).removeClass('btn-danger');
+                $(this).addClass('btn-success');
             } else {
                 // Open this row
-                row.child(format(row.data())).show();
+                rowData = row.data();
+                row.child(formatLicenses(rowData.licenses)).show();
                 tr.addClass('shown');
+                $(this).find('.fas').removeClass('fa-plus');
+                $(this).find('.fas').addClass('fa-minus');
+                $(this).removeClass('btn-success');
+                $(this).addClass('btn-danger');
             }
         });
 
@@ -476,7 +511,7 @@
                         $('#datatable').DataTable().ajax.reload();
                     }
                     $('#form-result').html(html);
-                    $('#form-result').delay(5000).fadeOut();
+                    $('#form-result').delay(4000).fadeOut();
                 }
             });
         });
@@ -510,7 +545,7 @@
                         scrollTop: 0
                     }, 'fast');
                     $('#message-success').html(html);
-                    $('#message-success').delay(5000).fadeOut();
+                    $('#message-success').delay(4000).fadeOut();
                 }
             });
         });
@@ -540,7 +575,7 @@
                     html += '<input type="text" id="licenseName_' + id + '" class="form-control" name="license_' + id + '" required>'
                     html += ' <label>@lang("Deadline")</label>';
                     html += '<input type="date" id="deadline_' + id + '" class="form-control" name="deadline_' + id + '"' + ` min="{{ \Carbon\Carbon::today()->format('Y-m-d') }}">`
-                    html += '</div>'
+                    html += '</>'
 
                     $('#row-licenses').before(html);
 
@@ -566,6 +601,18 @@
             table.column($(this).data('column'))
                 .search($(this).val())
                 .draw();
+        }); // FILTRO PER GRUPPO
+
+        $('#btn-show-licenses').click(function(e) {
+            if ($(this).attr('id') == 'btn-show-table') {
+                table.ajax.url("{{ route('api.users') }}").load();
+                $(this).text("@lang('Show expiring licenses')");
+                $(this).prop('id', 'btn-show-licenses');
+            } else {
+                table.ajax.url("{{ route('api.users.licenses') }}").load();
+                $(this).text("@lang('Show regular table')");
+                $(this).prop('id', 'btn-show-table');
+            }
         });
 
     });

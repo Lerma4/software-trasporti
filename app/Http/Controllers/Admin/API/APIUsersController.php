@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\API;
 use App\Http\Controllers\Controller;
 use App\Models\License;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -20,7 +21,29 @@ class APIUsersController extends Controller
 
     public function getUsers()
     {
-        $users = User::where('companyId', '=', auth('admin')->user()->companyId)->with('licenses')->select('id', 'name', 'email', 'group');
+        $users = User::where('companyId', '=', auth('admin')->user()->companyId)
+            ->with('licenses')
+            ->select('id', 'name', 'email', 'group');
+        return datatables::eloquent($users)
+            ->setRowId('id')
+            ->make(true);
+    }
+
+    public function getLicenses()
+    {
+        $licenses = License::where('deadline', '<', Carbon::now()->addDays(16))->distinct('user_id')->get('user_id');
+
+        $user_id = [];
+
+        foreach ($licenses as $license) {
+            array_push($user_id, $license->user_id);
+        }
+
+        $users = User::where('companyId', '=', auth('admin')->user()->companyId)
+            ->whereIn('id', $user_id)
+            ->with('licenses')
+            ->select('id', 'name', 'email', 'group');
+
         return datatables::eloquent($users)
             ->setRowId('id')
             ->make(true);
@@ -30,7 +53,12 @@ class APIUsersController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'max:100'],
-            'email' => ['required', 'email', 'unique:users', 'max:100'],
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users')->where('companyId', auth('admin')->user()->companyId),
+                'max:100'
+            ],
             'password' => ['required', 'confirmed', 'min:8'],
         ]);
 
@@ -87,12 +115,12 @@ class APIUsersController extends Controller
         if ($request->password == NULL) {
             $validator = Validator::make($request->all(), [
                 'name' => 'max:100',
-                'email' => ['email', Rule::unique('users')->ignore($request->id_user), 'max:100']
+                'email' => ['email', Rule::unique('users')->where('companyId', auth('admin')->user()->companyId)->ignore($request->id_user), 'max:100']
             ]);
         } else {
             $validator = Validator::make($request->all(), [
                 'name' => 'max:100',
-                'email' => ['email', Rule::unique('users')->ignore($request->id_user), 'max:100'],
+                'email' => ['email', Rule::unique('users')->where('companyId', auth('admin')->user()->companyId)->ignore($request->id_user), 'max:100'],
                 'password' => ['required', 'confirmed', 'min:8'],
             ]);
         }

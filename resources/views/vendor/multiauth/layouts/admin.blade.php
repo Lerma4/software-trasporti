@@ -13,10 +13,10 @@
   GIA' INCLUSO IN app.css-->
   <link href="{{ asset('css/app.css') }}" rel="stylesheet" /> <!-- E' MESSO QUI PERCHE' SE NO SOVRASCRIVE LO STILE DI coreui -->
   <link href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" rel="stylesheet" />
+  <link href="https://unpkg.com/@coreui/coreui@2.1.16/dist/css/coreui.min.css" rel="stylesheet" />
 
   @yield('styles')
 
-  <link href="https://unpkg.com/@coreui/coreui@2.1.16/dist/css/coreui.min.css" rel="stylesheet" />
 
 
 </head>

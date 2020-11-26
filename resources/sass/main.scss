@@ -25,12 +25,25 @@
     }
 }
 
-#table-licenses {
-    margin: 0;
+.dt-checkboxes {
+    margin-top: 50%;
 }
 
-td.row-licenses {
-    padding: 0 !important;
+.alert-license {
+    margin-left: 10px;
+    position: relative;
+    bottom: -3px;
+}
+
+.list-licenses {
+    width: 25%;
+}
+
+#btn-details {
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-bottom: 2px;
+    padding-top: 2px;
 }
 
 // DATATABLES
@@ -44,6 +57,10 @@ td.row-licenses {
         text-align: center;
     }
 }
+
+// PAGES
+
+// PAGE USERS
 
 #search_group {
     @media (max-width: 576px) {
@@ -63,4 +80,6 @@ td.row-licenses {
     margin-bottom: 16px;
 }
 
-// PAGES
+#btn-groups {
+    margin-right: 10px;
+}

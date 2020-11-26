@@ -13,16 +13,32 @@
 
             <li class="nav-item">
                 <a href="{{ route('admin.users') }}" class="nav-link">
-                    <i class="nav-icon fas fa-fw fa-tachometer-alt">
+                    <i class="nav-icon fas fa-fw fa-users">
 
                     </i>
                     @lang('Users')
                 </a>
             </li>
 
+            <li class="nav-item nav-dropdown">
+                <a class="nav-link nav-dropdown-toggle" href="#">
+                    <i class="nav-icon cui-puzzle"></i> @lang('Trucks')
+                </a>
+                <ul class="nav-dropdown-items">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-fw fa-truck">
+
+                            </i>
+                            @lang('Trucks')
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
             <li class="nav-item">
                 <a href="{{ route('admin.password.change') }}" class="nav-link">
-                    <i class="nav-icon fas fa-fw fa-tachometer-alt">
+                    <i class="nav-icon fas fa-fw fa-cog">
 
                     </i>
                     @lang('Change Password')

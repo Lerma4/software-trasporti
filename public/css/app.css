@@ -10930,12 +10930,25 @@ a.text-dark:focus {
   margin-bottom: 4px;
 }
 
-#table-licenses {
-  margin: 0;
+.dt-checkboxes {
+  margin-top: 50%;
 }
 
-td.row-licenses {
-  padding: 0 !important;
+.alert-license {
+  margin-left: 10px;
+  position: relative;
+  bottom: -3px;
+}
+
+.list-licenses {
+  width: 25%;
+}
+
+#btn-details {
+  padding-left: 6px;
+  padding-right: 6px;
+  padding-bottom: 2px;
+  padding-top: 2px;
 }
 
 .page-row {
@@ -10965,5 +10978,9 @@ td.row-licenses {
 
 .btn-license {
   margin-bottom: 16px;
+}
+
+#btn-groups {
+  margin-right: 10px;
 }
 
