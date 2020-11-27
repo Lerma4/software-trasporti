@@ -84,7 +84,7 @@
 
 <!-- AGGIUNGI UTENTI -->
 
-<div class="modal fade" id="modal-add" data-backdrop="static" tabindex="-1" aria-labelledby="modal-label-add" aria-hidden="true">
+<div class="modal fade" id="modal-add" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="modal-label-add" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -147,7 +147,10 @@
                     <div id="form-result"></div>
                     <div class="modal-footer">
                         <button id="btn-close" type="button" class="btn btn-secondary" data-dismiss="modal">@lang('Close')</button>
-                        <button type="submit" class="btn btn-primary submit">@lang('Submit')</button>
+                        <button type="submit" class="btn btn-primary submit">
+                            <span class="spinner-border spinner-border-sm loader-submit hidden" role="status" aria-hidden="true"></span>
+                            @lang('Submit')
+                        </button>
                     </div>
                 </form>
             </div>
@@ -235,13 +238,6 @@
 
 
     $(document).ready(function() {
-
-        $("#btn-add").click(function() {
-            $("#modal-add").modal({
-                backdrop: 'static',
-                keyboard: false
-            });
-        });
 
         $('.random_password').on('click', function(event) {
             var passwordField = $(event.target).closest('.modal-body').find('.password');
@@ -488,6 +484,10 @@
                 },
                 data: $(form).serialize(),
                 dataType: "json",
+                beforeSend: function() {
+                    $('.loader-submit').removeClass('hidden');
+                    $('.submit').contents().last().replaceWith('@lang("Loading...")');
+                },
                 success: function(data) {
                     var html = '';
                     if (data.errors) {
@@ -512,7 +512,11 @@
                     }
                     $('#form-result').html(html);
                     $('#form-result').delay(4000).fadeOut();
-                }
+                },
+                complete: function() {
+                    $('.loader-submit').addClass('hidden');
+                    $('.submit').contents().last().replaceWith('@lang("Submit")');
+                },
             });
         });
 

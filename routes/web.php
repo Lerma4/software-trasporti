@@ -21,6 +21,10 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 // ADMIN SIDE
 
+// GROUPS
+
+Route::get('/admin/users', [\App\Http\Controllers\Admin\UsersController::class, 'index'])->name('admin.users');
+
 // USERS
 
 Route::get('/admin/users', [\App\Http\Controllers\Admin\UsersController::class, 'index'])->name('admin.users');

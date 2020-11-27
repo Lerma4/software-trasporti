@@ -15,9 +15,13 @@ class CreateTrucksTable extends Migration
     {
         Schema::create('trucks', function (Blueprint $table) {
             $table->id();
-            $table->string('targa');
+            $table->string('plate');
             $table->float('km');
             $table->date('leasing')->nullable();
+            $table->date('insurance')->nullable();
+            $table->date('property_tax')->nullable();
+            $table->string('group');
+            $table->bigInteger('companyId');
             $table->timestamps();
         });
     }

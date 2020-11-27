@@ -1,60 +1,29 @@
-<div class="sidebar">
-    <nav class="sidebar-nav">
-
-        <ul class="nav">
-            <li class="nav-item">
-                <a href="{{ route('admin.home') }}" class="nav-link">
-                    <i class="nav-icon fas fa-fw fa-tachometer-alt">
-
-                    </i>
-                    @lang('Dashboard')
+<ul class="c-sidebar-nav">
+    <li class="c-sidebar-nav-item">
+        <a class="c-sidebar-nav-link" href="{{ route('admin.home') }}">
+            <i class="c-sidebar-nav-icon cil-speedometer"></i> @lang('Dashboard')
+        </a>
+    </li>
+    <li class="c-sidebar-nav-item">
+        <a class="c-sidebar-nav-link" href="{{ route('admin.users') }}">
+            <i class="c-sidebar-nav-icon cil-people"></i> @lang('Users')
+        </a>
+    </li>
+    <li class="c-sidebar-nav-dropdown">
+        <a class="c-sidebar-nav-dropdown-toggle" href="#">
+            <i class="c-sidebar-nav-icon cil-truck"></i> @lang('Vehicle management')
+        </a>
+        <ul class="c-sidebar-nav-dropdown-items">
+            <li class="c-sidebar-nav-item">
+                <a class="c-sidebar-nav-link" href="#">
+                    @lang('Trucks')
                 </a>
             </li>
-
-            <li class="nav-item">
-                <a href="{{ route('admin.users') }}" class="nav-link">
-                    <i class="nav-icon fas fa-fw fa-users">
-
-                    </i>
-                    @lang('Users')
-                </a>
-            </li>
-
-            <li class="nav-item nav-dropdown">
-                <a class="nav-link nav-dropdown-toggle" href="#">
-                    <i class="nav-icon cui-puzzle"></i> @lang('Trucks')
-                </a>
-                <ul class="nav-dropdown-items">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-fw fa-truck">
-
-                            </i>
-                            @lang('Trucks')
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
-            <li class="nav-item">
-                <a href="{{ route('admin.password.change') }}" class="nav-link">
-                    <i class="nav-icon fas fa-fw fa-cog">
-
-                    </i>
-                    @lang('Change Password')
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
-                    <i class="nav-icon fas fa-fw fa-sign-out-alt">
-
-                    </i>
-                    @lang('Logout')
+            <li class="c-sidebar-nav-item">
+                <a class="c-sidebar-nav-link" href="#">
+                    @lang('Maintenance')
                 </a>
             </li>
         </ul>
-
-    </nav>
-    <button class="sidebar-minimizer brand-minimizer" type="button"></button>
-</div>
+    </li>
+</ul>
