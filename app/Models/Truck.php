@@ -12,9 +12,26 @@ class Truck extends Model
 
     protected $fillable = [
         'plate',
+        'type',
+        'brand',
+        'model',
         'km',
-        'leasing',
-        'insurance',
-        'property_tax',
+        'description',
+        'group',
+        'companyId'
     ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
+    public function setPlateAttribute($value)
+    {
+        $this->attributes['plate'] = strtoupper($value);
+    }
+
+    public function expirations()
+    {
+        return $this->hasMany('App\Models\Expiration');
+    }
 }

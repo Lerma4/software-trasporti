@@ -18,7 +18,7 @@ class UsersController extends Controller
 
     public function index()
     {
-        $groups = Group::where('companyId', '=', auth('admin')->user()->companyId)->get();
+        $groups = Group::where('companyId', '=', auth('admin')->user()->companyId)->get('name');
 
         return view('admin.pages.users', ['groups' => $groups]);
     }

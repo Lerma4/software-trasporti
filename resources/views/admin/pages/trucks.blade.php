@@ -11,7 +11,7 @@
     <div class="card">
         <div class="card-body">
             @include('multiauth::message')
-            <form method="post" enctype="multipart/form-data" action="{{ route('admin.users.importExcel') }}">
+            <form method="post" enctype="multipart/form-data" action="">
                 @csrf
                 <div class="form-group">
                     <table class="table">
@@ -43,14 +43,21 @@
                     <button type="button" class="btn btn-danger" id="btn-delete" disabled>
                         @lang('Delete')
                     </button>
-                    <button id="btn-show-licenses" type="button" class="btn btn-primary btn-show-licenses">
-                        @lang('Show expiring licenses')
+                    <button id="btn-show-expirations" type="button" class="btn btn-primary btn-show-exp">
+                        @lang('Show upcoming deadlines')
                     </button>
                 </div>
                 <div class="col-sm-auto">
                     <div class="form-inline">
+                        <label id="search_type">@lang('Search for type'):</label>
+                        <select class="form-control select-input-type" data-column="3">
+                            <option default value="">@lang('All')</option>
+                            <option value="@lang('semirimorchio')">@lang('Semirimorchio')</option>
+                            <option value="@lang('trattore')">@lang('Trattore')</option>
+                            <option value="@lang('motrice')">@lang('Motrice')</option>
+                        </select>
                         <label id="search_group">@lang('Search for group'):</label>
-                        <select class="form-control select-input" data-column="4">
+                        <select class="form-control select-input-group" data-column="8">
                             <option default value="">@lang('All')</option>
                             @foreach ($groups as $group)
                             <option value="{{$group->name}}">{{$group->name}}</option>
@@ -65,8 +72,12 @@
                         <tr>
                             <th></th>
                             <th></th>
-                            <th>@lang('Name')</th>
-                            <th>@lang('Email')</th>
+                            <th>@lang('Plate')</th>
+                            <th>@lang('Type')</th>
+                            <th>@lang('Brand')</th>
+                            <th>@lang('Model')</th>
+                            <th>@lang('Km')</th>
+                            <th>@lang('Description')</th>
                             <th>@lang('Group')</th>
                         </tr>
                     </thead>
@@ -82,41 +93,45 @@
 
 <!-- FINESTRE MODAL -->
 
-<!-- AGGIUNGI UTENTI -->
-
 <div class="modal fade" id="modal-add" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="modal-label-add" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal-label-add">@lang('Add user')</h5>
+                <h5 class="modal-title" id="modal-label-add">@lang('Add truck')</h5>
             </div>
             <div class="modal-body">
-                <form id="addUser">
+                <form id="addTruck">
                     @csrf
-                    <input type="hidden" id="id_user" name="id_user" value="">
+                    <input type="hidden" id="id_truck" name="id_truck" value="">
                     <div class="form-group">
-                        <label for="email">@lang('Email')</label>
-                        <input type="email" id="email" value="{{ old('email') }}" class="form-control" name="email" autocomplete="email" required>
+                        <label for="plate">@lang('Plate')</label>
+                        <input type="text" id="plate" class="form-control" name="plate" required>
                     </div>
                     <div class="form-group">
-                        <label for="password">@lang('Password')</label>
-                        <input type="password" id="password" class="form-control password" name="password" autocomplete="new-password" required>
-                        <span class="invalid-feedback" role="alert">
-                            <strong id="password-error"></strong>
-                        </span>
-                        <small>@lang('The password must have at least 8 characters, including an uppercase letter, a lowercase letter and a number.')</small>
+                        <label for="type">@lang('Type')</label>
+                        <select name="type" id="type" class="custom-select" required>
+                            <option value=""></option>
+                            <option value="@lang('semirimorchio')">@lang('Semirimorchio')</option>
+                            <option value="@lang('trattore')">@lang('Trattore')</option>
+                            <option value="@lang('motrice')">@lang('Motrice')</option>
+                        </select>
                     </div>
                     <div class="form-group">
-                        <label for="password_confirm">@lang('Conferma Password')</label>
-                        <input id="password_confirm" type="password" class="form-control passwordConfirm" name="password_confirmation" required autocomplete="new-password">
+                        <label for="brand">@lang('Brand') (@lang('Optional'))</label>
+                        <input type="text" id="brand" class="form-control" name="brand">
                     </div>
-
-                    <button type="button" class="btn btn-success random_password">@lang('Random Password')</button>
-                    <button type="button" class="btn btn-secondary show_password">@lang('Show Password')</button>
-
                     <div class="form-group">
-                        <label for="name">@lang('Nome')</label>
-                        <input type="text" class="form-control" id="name" value="{{ old('nome') }}" name="name" required>
+                        <label for="model">@lang('Model') (@lang('Optional'))</label>
+                        <input type="text" class="form-control" id="model" name="model">
+                    </div>
+                    <div class="form-group">
+                        <label for="km">@lang('Km')</label>
+                        <input type="number" step="0.01" class="form-control" id="km" name="km" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">@lang('Description (optional)')</label>
+                        <input type="text" class="form-control" id="description" maxlength="150" name="description">
+                        <small>@lang('Max 50 characters.')</small>
                     </div>
                     <div class="form-group">
                         <label for="group">@lang('Gruppo')</label>
@@ -127,19 +142,20 @@
                             @endforeach
                         </select>
                     </div>
-                    <div id="license-title" class="form-group">
+                    <div id="expirations-title" class="form-group">
                         <h5>
-                            @lang('Licenses (Optional)')
+                            @lang('Expirations') (@lang('Optional'))
                         </h5>
+                        <small>@lang('For example insurance and property tax.')</small>
                     </div>
-                    <div id="row-licenses" class="row justify-content-center">
+                    <div id="expirations-row" class="row justify-content-center">
                         <div class="col-auto">
-                            <button id="buttonAdd" type="button" class="btn btn-success btn-license">
+                            <button id="buttonAdd" type="button" class="btn btn-success btn-expiration">
                                 <i class="fas fa-plus"></i>
                             </button>
                         </div>
                         <div class="col-auto">
-                            <button id="buttonRemove" type="button" class="btn btn-danger btn-license">
+                            <button id="buttonRemove" type="button" class="btn btn-danger btn-expiration">
                                 <i class="fas fa-minus"></i>
                             </button>
                         </div>
@@ -192,16 +208,6 @@
 @endswitch
 
 <script>
-    function generatePassword() {
-        var length = 8,
-            charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-            retVal = "";
-        for (var i = 0, n = charset.length; i < length; ++i) {
-            retVal += charset.charAt(Math.floor(Math.random() * n));
-        }
-        return retVal;
-    };
-
     function formatData(date) {
         var dateAr = date.split('-');
         var newDate = dateAr[2] + '-' + dateAr[1] + '-' + dateAr[0];
@@ -214,58 +220,40 @@
         return newDate;
     }
 
-    function formatLicenses(d) {
+    function formatExp(d) {
         var today = new Date();
         var deadline;
         today.setDate(today.getDate() + 16);
-        var html = '<ul class="list-group list-group-flush list-licenses">';
+        var html = '<table class="table table-sm table-borderless table-exp"><thead>' +
+            '<tr> <th scope = "col" > @lang("Name")' +
+            '</th> <th scope = "col" > @lang("Deadline")' +
+            '</th> <th scope = "col" > @lang("Description") </th> </thead>' +
+            '<tbody>';
         d.forEach(element => {
+            html += '<tr><td>' + element.name + '</td>'
             if (element.deadline != null) {
                 deadline = new Date(formatInternational(element.deadline));
-                html += '<li class="list-group-item">' + element.name;
-                html += ' : ' + element.deadline;
+                html += '<td>' + element.deadline;
                 if (deadline < today) {
                     html += '<i class="fas fa-exclamation-triangle"></i>';
                 }
+                html += '</td>';
             } else {
-                html += '<li class="list-group-item">' + element.name;
+                html += '<td></td>';
             }
-            html += '</li>';
+            if (element.description != null) {
+                html += '<td>' + element.description + '</td>'
+            } else {
+                html += '<td></td>';
+            }
+            html += '</tr>';
         });
-        html += '</ul>';
+        html += '</tbody></table>';
         return html;
     }
 
 
     $(document).ready(function() {
-
-        $('.random_password').on('click', function(event) {
-            var passwordField = $(event.target).closest('.modal-body').find('.password');
-            var passwordFieldConfirm = $(event.target).closest('.modal-body').find('.passwordConfirm');
-            var i = 0;
-            var patt = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*)/;
-
-            while (i == 0) {
-                var newPassword = generatePassword();
-                if (patt.test(newPassword)) {
-                    i = 1;
-                }
-            }
-            passwordField.val(newPassword);
-            passwordFieldConfirm.val(newPassword);
-        });
-
-        $('.show_password').on('click', function() {
-            var passwordField = $(event.target).closest('.modal-body').find('.password');
-            var passwordFieldType = passwordField.attr('type');
-            if (passwordFieldType == 'password') {
-                passwordField.attr('type', 'text');
-                $(this).text('@lang("Hide Password")');
-            } else {
-                passwordField.attr('type', 'password');
-                $(this).text('@lang("Show Password")');
-            }
-        });
 
         var table = $('#datatable').DataTable({
             "dom": '<"row justify-content-between table-row"<"col-sm table-col"lB><"col-sm-auto"f>>rtip',
@@ -277,15 +265,15 @@
                         extend: 'excelHtml5',
                         className: 'btn btn-success',
                         exportOptions: {
-                            columns: [2, 3, 4]
+                            columns: [2, 3, 4, 5, 7, 8]
                         },
                         text: '@lang("Export EXCEL")'
-                    },
+                    }, // NON FUNZIONA (PER ORA) CON I NUMERI
                     {
                         extend: 'pdfHtml5',
                         className: 'btn btn-danger',
                         exportOptions: {
-                            columns: [2, 3, 4]
+                            columns: [2, 3, 4, 5, 6, 7, 8]
                         },
                         text: '@lang("Export PDF")',
                         customize: function(doc) {
@@ -301,7 +289,7 @@
             ],
             "processing": true,
             "serverSide": true,
-            "ajax": "{{ route('api.users') }}",
+            "ajax": "{{ route('api.trucks') }}",
             "columns": [{
                     data: 'id',
                     name: 'id'
@@ -309,12 +297,11 @@
                 {
                     "className": 'details-control',
                     "orderable": false,
-                    "data": 'licenses',
+                    "data": 'expirations',
                     "defaultContent": '',
                     "render": function(data, type, row) {
                         var html = "",
                             check = 0;
-
                         if (data.length > 0) {
                             html = '<button id="btn-details" type="button" class="btn btn-sm btn-success">' +
                                 '<i class="fas fa-plus"></i>' +
@@ -323,12 +310,12 @@
                             var deadline;
                             today.setDate(today.getDate() + 16);
 
-                            data.forEach(license => {
-                                if (license.deadline != null) {
-                                    deadline = new Date(formatInternational(license.deadline));
+                            data.forEach(expiration => {
+                                if (expiration.deadline != null) {
+                                    deadline = new Date(formatInternational(expiration.deadline));
                                     if (deadline < today) {
-                                        html += `<i title="@lang('There is at least one license expiring')"` +
-                                            'class="fas fa-exclamation-triangle fa-lg alert-license"></i>';
+                                        html += `<i title="@lang('There is at least one upcoming deadline')"` +
+                                            'class="fas fa-exclamation-triangle fa-lg alert-expiration"></i>';
                                     }
                                 }
                             });
@@ -337,12 +324,28 @@
                     },
                 },
                 {
-                    data: 'name',
-                    name: 'name'
+                    data: 'plate',
+                    name: 'plate'
                 },
                 {
-                    data: 'email',
-                    name: 'email'
+                    data: 'type',
+                    name: 'type'
+                },
+                {
+                    data: 'brand',
+                    name: 'brand'
+                },
+                {
+                    data: 'model',
+                    name: 'model'
+                },
+                {
+                    data: 'km',
+                    name: 'km'
+                },
+                {
+                    data: 'description',
+                    name: 'description'
                 },
                 {
                     data: 'group',
@@ -361,15 +364,21 @@
                     "orderable": false,
                     "searchable": false,
                     'width': '1%'
+                }, {
+                    'targets': 7,
+                    "orderable": false,
                 }
             ],
             'select': {
                 'style': 'multi'
             },
             "language": {
-                "url": language,
+                "url": language
             },
             "responsive": true,
+            search: {
+                "regex": true
+            },
         });
 
         $('#datatable tbody').on('click', '#btn-details', function() {
@@ -387,7 +396,7 @@
             } else {
                 // Open this row
                 rowData = row.data();
-                row.child(formatLicenses(rowData.licenses)).show();
+                row.child(formatExp(rowData.expirations)).show();
                 tr.addClass('shown');
                 $(this).find('.fas').removeClass('fa-plus');
                 $(this).find('.fas').addClass('fa-minus');
@@ -420,10 +429,10 @@
         }); // DESELEZIONA I BUTTONS EDIT E DELETE
 
         $('#buttonAdd').on('click', function(event) {
-            var lastInput = $('#row-licenses').prev();
+            var lastInput = $('#expirations-row').prev();
             var id;
             var idNew = [];
-            if (lastInput.attr('id') == 'license-title') {
+            if (lastInput.attr('id') == 'expirations-title') {
                 id = 1;
             } else {
                 idNew = lastInput.attr('id').split("_");
@@ -431,36 +440,38 @@
                 id = idNew[1] + 1;
             }
 
-            var html = "<div id='license_" + id + "' class='form-group'>";
+            var html = "<div id='expiration_" + id + "' class='form-group'>";
             html += '<label>@lang("Name")</label>';
-            html += '<input type="text" id="licenseName_' + id + '" class="form-control" name="license_' + id + '" required>'
+            html += '<input type="text" id="expirationName_' + id + '" class="form-control" name="expiration_' + id + '" required>'
+            html += '<label>@lang("Description")</label>';
+            html += '<input type="text" id="description_' + id + '" class="form-control" name="description_' + id + '">'
             html += ' <label>@lang("Deadline")</label>';
-            html += '<input type="date" id="deadline_' + id + '" class="form-control" name="deadline_' + id + '"' + ` min="{{ \Carbon\Carbon::today()->format('Y-m-d') }}">`
+            html += '<input type="date" id="deadline_' + id + '" class="form-control" name="deadline_' + id + '"' + ` min="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" required>`
             html += '</div>'
 
-            $('#row-licenses').before(html);
+            $('#expirations-row').before(html);
         });
 
         $('#buttonRemove').on('click', function(event) {
-            var lastInput = $('#row-licenses').prev();
+            var lastInput = $('#expirations-row').prev();
 
-            if (lastInput.attr('id') != 'license-title') {
+            if (lastInput.attr('id') != 'expirations-title') {
                 lastInput.remove();
             }
         });
 
         $('#btn-close').on('click', function(event) {
-            if ($('#addUser').length != 0) $('#addUser')[0].reset(); //PER CONTROLLARE SE SONO IN EDIT O IN ADD E EVITARE ERRORI DEL JAVASCRIPT
-            else $('#editUser')[0].reset();
+            if ($('#addTruck').length != 0) $('#addTruck')[0].reset(); //PER CONTROLLARE SE SONO IN EDIT O IN ADD E EVITARE ERRORI DEL JAVASCRIPT
+            else $('#editTruck')[0].reset();
 
-            var lastInput = $('#row-licenses').prev();
-            while (lastInput.attr('id') != 'license-title') {
+            var lastInput = $('#expirations-row').prev();
+            while (lastInput.attr('id') != 'expirations-title') {
                 lastInput.remove();
-                lastInput = $('#row-licenses').prev();
+                lastInput = $('#expirations-row').prev();
             }
         });
 
-        $('#addUser').on('submit', function(event) {
+        $('#addTruck').on('submit', function(event) {
             event.preventDefault();
 
             $('#form-result').text('');
@@ -469,10 +480,10 @@
             var url;
             var form = $(this).closest('form');
 
-            if (form.attr('id') == 'addUser') {
-                url = '{{ route("admin.users.store") }}';
+            if (form.attr('id') == 'addTruck') {
+                url = '{{ route("admin.trucks.store") }}';
             } else {
-                url = '{{ route("admin.users.edit") }}';
+                url = '{{ route("admin.trucks.edit") }}';
             };
 
             $.ajax({
@@ -498,13 +509,13 @@
                     }
                     if (data.success) {
                         html = '<div class="alert alert-success">' + data.success + '</div>';
-                        if ($('#addUser').length != 0) {
-                            $('#addUser')[0].reset(); //PER CONTROLLARE SE SONO IN EDIT O IN ADD E EVITARE ERRORI DEL JAVASCRIPT
+                        if ($('#addTruck').length != 0) {
+                            $('#addTruck')[0].reset(); //PER CONTROLLARE SE SONO IN EDIT O IN ADD E EVITARE ERRORI DEL JAVASCRIPT
 
-                            var lastInput = $('#row-licenses').prev();
-                            while (lastInput.attr('id') != 'license-title') {
+                            var lastInput = $('#expirations-row').prev();
+                            while (lastInput.attr('id') != 'expirations-title') {
                                 lastInput.remove();
-                                lastInput = $('#row-licenses').prev();
+                                lastInput = $('#expirations-row').prev();
                             }
                         }
                         $('#datatable').DataTable().ajax.reload();
@@ -532,13 +543,13 @@
             $('#message-success').show();
 
             $.ajax({
-                url: '{{ route("admin.users.delete") }}',
+                url: '{{ route("admin.trucks.delete") }}',
                 type: "POST",
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 data: {
-                    users: id
+                    trucks: id
                 },
                 success: function(data) {
                     var html = '';
@@ -555,36 +566,42 @@
 
         $('#btn-edit').on('click', function(e) {
 
-            $('#modal-label-add').text('Edit user');
-            $('#addUser').prop('id', 'editUser');
-
-            $('#password').prop('required', false);
-            $('#password_confirm').prop('required', false);
+            $('#modal-label-add').text('Edit truck');
+            $('#addTruck').prop('id', 'editTruck');
 
             var rows_selected = table.column(0).checkboxes.selected();
 
             if (rows_selected.length == 1) {
-                $('#id_user').val(rows_selected[0]);
+                $('#id_truck').val(rows_selected[0]);
                 var row = table.row('#' + rows_selected[0]).data();
 
-                $('#email').val(row['email']);
-                $('#name').val(row['name']);
+                $('#plate').val(row['plate']);
+                $('#type').val(row['type']);
+                $('#brand').val(row['brand']);
+                $('#model').val(row['model']);
+                $('#km').val(row['km']);
+                $('#description').val(row['description']);
                 $('#group').val(row['group']);
 
-                row['licenses'].forEach(function(license, i) {
+                row['expirations'].forEach(function(expiration, i) {
                     var id = i + 1;
-                    var html = "<div id='license_" + id + "' class='form-group'>";
+                    var html = "<div id='expiration_" + id + "' class='form-group'>";
                     html += '<label>@lang("Name")</label>';
-                    html += '<input type="text" id="licenseName_' + id + '" class="form-control" name="license_' + id + '" required>'
+                    html += '<input type="text" id="expirationName_' + id + '" class="form-control" name="expiration_' + id + '" required>'
+                    html += '<label>@lang("Description")</label>';
+                    html += '<input type="text" id="description_' + id + '" class="form-control" name="description_' + id + '">'
                     html += ' <label>@lang("Deadline")</label>';
-                    html += '<input type="date" id="deadline_' + id + '" class="form-control" name="deadline_' + id + '"' + ` min="{{ \Carbon\Carbon::today()->format('Y-m-d') }}">`
-                    html += '</>'
+                    html += '<input type="date" id="deadline_' + id + '" class="form-control" name="deadline_' + id + '"' + ` min="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" required>`
+                    html += '</div>'
 
-                    $('#row-licenses').before(html);
+                    $('#expirations-row').before(html);
 
-                    $('#licenseName_' + id).val(license['name']);
-                    if (license['deadline'] != undefined) {
-                        $('#deadline_' + id).val(formatData(license['deadline']));
+                    $('#expirationName_' + id).val(expiration['name']);
+                    if (expiration['deadline'] != undefined) {
+                        $('#deadline_' + id).val(formatData(expiration['deadline']));
+                    }
+                    if (expiration['description'] != undefined) {
+                        $('#description_' + id).val(expiration['description']);
                     }
                 });
             }
@@ -592,42 +609,74 @@
 
         $('#btn-add').on('click', function(e) {
 
-            $('#modal-label-add').text('Add user');
-            $('#editUser').attr('id', 'addUser');
-
-            $('#password').prop('required', true);
-            $('#password_confirm').prop('required', true);
+            $('#modal-label-add').text('Add truck');
+            $('#editTruck').attr('id', 'addTruck');
 
         });
 
-        $('.select-input').change(function() {
-            if ($('.btn-show-licenses').text() == "@lang('Show regular table')") {
-                var url = "{{ route('api.users.licenses') }}";
+        $('.select-input-group').change(function() {
+            if ($('.btn-show-exp').text() == "@lang('Show regular table')") {
+                var url = "{{ route('api.trucks.expirations') }}";
             } else {
-                var url = "{{ route('api.users') }}";
+                var url = "{{ route('api.trucks') }}";
             }
-            url += "/" + $(this).val();
+            if ($(this).val() == '') {
+                var group = 'nullValue';
+            } else {
+                var group = $(this).val();
+            }
+            url += "/" + group + "/" + $('.select-input-type').val();
 
             table.ajax.url(url).load();
         }); // FILTRO PER GRUPPO
 
-        $('#btn-show-licenses').click(function(e) {
+        $('.select-input-type').change(function() {
+            if ($('.btn-show-exp').text() == "@lang('Show regular table')") {
+                var url = "{{ route('api.trucks.expirations') }}";
+            } else {
+                var url = "{{ route('api.trucks') }}";
+            }
+            if ($('.select-input-group').val() == '') {
+                var group = 'nullValue';
+            } else {
+                var group = $('.select-input-group').val();
+            }
+            url += "/" + group + "/" + $(this).val();
+
+            table.ajax.url(url).load();
+        }); // FILTRO PER TIPO
+
+        $('#btn-show-expirations').click(function(e) {
             if ($(this).attr('id') == 'btn-show-table') {
 
-                var url = "{{ route('api.users') }}";
-                url += "/" + $('.select-input').val();
+                var url = "{{ route('api.trucks') }}";
+                if ($('.select-input-group').val() == '') {
+                    var group = 'nullValue';
+                } else {
+                    var group = $('.select-input-group').val();
+                }
+                url += "/" + group + "/" + $('.select-input-type').val();
+
                 table.ajax.url(url).load();
 
-                $(this).text("@lang('Show expiring licenses')");
-                $(this).prop('id', 'btn-show-licenses');
+                $(this).text("@lang('Show upcoming deadlines')");
+                $(this).prop('id', 'btn-show-expirations');
+
             } else {
 
-                var url = "{{ route('api.users.licenses') }}";
-                url += "/" + $('.select-input').val();
+                var url = "{{ route('api.trucks.expirations') }}";
+                if ($('.select-input-group').val() == '') {
+                    var group = 'nullValue';
+                } else {
+                    var group = $('.select-input-group').val();
+                }
+                url += "/" + group + "/" + $('.select-input-type').val();
+
                 table.ajax.url(url).load();
 
                 $(this).text("@lang('Show regular table')");
                 $(this).prop('id', 'btn-show-table');
+
             }
         });
 

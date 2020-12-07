@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddGroupToUsersTable extends Migration
+class AddTypeToTrucksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class AddGroupToUsersTable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('group')->nullable()->default(NULL);
+        Schema::table('trucks', function (Blueprint $table) {
+            $table->string('type');
+            $table->text('description')->nullable();
         });
     }
 
@@ -25,8 +26,9 @@ class AddGroupToUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('group');
+        Schema::table('trucks', function (Blueprint $table) {
+            $table->dropColumn('type');
+            $table->dropColumn('description');
         });
     }
 }

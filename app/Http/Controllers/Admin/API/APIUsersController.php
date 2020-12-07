@@ -19,17 +19,21 @@ class APIUsersController extends Controller
         $this->middleware('role:super;admin');
     }
 
-    public function getUsers()
+    public function getUsers($group = NULL)
     {
-        $users = User::where('companyId', '=', auth('admin')->user()->companyId)
+        $users = User::when($group != NULL && $group != '', function ($query) use ($group) {
+            return $query->where('group', $group);
+        })
+            ->where('companyId', '=', auth('admin')->user()->companyId)
             ->with('licenses')
             ->select('id', 'name', 'email', 'group');
+
         return datatables::eloquent($users)
             ->setRowId('id')
             ->make(true);
     }
 
-    public function getLicenses()
+    public function getLicenses($group = NULL)
     {
         $licenses = License::where('deadline', '<', Carbon::now()->addDays(16))->distinct('user_id')->get('user_id');
 
@@ -39,7 +43,10 @@ class APIUsersController extends Controller
             array_push($user_id, $license->user_id);
         }
 
-        $users = User::where('companyId', '=', auth('admin')->user()->companyId)
+        $users = User::when($group != NULL && $group != '', function ($query) use ($group) {
+            return $query->where('group', $group);
+        })
+            ->where('companyId', '=', auth('admin')->user()->companyId)
             ->whereIn('id', $user_id)
             ->with('licenses')
             ->select('id', 'name', 'email', 'group');
@@ -60,6 +67,7 @@ class APIUsersController extends Controller
                 'max:100'
             ],
             'password' => ['required', 'confirmed', 'min:8'],
+            'group' => ['exists:groups,name'],
         ]);
 
         if ($validator->fails()) {
@@ -115,13 +123,27 @@ class APIUsersController extends Controller
         if ($request->password == NULL) {
             $validator = Validator::make($request->all(), [
                 'name' => 'max:100',
-                'email' => ['email', Rule::unique('users')->where('companyId', auth('admin')->user()->companyId)->ignore($request->id_user), 'max:100']
+                'email' => [
+                    'email',
+                    Rule::unique('users')
+                        ->where('companyId', auth('admin')->user()->companyId)
+                        ->ignore($request->id_user),
+                    'max:100'
+                ],
+                'group' => ['exists:groups,name'],
             ]);
         } else {
             $validator = Validator::make($request->all(), [
                 'name' => 'max:100',
-                'email' => ['email', Rule::unique('users')->where('companyId', auth('admin')->user()->companyId)->ignore($request->id_user), 'max:100'],
+                'email' => [
+                    'email',
+                    Rule::unique('users')->where('companyId', auth('admin')
+                        ->user()->companyId)
+                        ->ignore($request->id_user),
+                    'max:100'
+                ],
                 'password' => ['required', 'confirmed', 'min:8'],
+                'group' => ['exists:groups,name'],
             ]);
         }
 

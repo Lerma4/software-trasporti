@@ -10935,6 +10935,21 @@ a.text-dark:focus {
   display: none;
 }
 
+.dataTables_wrapper .dataTables_processing {
+  position: absolute;
+  z-index: 100 !important;
+  top: 30%;
+  left: 50%;
+  width: 30%;
+  height: 100px;
+  margin-left: -20%;
+  margin-top: -25px;
+  padding-top: 20px;
+  text-align: center;
+  font-size: 1.2em;
+  background-color: white;
+}
+
 .table-row #datatable_filter {
   position: relative;
   margin-top: auto;
@@ -10962,7 +10977,8 @@ a.text-dark:focus {
   margin-top: 50%;
 }
 
-.alert-license {
+.alert-license,
+.alert-expiration {
   margin-left: 10px;
   position: relative;
   bottom: -3px;
@@ -10991,9 +11007,10 @@ a.text-dark:focus {
 }
 
 @media (max-width: 576px) {
-  #search_group {
+  #search_group,
+  #search_type {
     position: relative;
-    left: 36%;
+    left: 32%;
     margin-top: 8px;
   }
 }
@@ -11004,11 +11021,18 @@ a.text-dark:focus {
   margin-right: 16px;
 }
 
-.btn-license {
+.btn-license,
+.btn-expiration {
   margin-bottom: 16px;
 }
 
 #btn-groups {
   margin-right: 10px;
+}
+
+@media (min-width: 576px) {
+  #search_group {
+    margin-left: 10px;
+  }
 }
 

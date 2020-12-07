@@ -15,7 +15,7 @@ class CreateLicensesTable extends Migration
     {
         Schema::create('licenses', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->string('name');
             $table->date('deadline')->nullable();
             $table->bigInteger('user_id');
         });

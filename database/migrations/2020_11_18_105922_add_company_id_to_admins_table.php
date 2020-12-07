@@ -26,7 +26,7 @@ class AddCompanyIdToAdminsTable extends Migration
     public function down()
     {
         Schema::table('admins', function (Blueprint $table) {
-            //
+            $table->dropColumn('companyId');
         });
     }
 }

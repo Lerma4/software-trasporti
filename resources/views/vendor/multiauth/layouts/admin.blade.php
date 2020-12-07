@@ -35,6 +35,13 @@
       <button class="c-header-toggler c-class-toggler mfs-3 d-md-down-none" type="button" data-target="#sidebar" data-class="c-sidebar-lg-show" responsive="true">
         <i class="c-icon c-icon-2xl cil-menu"></i>
       </button>
+      <ul class="c-header-nav mfs-auto">
+        <li class="c-header-nav-item px-3 c-d-legacy-none">
+          <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" class="d-none">
+            @csrf
+          </form>
+          <a class="c-header-nav-btn fas fa-sign-out-alt fa-lg " href="{{ route('admin.logout') }}" title="Logout" onclick="event.preventDefault();document.getElementById('logout-form').submit();"></a>
+        </li>
       </ul>
     </header>
     <div class="c-body">
@@ -56,8 +63,8 @@
   </div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="{{ asset('js/app.js') }}" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
   @yield('scripts')
 
