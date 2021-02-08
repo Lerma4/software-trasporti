@@ -17,10 +17,14 @@ class CreateMaintenancesTable extends Migration
             $table->id();
             $table->string('plate');
             $table->string('type');
-            $table->date('deadline_date')->nullable()->default(NULL);
-            $table->bigInteger('deadline_km')->nullable()->default(NULL);
-            $table->bigInteger('deadline_period')->nullable()->default(NULL);
-            $table->timestamps();
+            $table->string('garage')->nullable()->default(NULL);
+            $table->string('description')->nullable()->default(NULL);
+            $table->date('date');
+            $table->boolean('alert')->nullable()->default(FALSE);
+            $table->bigInteger('km')->nullable()->default(NULL);
+            $table->bigInteger('period')->nullable()->default(NULL);
+            $table->bigInteger('price')->nullable()->default(NULL);
+            $table->bigInteger('companyId');
         });
     }
 

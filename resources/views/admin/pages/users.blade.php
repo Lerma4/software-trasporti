@@ -323,12 +323,14 @@
                             var deadline;
                             today.setDate(today.getDate() + 16);
 
+                            var check = 0;
                             data.forEach(license => {
-                                if (license.deadline != null) {
+                                if (license.deadline != null && check === 0) {
                                     deadline = new Date(formatInternational(license.deadline));
                                     if (deadline < today) {
                                         html += `<i title="@lang('There is at least one license expiring')"` +
                                             'class="fas fa-exclamation-triangle fa-lg alert-license"></i>';
+                                        check = -1;
                                     }
                                 }
                             });

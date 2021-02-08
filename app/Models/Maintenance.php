@@ -10,12 +10,25 @@ class Maintenance extends Model
 {
     use HasFactory, Notifiable;
 
+    public $timestamps = false;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'plate',
+        'type',
+        'km',
+        'description',
+        'period',
+        'price',
+        'alert',
+        'date',
+        'garage',
+        'companyId'
+    ];
 
     public function truck()
     {

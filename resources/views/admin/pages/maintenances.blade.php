@@ -43,27 +43,17 @@
                     <button type="button" class="btn btn-danger" id="btn-delete" disabled>
                         @lang('Delete')
                     </button>
-                    <button id="btn-show-expirations" type="button" class="btn btn-primary btn-show-exp">
-                        @lang('Show upcoming deadlines')
-                    </button>
                 </div>
                 <div class="col-sm-auto">
-                    <div class="form-inline">
-                        <label id="search_type">@lang('Search for type'):</label>
-                        <select class="form-control select-input-type" data-column="3">
-                            <option default value="">@lang('All')</option>
-                            <option value="semirimorchio">@lang('Semirimorchio')</option>
-                            <option value="trattore">@lang('Trattore')</option>
-                            <option value="motrice">@lang('Motrice')</option>
-                        </select>
-                        <label id="search_group">@lang('Search for group'):</label>
-                        <select class="form-control select-input-group" data-column="8">
-                            <option default value="">@lang('All')</option>
-                            @foreach ($groups as $group)
-                            <option value="{{$group->name}}">{{$group->name}}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                    <form>
+                        <div class="form-inline">
+                            <label id="search_type">@lang('From'):</label>
+                            <input type="date" class="form-control select-input-date-from" data-column="3">
+                            <label id="search_group">@lang('To'):</label>
+                            <input type="date" class="form-control select-input-date-to" data-column="3">
+                            <button class="btn btn-primary" type="reset" id="btn-reset">Reset</button>
+                        </div>
+                    </form>
                 </div>
             </div>
             <div class="table-responsive">
@@ -71,14 +61,14 @@
                     <thead>
                         <tr>
                             <th></th>
-                            <th></th>
                             <th>@lang('Plate')</th>
                             <th>@lang('Type')</th>
-                            <th>@lang('Brand')</th>
-                            <th>@lang('Model')</th>
-                            <th>@lang('Km')</th>
+                            <th>@lang('Date')</th>
+                            <th>@lang('Period')</th>
+                            <th>@lang("Vehicle's km")</th>
+                            <th>@lang('Price')</th>
+                            <th>@lang('Garage')</th>
                             <th>@lang('Description')</th>
-                            <th>@lang('Group')</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -97,7 +87,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal-label-add">@lang('Add truck')</h5>
+                <h5 class="modal-title" id="modal-label-add">@lang('Add maintenance')</h5>
             </div>
             <div class="modal-body">
                 <form id="addTruck">
@@ -105,62 +95,50 @@
                     <input type="hidden" id="id_truck" name="id_truck" value="">
                     <div class="form-group">
                         <label for="plate">@lang('Plate')</label>
-                        <input type="text" id="plate" class="form-control" name="plate" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="type">@lang('Type')</label>
-                        <select name="type" id="type" class="custom-select" required>
-                            <option value=""></option>
-                            <option value="semirimorchio">@lang('Semirimorchio')</option>
-                            <option value="trattore">@lang('Trattore')</option>
-                            <option value="motrice">@lang('Motrice')</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="brand">@lang('Brand') (@lang('Optional'))</label>
-                        <input type="text" id="brand" class="form-control" name="brand">
-                    </div>
-                    <div class="form-group">
-                        <label for="model">@lang('Model') (@lang('Optional'))</label>
-                        <input type="text" class="form-control" id="model" name="model">
-                    </div>
-                    <div class="form-group">
-                        <label for="km">@lang('Km')</label>
-                        <input type="number" step="0.01" class="form-control" id="km" name="km" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="description">@lang('Description (optional)')</label>
-                        <input type="text" class="form-control" id="description" maxlength="150" name="description">
-                        <small>@lang('Max 50 characters.')</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="group">@lang('Gruppo')</label>
-                        <select name="group" id="group" class="custom-select">
-                            <option value="">@lang('No group')</option>
-                            @foreach ($groups as $group)
-                            <option value="{{ $group->name }}">{{ $group->name }}</option>
+                        <select name="plate" id="plate" class="custom-select" required>
+                            @foreach ($trucks as $plate)
+                            <option value="{{ $plate->plate }}">{{ $plate->plate }}</option>
                             @endforeach
                         </select>
                     </div>
-                    <div id="expirations-title" class="form-group">
-                        <h5>
-                            @lang('Expirations') (@lang('Optional'))
-                        </h5>
-                        <small>@lang('For example insurance and property tax.')</small>
+                    <div class="form-group">
+                        <label for="type">@lang('Type')</label>
+                        <input type="text" id="type" class="form-control" name="type" required>
                     </div>
-                    <div id="expirations-row" class="row justify-content-center">
-                        <div class="col-auto">
-                            <button id="buttonAdd" type="button" class="btn btn-success btn-expiration">
-                                <i class="fas fa-plus"></i>
-                            </button>
-                        </div>
-                        <div class="col-auto">
-                            <button id="buttonRemove" type="button" class="btn btn-danger btn-expiration">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                        </div>
+                    <div class="form-group">
+                        <label for="date">@lang('Date')</label>
+                        <input type="date" id="date" class="form-control" name="date" required>
                     </div>
-                    <div id="form-result"></div>
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" id="alert" name="alert" value="1">
+                        <label class="form-check-label" for="alert">@lang('Alert') (@lang('Optional'))</label>
+                    </div>
+                    <div class="form-group">
+                        <small>@lang('Spuntando la casella qui sopra, 15 giorni prima del giorno della manutenzione si riceverà un avviso.')</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="period">@lang('Rinnovo automatico') (@lang('Optional'))</label>
+                        <input type="number" class="form-control" id="period" name="period" max="24" min="1">
+                        <small>@lang('Indicare ogni quanti mesi (fino a un massimo di 24) ripetere la manutenzione.')</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="price">@lang('Price') (@lang('Optional'))</label>
+                        <input type="number" class="form-control" id="price" name="price">
+                    </div>
+                    <div class="form-group">
+                        <label for="garage">@lang('Garage') (@lang('Optional'))</label>
+                        <input type="text" id="garage" class="form-control" name="garage">
+                    </div>
+                    <div class="form-group">
+                        <label for="km">@lang('Km') (@lang('Optional'))</label>
+                        <input type="number" step="0.01" class="form-control" id="km" name="km">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">@lang('Description') (@lang('Optional'))</label>
+                        <input type="text" class="form-control" id="description" maxlength="150" name="description">
+                        <small>@lang('Max 50 characters.')</small>
+                    </div>
+                    <div class="form-group" id="form-result"></div>
                     <div class="modal-footer">
                         <button id="btn-close" type="button" class="btn btn-secondary" data-dismiss="modal">@lang('Close')</button>
                         <button type="submit" class="btn btn-primary submit">
@@ -189,6 +167,10 @@
 <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js" defer></script>
 <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.html5.min.js" defer></script>
 <script type="text/javascript" src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js" defer></script>
+
+<!-- LIBRERIA PER LE DATE -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
 
 @switch(App::getLocale())
 @case('it')
@@ -220,52 +202,20 @@
         return newDate;
     }
 
-    function formatExp(d) {
-        var today = new Date();
-        var deadline;
-        today.setDate(today.getDate() + 16);
-        var html = '<table class="table table-sm table-borderless table-exp"><thead>' +
-            '<tr> <th scope = "col" > @lang("Name")' +
-            '</th> <th scope = "col" > @lang("Deadline")' +
-            '</th> <th scope = "col" > @lang("Description") </th> </thead>' +
-            '<tbody>';
-        d.forEach(element => {
-            html += '<tr><td>' + element.name + '</td>'
-            if (element.deadline != null) {
-                deadline = new Date(formatInternational(element.deadline));
-                html += '<td>' + element.deadline;
-                if (deadline < today) {
-                    html += '<i class="fas fa-exclamation-triangle"></i>';
-                }
-                html += '</td>';
-            } else {
-                html += '<td></td>';
-            }
-            if (element.description != null) {
-                html += '<td>' + element.description + '</td>'
-            } else {
-                html += '<td></td>';
-            }
-            html += '</tr>';
-        });
-        html += '</tbody></table>';
-        return html;
-    }
-
 
     $(document).ready(function() {
 
         var table = $('#datatable').DataTable({
             "dom": '<"row justify-content-between table-row"<"col-sm table-col"lB><"col-sm-auto"f>>rtip',
             "order": [
-                [2, "asc"]
+                [1, "asc"]
             ],
             buttons: {
                 buttons: [{
                         extend: 'excelHtml5',
                         className: 'btn btn-success',
                         exportOptions: {
-                            columns: [2, 3, 4, 5, 7, 8]
+                            columns: [1, 2, 3, 4, 5, 7, 8]
                         },
                         text: '@lang("Export EXCEL")'
                     }, // NON FUNZIONA (PER ORA) CON I NUMERI
@@ -273,7 +223,7 @@
                         extend: 'pdfHtml5',
                         className: 'btn btn-danger',
                         exportOptions: {
-                            columns: [2, 3, 4, 5, 6, 7, 8]
+                            columns: [1, 2, 3, 4, 5, 6, 7, 8]
                         },
                         text: '@lang("Export PDF")',
                         customize: function(doc) {
@@ -289,41 +239,10 @@
             ],
             "processing": true,
             "serverSide": true,
-            "ajax": "{{ route('api.trucks') }}",
+            "ajax": "{{ route('api.maint') }}",
             "columns": [{
                     data: 'id',
                     name: 'id'
-                },
-                {
-                    "className": 'details-control',
-                    "orderable": false,
-                    "data": 'expirations',
-                    "defaultContent": '',
-                    "render": function(data, type, row) {
-                        var html = "",
-                            check = 0;
-                        if (data.length > 0) {
-                            html = '<button id="btn-details" type="button" class="btn btn-sm btn-success">' +
-                                '<i class="fas fa-plus"></i>' +
-                                '</button>';
-                            var today = new Date();
-                            var deadline;
-                            today.setDate(today.getDate() + 16);
-
-                            var check = 0;
-                            data.forEach(expiration => {
-                                if (expiration.deadline != null && check === 0) {
-                                    deadline = new Date(formatInternational(expiration.deadline));
-                                    if (deadline < today) {
-                                        html += `<i title="@lang('There is at least one upcoming deadline')"` +
-                                            'class="fas fa-exclamation-triangle fa-lg alert-expiration"></i>';
-                                        check = -1;
-                                    }
-                                }
-                            });
-                        }
-                        return html;
-                    },
                 },
                 {
                     data: 'plate',
@@ -334,24 +253,28 @@
                     name: 'type'
                 },
                 {
-                    data: 'brand',
-                    name: 'brand'
+                    data: 'date',
+                    name: 'date'
                 },
                 {
-                    data: 'model',
-                    name: 'model'
+                    data: 'period',
+                    name: 'period'
                 },
                 {
                     data: 'km',
                     name: 'km'
                 },
                 {
-                    data: 'description',
-                    name: 'description'
+                    data: 'price',
+                    name: 'price'
                 },
                 {
-                    data: 'group',
-                    name: 'group'
+                    data: 'garage',
+                    name: 'garage'
+                },
+                {
+                    data: 'description',
+                    name: 'description'
                 },
             ],
             "columnDefs": [{
@@ -362,13 +285,18 @@
                     'width': '1%'
                 },
                 {
-                    'targets': 1,
+                    'targets': 3,
+                    'render': function(data) {
+                        return moment(data).format('DD-MM-YYYY');
+                    }
+                },
+                {
+                    'targets': [2, 4, 5, 6, 7, 8],
                     "orderable": false,
+                },
+                {
                     "searchable": false,
-                    'width': '1%'
-                }, {
-                    'targets': 7,
-                    "orderable": false,
+                    "targets": [3, 4, 5, 6]
                 }
             ],
             'select': {
@@ -381,30 +309,6 @@
             search: {
                 "regex": true
             },
-        });
-
-        $('#datatable tbody').on('click', '#btn-details', function() {
-            var tr = $(this).closest('tr');
-            var row = table.row(tr);
-
-            if (row.child.isShown()) {
-                // This row is already open - close it
-                row.child.hide();
-                tr.removeClass('shown');
-                $(this).find('.fas').removeClass('fa-minus');
-                $(this).find('.fas').addClass('fa-plus');
-                $(this).removeClass('btn-danger');
-                $(this).addClass('btn-success');
-            } else {
-                // Open this row
-                rowData = row.data();
-                row.child(formatExp(rowData.expirations)).show();
-                tr.addClass('shown');
-                $(this).find('.fas').removeClass('fa-plus');
-                $(this).find('.fas').addClass('fa-minus');
-                $(this).removeClass('btn-success');
-                $(this).addClass('btn-danger');
-            }
         });
 
         $('#datatable').on('draw.dt', function() {
@@ -430,47 +334,9 @@
             }
         }); // DESELEZIONA I BUTTONS EDIT E DELETE
 
-        $('#buttonAdd').on('click', function(event) {
-            var lastInput = $('#expirations-row').prev();
-            var id;
-            var idNew = [];
-            if (lastInput.attr('id') == 'expirations-title') {
-                id = 1;
-            } else {
-                idNew = lastInput.attr('id').split("_");
-                idNew[1] = parseInt(idNew[1]);
-                id = idNew[1] + 1;
-            }
-
-            var html = "<div id='expiration_" + id + "' class='form-group'>";
-            html += '<label>@lang("Name")</label>';
-            html += '<input type="text" id="expirationName_' + id + '" class="form-control" name="expiration_' + id + '" required>'
-            html += '<label>@lang("Description")</label>';
-            html += '<input type="text" id="description_' + id + '" class="form-control" name="description_' + id + '">'
-            html += ' <label>@lang("Deadline")</label>';
-            html += '<input type="date" id="deadline_' + id + '" class="form-control" name="deadline_' + id + '"' + ` min="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" required>`
-            html += '</div>'
-
-            $('#expirations-row').before(html);
-        });
-
-        $('#buttonRemove').on('click', function(event) {
-            var lastInput = $('#expirations-row').prev();
-
-            if (lastInput.attr('id') != 'expirations-title') {
-                lastInput.remove();
-            }
-        });
-
         $('#btn-close').on('click', function(event) {
             if ($('#addTruck').length != 0) $('#addTruck')[0].reset(); //PER CONTROLLARE SE SONO IN EDIT O IN ADD E EVITARE ERRORI DEL JAVASCRIPT
             else $('#editTruck')[0].reset();
-
-            var lastInput = $('#expirations-row').prev();
-            while (lastInput.attr('id') != 'expirations-title') {
-                lastInput.remove();
-                lastInput = $('#expirations-row').prev();
-            }
         });
 
         $('#addTruck').on('submit', function(event) {
@@ -483,9 +349,9 @@
             var form = $(this).closest('form');
 
             if (form.attr('id') == 'addTruck') {
-                url = '{{ route("admin.trucks.store") }}';
+                url = '{{ route("admin.maint.store") }}';
             } else {
-                url = '{{ route("admin.trucks.edit") }}';
+                url = '{{ route("admin.maint.edit") }}';
             };
 
             $.ajax({
@@ -513,12 +379,6 @@
                         html = '<div class="alert alert-success">' + data.success + '</div>';
                         if ($('#addTruck').length != 0) {
                             $('#addTruck')[0].reset(); //PER CONTROLLARE SE SONO IN EDIT O IN ADD E EVITARE ERRORI DEL JAVASCRIPT
-
-                            var lastInput = $('#expirations-row').prev();
-                            while (lastInput.attr('id') != 'expirations-title') {
-                                lastInput.remove();
-                                lastInput = $('#expirations-row').prev();
-                            }
                         }
                         $('#datatable').DataTable().ajax.reload();
                     }
@@ -545,13 +405,13 @@
             $('#message-success').show();
 
             $.ajax({
-                url: '{{ route("admin.trucks.delete") }}',
+                url: '{{ route("admin.maint.delete") }}',
                 type: "POST",
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 data: {
-                    trucks: id
+                    maint: id
                 },
                 success: function(data) {
                     var html = '';
@@ -568,7 +428,7 @@
 
         $('#btn-edit').on('click', function(e) {
 
-            $('#modal-label-add').text('Edit truck');
+            $('#modal-label-add').text('Edit maintenance');
             $('#addTruck').prop('id', 'editTruck');
 
             var rows_selected = table.column(0).checkboxes.selected();
@@ -611,76 +471,40 @@
 
         $('#btn-add').on('click', function(e) {
 
-            $('#modal-label-add').text('Add truck');
+            $('#modal-label-add').text('Add maintenance');
             $('#editTruck').attr('id', 'addTruck');
 
         });
 
-        $('.select-input-group').change(function() {
-            if ($('.btn-show-exp').text() == "@lang('Show regular table')") {
-                var url = "{{ route('api.trucks.expirations') }}";
-            } else {
-                var url = "{{ route('api.trucks') }}";
-            }
+        $('.select-input-date-to').change(function() {
+            var url = "{{ route('api.maint') }}";
+
             if ($(this).val() == '') {
-                var group = 'nullValue';
+                var date = 'nullValue';
             } else {
-                var group = $(this).val();
+                var date = $(this).val();
             }
-            url += "/" + group + "/" + $('.select-input-type').val();
+            url += "/" + date + "/" + $('.select-input-date-from').val();
 
             table.ajax.url(url).load();
         }); // FILTRO PER GRUPPO
 
-        $('.select-input-type').change(function() {
-            if ($('.btn-show-exp').text() == "@lang('Show regular table')") {
-                var url = "{{ route('api.trucks.expirations') }}";
+        $('.select-input-date-from').change(function() {
+            var url = "{{ route('api.maint') }}";
+
+            if ($('.select-input-date-to').val() == '') {
+                var date = 'nullValue';
             } else {
-                var url = "{{ route('api.trucks') }}";
+                var date = $('.select-input-date-to').val();
             }
-            if ($('.select-input-group').val() == '') {
-                var group = 'nullValue';
-            } else {
-                var group = $('.select-input-group').val();
-            }
-            url += "/" + group + "/" + $(this).val();
+            url += "/" + date + "/" + $(this).val();
 
             table.ajax.url(url).load();
         }); // FILTRO PER TIPO
 
-        $('#btn-show-expirations').click(function(e) {
-            if ($(this).attr('id') == 'btn-show-table') {
-
-                var url = "{{ route('api.trucks') }}";
-                if ($('.select-input-group').val() == '') {
-                    var group = 'nullValue';
-                } else {
-                    var group = $('.select-input-group').val();
-                }
-                url += "/" + group + "/" + $('.select-input-type').val();
-
-                table.ajax.url(url).load();
-
-                $(this).text("@lang('Show upcoming deadlines')");
-                $(this).prop('id', 'btn-show-expirations');
-
-            } else {
-
-                var url = "{{ route('api.trucks.expirations') }}";
-                if ($('.select-input-group').val() == '') {
-                    var group = 'nullValue';
-                } else {
-                    var group = $('.select-input-group').val();
-                }
-                url += "/" + group + "/" + $('.select-input-type').val();
-
-                table.ajax.url(url).load();
-
-                $(this).text("@lang('Show regular table')");
-                $(this).prop('id', 'btn-show-table');
-
-            }
-        });
+        $('#btn-reset').click(function(e) {
+            table.ajax.url("{{ route('api.maint') }}").load();
+        }) //RESET DELLE DATE
 
     });
 </script>

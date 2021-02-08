@@ -25,7 +25,7 @@
                 </a>
             </li>
             <li class="c-sidebar-nav-item">
-                <a class="c-sidebar-nav-link" href="#">
+                <a class="c-sidebar-nav-link" href="{{ route('admin.maint') }}">
                     @lang('Maintenance')
                 </a>
             </li>

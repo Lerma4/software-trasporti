@@ -24,6 +24,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 // SETTINGS
 
 Route::get('/admin/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'index'])->name('admin.settings');
+Route::post('/admin/settings/setLang', [\App\Http\Controllers\Admin\SettingsController::class, 'setLang'])->name('admin.lang');
+Route::post('/admin/settings/psw', [\App\Http\Controllers\Admin\SettingsController::class, 'pswChange'])->name('admin.psw.change');
 
 // GROUPS
 
@@ -55,3 +57,13 @@ Route::get('/admin/APItrucks/expirations/{group?}/{type?}', [\App\Http\Controlle
 Route::post('/admin/APItrucks/store', [\App\Http\Controllers\Admin\API\APITrucksController::class, 'store'])->name('admin.trucks.store');
 Route::post('/admin/APItrucks/edit', [\App\Http\Controllers\Admin\API\APITrucksController::class, 'edit'])->name('admin.trucks.edit');
 Route::post('/admin/APItrucks/delete', [\App\Http\Controllers\Admin\API\APITrucksController::class, 'destroy'])->name('admin.trucks.delete');
+
+
+// MAINTENANCES
+
+Route::get('/admin/maintenance', [\App\Http\Controllers\Admin\MaintenancesController::class, 'index'])->name('admin.maint');
+
+Route::get('/admin/APIMaintenance/trucks/{dateTo?}/{dateFrom?}', [\App\Http\Controllers\Admin\API\APIMaintenancesController::class, 'getMaint'])->name('api.maint');
+Route::post('/admin/APIMaintenance/store', [\App\Http\Controllers\Admin\API\APIMaintenancesController::class, 'store'])->name('admin.maint.store');
+Route::post('/admin/APIMaintenance/edit', [\App\Http\Controllers\Admin\API\APIMaintenancesController::class, 'edit'])->name('admin.maint.edit');
+Route::post('/admin/APIMaintenance/delete', [\App\Http\Controllers\Admin\API\APIMaintenancesController::class, 'destroy'])->name('admin.maint.delete');
