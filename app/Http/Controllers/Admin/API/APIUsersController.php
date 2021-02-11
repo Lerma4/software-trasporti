@@ -129,8 +129,7 @@ class APIUsersController extends Controller
                         ->where('companyId', auth('admin')->user()->companyId)
                         ->ignore($request->id_user),
                     'max:100'
-                ],
-                'group' => ['exists:groups,name'],
+                ]
             ]);
         } else {
             $validator = Validator::make($request->all(), [
@@ -142,8 +141,7 @@ class APIUsersController extends Controller
                         ->ignore($request->id_user),
                     'max:100'
                 ],
-                'password' => ['required', 'confirmed', 'min:8'],
-                'group' => ['exists:groups,name'],
+                'password' => ['required', 'confirmed', 'min:8']
             ]);
         }
 
@@ -167,8 +165,8 @@ class APIUsersController extends Controller
             return response()
                 ->json(['errors' => [__('Two or more licenses have the same name')]]);
         }
-
-        $user = User::findOrfail($request->id_user)
+        $user = User::findOrfail($request->id_user);
+        $user
             ->update([
                 'name' => $request->name,
                 'email' => $request->email,

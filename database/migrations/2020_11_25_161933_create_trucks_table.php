@@ -19,7 +19,7 @@ class CreateTrucksTable extends Migration
             $table->string('brand')->nullable();
             $table->string('model')->nullable();
             $table->float('km');
-            $table->string('group')->nullable();
+            $table->string('group')->nullable()->default(NULL);
             $table->bigInteger('companyId');
             $table->timestamps();
         });

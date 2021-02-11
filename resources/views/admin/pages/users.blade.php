@@ -134,12 +134,12 @@
                     </div>
                     <div id="row-licenses" class="row justify-content-center">
                         <div class="col-auto">
-                            <button id="buttonAdd" type="button" class="btn btn-success btn-license">
+                            <button id="buttonAdd" type="button" class="btn btn-success btn-trip">
                                 <i class="fas fa-plus"></i>
                             </button>
                         </div>
                         <div class="col-auto">
-                            <button id="buttonRemove" type="button" class="btn btn-danger btn-license">
+                            <button id="buttonRemove" type="button" class="btn btn-danger btn-trip">
                                 <i class="fas fa-minus"></i>
                             </button>
                         </div>
