@@ -67,7 +67,6 @@ class APIUsersController extends Controller
                 'max:100'
             ],
             'password' => ['required', 'confirmed', 'min:8'],
-            'group' => ['exists:groups,name'],
         ]);
 
         if ($validator->fails()) {

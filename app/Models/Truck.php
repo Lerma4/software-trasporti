@@ -21,10 +21,6 @@ class Truck extends Model
         'companyId'
     ];
 
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-
     public function setPlateAttribute($value)
     {
         $this->attributes['plate'] = strtoupper($value);

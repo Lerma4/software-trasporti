@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::post('/home/autocomplete', [App\Http\Controllers\HomeController::class, 'autocomplete'])->name('autocomplete');
+Route::post('/home/tripmerci', [App\Http\Controllers\HomeController::class, 'tripMerci'])->name('tripmerci');
 
 // ADMIN SIDE
 

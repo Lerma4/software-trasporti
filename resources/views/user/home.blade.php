@@ -1,18 +1,20 @@
 @extends('layouts.app')
 
+@section('styles')
+<link rel="stylesheet" type="text/css" href="{{asset('jqueryui/jquery-ui.min.css')}}">
+@endsection
+
 @section('content')
 <div class="col-12 pages-content">
     <div class="card">
         <div class="card-body">
 
-            <div id="form-falied" class="alert alert-danger" role="alert"></div>
-
-            <div id="form-success" class="alert alert-success" role="alert"></div>
+            <div id="form-result"></div>
 
             <div class="form-group">
                 <label>@lang('Seleziona la tipologia di viaggio:')</label>
                 <select class="form-control trip" id="type" name="type" required>
-                    <option value="merci">@lang('Carico/scarico merce')</option>
+                    <option value="merci">@lang('Carico/scarico merci')</option>
                     <option value="officina">@lang('Officina/gommista')</option>
                     <option value="vuoto">@lang('A vuoto')</option>
                 </select>
@@ -20,13 +22,21 @@
 
             <form id="merci">
                 <div class="form-group">
+                    <label for="date">@lang('Date'):</label>
+                    <input type="date" class="form-control" name="date" max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" required>
+                </div>
+                <div class="form-group">
                     <label for="plate">@lang("Truck's plate"):</label>
                     <select name="plate" class="form-control" required>
                         <option value=""></option>
                         @foreach ($plates as $plate)
-                        <option value="{{ $plate->plate }}">{{ $plate->plate }}</option>
+                        <option value="{{ $plate->plate }}">{{ $plate->plate }} (km: {{ $plate->km }})</option>
                         @endforeach
                     </select>
+                </div>
+                <div class="form-group">
+                    <label for="start">@lang('Città di partenza'):</label>
+                    <input type="text" class="form-control autocomplete" name="start" required>
                 </div>
                 <div class="form-group">
                     <label id="label-stop">@lang('Stops') (@lang("Optional")):</label>
@@ -45,7 +55,7 @@
                 </div>
                 <div class="form-group">
                     <label for="destination">@lang('Destinazione finale'):</label>
-                    <input type="text" class="form-control" name="destination" required>
+                    <input type="text" class="form-control autocomplete" name="destination" required>
                 </div>
                 <div class="form-group">
                     <label for="km">@lang('Km finali'):</label>
@@ -56,12 +66,12 @@
                     <input type="number" class="form-control" name="fuel" min="0" required>
                 </div>
                 <div class="form-group">
-                    <label for="fuel_cost">@lang('Fuel cost'):</label>
-                    <input type="number" class="form-control" name="fuel_cost" min="0" required>
+                    <label for="cost">@lang('Fuel cost'):</label>
+                    <input type="number" class="form-control" name="cost" min="0" required>
                 </div>
                 <div class="form-group">
-                    <label for="plate_semi">@lang("Targa semirimorchio") (@lang("Optional")):</label>
-                    <select name="plate_semi" class="form-control">
+                    <label for="plate_s">@lang("Targa semirimorchio") (@lang("Optional")):</label>
+                    <select name="plate_s" class="form-control">
                         <option value=""></option>
                         @foreach ($plates_semi as $plate)
                         <option value="{{ $plate->plate }}">{{ $plate->plate }}</option>
@@ -73,28 +83,38 @@
                     <input type="text" class="form-control" name="container">
                 </div>
                 <div class="form-group">
-                    <label for="container">@lang('Note') (@lang("Optional")):</label>
-                    <textarea class="form-control" name="note" rows="3"></textarea>
+                    <label for="note">@lang('Note') (@lang("Optional")):</label>
+                    <textarea class="form-control" name="note" rows="3" max="200"></textarea>
                 </div>
                 <div class="form-group">
-                    <span class="spinner-border spinner-border-sm loader-submit hidden" role="status" aria-hidden="true"></span>
-                    <button type="submit" class="btn btn-primary submit">@lang('Submit')</button>
+                    <button type="submit" class="btn btn-primary submit-merci">
+                        <span class="spinner-border spinner-border-sm loader-submit hidden" role="status" aria-hidden="true"></span>
+                        @lang('Submit')
+                    </button>
                 </div>
             </form>
 
             <form id="officina">
                 <div class="form-group">
+                    <label for="date">@lang('Date'):</label>
+                    <input type="date" class="form-control" name="date" max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" required>
+                </div>
+                <div class="form-group">
                     <label for="plate">@lang("Truck's plate"):</label>
                     <select name="plate" class="form-control" required>
                         <option value=""></option>
                         @foreach ($plates as $plate)
-                        <option value="{{ $plate->plate }}">{{ $plate->plate }}</option>
+                        <option value="{{ $plate->plate }}">{{ $plate->plate }} (km: {{ $plate->km }})</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="form-group">
+                    <label for="start">@lang('Città di partenza'):</label>
+                    <input type="text" class="form-control autocomplete" name="start" required>
+                </div>
+                <div class="form-group">
                     <label for="destination">@lang('Destinazione'):</label>
-                    <input type="text" class="form-control" name="destination" required>
+                    <input type="text" class="form-control autocomplete" name="destination" required>
                 </div>
                 <div class="form-group">
                     <label for="garage">@lang('Garage'):</label>
@@ -109,12 +129,12 @@
                     <input type="number" class="form-control" name="fuel" min="0" required>
                 </div>
                 <div class="form-group">
-                    <label for="fuel_cost">@lang('Fuel cost'):</label>
-                    <input type="number" class="form-control" name="fuel_cost" min="0" required>
+                    <label for="cost">@lang('Fuel cost'):</label>
+                    <input type="number" class="form-control" name="cost" min="0" required>
                 </div>
                 <div class="form-group">
-                    <label for="plate_semi">@lang("Targa semirimorchio") (@lang("Optional")):</label>
-                    <select name="plate_semi" class="form-control">
+                    <label for="plate_s">@lang("Targa semirimorchio") (@lang("Optional")):</label>
+                    <select name="plate_s" class="form-control">
                         <option value=""></option>
                         @foreach ($plates_semi as $plate)
                         <option value="{{ $plate->plate }}">{{ $plate->plate }}</option>
@@ -126,24 +146,34 @@
                     <textarea class="form-control" name="note" rows="3"></textarea>
                 </div>
                 <div class="form-group">
-                    <span class="spinner-border spinner-border-sm loader-submit hidden" role="status" aria-hidden="true"></span>
-                    <button type="submit" class="btn btn-primary submit">@lang('Submit')</button>
+                    <button type="submit" class="btn btn-primary submit-officina">
+                        <span class="spinner-border spinner-border-sm loader-submit hidden" role="status" aria-hidden="true"></span>
+                        @lang('Submit')
+                    </button>
                 </div>
             </form>
 
             <form id="vuoto">
                 <div class="form-group">
+                    <label for="date">@lang('Date'):</label>
+                    <input type="date" class="form-control" name="date" max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" required>
+                </div>
+                <div class="form-group">
                     <label for="plate">@lang("Truck's plate"):</label>
                     <select name="plate" class="form-control" required>
                         <option value=""></option>
                         @foreach ($plates as $plate)
-                        <option value="{{ $plate->plate }}">{{ $plate->plate }}</option>
+                        <option value="{{ $plate->plate }}">{{ $plate->plate }} (km: {{ $plate->km }})</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="form-group">
+                    <label for="start">@lang('Città di partenza'):</label>
+                    <input type="text" class="form-control autocomplete" name="start" required>
+                </div>
+                <div class="form-group">
                     <label for="destination">@lang('Destinazione'):</label>
-                    <input type="text" class="form-control" name="destination" required>
+                    <input type="text" class="form-control autocomplete" name="destination" required>
                 </div>
                 <div class="form-group">
                     <label for="km">@lang('Km finali'):</label>
@@ -154,12 +184,12 @@
                     <input type="number" class="form-control" name="fuel" min="0" required>
                 </div>
                 <div class="form-group">
-                    <label for="fuel_cost">@lang('Fuel cost'):</label>
-                    <input type="number" class="form-control" name="fuel_cost" min="0" required>
+                    <label for="cost">@lang('Fuel cost'):</label>
+                    <input type="number" class="form-control" name="cost" min="0" required>
                 </div>
                 <div class="form-group">
-                    <label for="plate_semi">@lang("Targa semirimorchio") (@lang("Optional")):</label>
-                    <select name="plate_semi" class="form-control">
+                    <label for="plate_s">@lang("Targa semirimorchio") (@lang("Optional")):</label>
+                    <select name="plate_s" class="form-control">
                         <option value=""></option>
                         @foreach ($plates_semi as $plate)
                         <option value="{{ $plate->plate }}">{{ $plate->plate }}</option>
@@ -171,8 +201,10 @@
                     <textarea class="form-control" name="note" rows="3"></textarea>
                 </div>
                 <div class="form-group">
-                    <span class="spinner-border spinner-border-sm loader-submit hidden" role="status" aria-hidden="true"></span>
-                    <button type="submit" class="btn btn-primary submit">@lang('Submit')</button>
+                    <button type="submit" class="btn btn-primary submit-vuoto">
+                        <span class="spinner-border spinner-border-sm loader-submit hidden" role="status" aria-hidden="true"></span>
+                        @lang('Submit')
+                    </button>
                 </div>
             </form>
         </div>
@@ -181,6 +213,7 @@
 @endsection
 
 @section('scripts')
+<script src="{{asset('jqueryui/jquery-ui.min.js')}}" type="text/javascript" defer></script>
 
 <script>
     $(document).ready(function() {
@@ -228,7 +261,7 @@
                 id = idNew[1] + 1;
             }
 
-            var html = '<input type="text" class="form-control input-stop" id="stop_' + id + '" name="stop_' + id + '" required>';
+            var html = '<input type="text" class="form-control autocomplete input-stop" id="stop_' + id + '" name="stop_' + id + '" required>';
 
             $('#row-stop').before(html);
         });
@@ -241,14 +274,44 @@
             }
         });
 
+        // AUTOCOMPLETAMENTO CITTA'
+
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        $(document).on('keydown.autocomplete', '.autocomplete', function() {
+            $(this).autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        url: "{{route('autocomplete')}}",
+                        type: 'post',
+                        dataType: "json",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            search: request.term
+                        },
+                        success: function(data) {
+                            response(data);
+                        }
+                    });
+                },
+                select: function(event, ui) {
+                    $(this).val(ui.item.label);
+                    return false;
+                },
+                minLength: 2
+            });
+        });
+
         // SUBMIT FORM
 
         $('#merci').on('submit', function(event) {
             event.preventDefault();
             var form = $(this).closest('form');
 
+            $('#form-result').text('');
+            $('#form-result').fadeIn();
+
             $.ajax({
-                url: url,
+                url: "{{route('tripmerci')}}",
                 type: "POST",
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -257,7 +320,7 @@
                 dataType: "json",
                 beforeSend: function() {
                     $('.loader-submit').removeClass('hidden');
-                    $('.submit').contents().last().replaceWith('@lang("Loading...")');
+                    $('.submit-merci').contents().last().replaceWith('@lang("Loading...")');
                 },
                 success: function(data) {
                     var html = '';
@@ -270,23 +333,20 @@
                     }
                     if (data.success) {
                         html = '<div class="alert alert-success">' + data.success + '</div>';
-                        if ($('#addUser').length != 0) {
-                            $('#addUser')[0].reset(); //PER CONTROLLARE SE SONO IN EDIT O IN ADD E EVITARE ERRORI DEL JAVASCRIPT
-
-                            var lastInput = $('#row-licenses').prev();
-                            while (lastInput.attr('id') != 'license-title') {
-                                lastInput.remove();
-                                lastInput = $('#row-licenses').prev();
-                            }
+                        var lastInput = $('#row-stop').prev();
+                        while (lastInput.attr('id') != 'label-stop') {
+                            lastInput.remove();
+                            lastInput = $('#row-stop').prev();
                         }
-                        $('#datatable').DataTable().ajax.reload();
+                        $('#merci')[0].reset();
                     }
+                    $(window).scrollTop(0);
                     $('#form-result').html(html);
                     $('#form-result').delay(4000).fadeOut();
                 },
                 complete: function() {
                     $('.loader-submit').addClass('hidden');
-                    $('.submit').contents().last().replaceWith('@lang("Submit")');
+                    $('.submit-merci').contents().last().replaceWith('@lang("Submit")');
                 },
             });
         });
