@@ -276,6 +276,7 @@
                             columns: [2, 3, 4, 5, 6, 7, 8]
                         },
                         text: '@lang("Export PDF")',
+                        orientation: 'landscape',
                         customize: function(doc) {
                             doc.content[1].table.widths =
                                 Array(doc.content[1].table.body[0].length + 1).join('*').split('');

@@ -72,7 +72,7 @@ class HomeController extends Controller
 
         $truck_s = Truck::where('companyId', '=', auth()->user()->companyId)
             ->where('plate', $request->plate_s)
-            ->get();
+            ->first();
 
         $lastTrip = Trip::where('companyId', '=', auth()->user()->companyId)
             ->where('plate', $request->plate)
@@ -101,8 +101,8 @@ class HomeController extends Controller
                 ->json(['errors' => $validator->errors()->all()]);
         }
 
-        if ($truck[0]->km > $request->km) {
-            $error = __("Il numero di km inserito è inferiore a quelli che aveva già il veicolo");
+        if ($truck[0]->km >= $request->km) {
+            $error = __("Il numero di km inserito è inferiore o uguale a quelli che aveva già il veicolo");
             return response()
                 ->json(['errors' => [$error]]);
         } elseif (($request->km - $truck[0]->km) > 1000) {
@@ -122,7 +122,7 @@ class HomeController extends Controller
         $truck[0]->km = $request->km;
         $truck[0]->save();
 
-        if ($truck_s != NULL) {
+        if ($truck_s[0] != NULL) {
             $truck_s[0]->km += $distance;
             $truck_s[0]->save();
         }
@@ -153,6 +153,179 @@ class HomeController extends Controller
             'start' => $request->start,
             'destination' => $request->destination,
             'stops' => $stops,
+            'km' => $request->km,
+            'distance' => $distance,
+            'fuel' => $request->fuel,
+            'cost' => $request->cost,
+            'note' => $request->note,
+        ]);
+
+        return response()->json(['success' => [__('Trip successfully inserted!')]]);
+    }
+
+    public function tripOfficina(Request $request)
+    {
+        // VARIABILI UTILI
+
+        $truck = Truck::where('companyId', '=', auth()->user()->companyId)
+            ->where('plate', $request->plate)
+            ->get();
+
+        $truck_s = Truck::where('companyId', '=', auth()->user()->companyId)
+            ->where('plate', $request->plate_s)
+            ->first();
+
+        $lastTrip = Trip::where('companyId', '=', auth()->user()->companyId)
+            ->where('plate', $request->plate)
+            ->latest()
+            ->first();
+
+        $distance = $request->km - $truck[0]->km;
+
+        $error = '';
+
+        // CHECK
+
+        $validator = Validator::make($request->all(), [
+            'date' => ['required', 'date'],
+            'start' => ['required', 'max:40'],
+            'destination' => ['required', 'max:40'],
+            'km' => ['required', 'numeric', 'min:0'],
+            'fuel' => ['required', 'numeric', 'min:0'],
+            'cost' => ['required', 'numeric', 'min:0'],
+            'plate' => ['required', 'exists:trucks,plate'],
+            'plate_s' => ['nullable', 'exists:trucks,plate'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()
+                ->json(['errors' => $validator->errors()->all()]);
+        }
+
+        if ($truck[0]->km >= $request->km) {
+            $error = __("Il numero di km inserito è inferiore o uguale a quelli che aveva già il veicolo");
+            return response()
+                ->json(['errors' => [$error]]);
+        } elseif (($request->km - $truck[0]->km) > 1000) {
+            $error = __("Il numero di km inserito è troppo elevato rispetto ai km precedenti del veicolo");
+            return response()
+                ->json(['errors' => [$error]]);
+        } elseif ($lastTrip != NULL) {
+            if ($request->date < $lastTrip->date) {
+                $error = __("Con questo mezzo è già stato inserito un viaggio dopo questa data");
+                return response()
+                    ->json(['errors' => [$error]]);
+            }
+        }
+
+        // AGGIORNAMENTO VEICOLI
+
+
+        $truck[0]->km = $request->km;
+        $truck[0]->save();
+
+        if ($truck_s != NULL) {
+            $truck_s[0]->km += $distance;
+            $truck_s[0]->save();
+        }
+
+        Trip::create([
+            'companyId' => auth()->user()->companyId,
+            'user_email' => auth()->user()->email,
+            'name' => auth()->user()->name,
+            'date' => $request->date,
+            'type' => 1,
+            'plate' => $request->plate,
+            'plate_s' => $request->plate_s,
+            'start' => $request->start,
+            'destination' => $request->destination,
+            'garage' => $request->garage,
+            'km' => $request->km,
+            'distance' => $distance,
+            'fuel' => $request->fuel,
+            'cost' => $request->cost,
+            'note' => $request->note,
+        ]);
+
+        return response()->json(['success' => [__('Trip successfully inserted!')]]);
+    }
+
+    public function tripVuoto(Request $request)
+    {
+        // VARIABILI UTILI
+
+        $truck = Truck::where('companyId', '=', auth()->user()->companyId)
+            ->where('plate', $request->plate)
+            ->get();
+
+        $truck_s = Truck::where('companyId', '=', auth()->user()->companyId)
+            ->where('plate', $request->plate_s)
+            ->first();
+
+        $lastTrip = Trip::where('companyId', '=', auth()->user()->companyId)
+            ->where('plate', $request->plate)
+            ->latest()
+            ->first();
+
+        $distance = $request->km - $truck[0]->km;
+
+        $error = '';
+
+        // CHECK
+
+        $validator = Validator::make($request->all(), [
+            'date' => ['required', 'date'],
+            'start' => ['required', 'max:40'],
+            'destination' => ['required', 'max:40'],
+            'km' => ['required', 'numeric', 'min:0'],
+            'fuel' => ['required', 'numeric', 'min:0'],
+            'cost' => ['required', 'numeric', 'min:0'],
+            'plate' => ['required', 'exists:trucks,plate'],
+            'plate_s' => ['nullable', 'exists:trucks,plate'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()
+                ->json(['errors' => $validator->errors()->all()]);
+        }
+
+        if ($truck[0]->km >= $request->km) {
+            $error = __("Il numero di km inserito è inferiore o uguale a quelli che aveva già il veicolo");
+            return response()
+                ->json(['errors' => [$error]]);
+        } elseif (($request->km - $truck[0]->km) > 1000) {
+            $error = __("Il numero di km inserito è troppo elevato rispetto ai km precedenti del veicolo");
+            return response()
+                ->json(['errors' => [$error]]);
+        } elseif ($lastTrip != NULL) {
+            if ($request->date < $lastTrip->date) {
+                $error = __("Con questo mezzo è già stato inserito un viaggio dopo questa data");
+                return response()
+                    ->json(['errors' => [$error]]);
+            }
+        }
+
+        // AGGIORNAMENTO VEICOLI
+
+
+        $truck[0]->km = $request->km;
+        $truck[0]->save();
+
+        if ($truck_s != NULL) {
+            $truck_s[0]->km += $distance;
+            $truck_s[0]->save();
+        }
+
+        Trip::create([
+            'companyId' => auth()->user()->companyId,
+            'user_email' => auth()->user()->email,
+            'name' => auth()->user()->name,
+            'date' => $request->date,
+            'type' => 2,
+            'plate' => $request->plate,
+            'plate_s' => $request->plate_s,
+            'start' => $request->start,
+            'destination' => $request->destination,
             'km' => $request->km,
             'distance' => $distance,
             'fuel' => $request->fuel,

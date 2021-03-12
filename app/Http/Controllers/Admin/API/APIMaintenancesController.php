@@ -28,11 +28,17 @@ class APIMaintenancesController extends Controller
             $dateFrom = null;
         };
 
-        $result = Maintenance::when($dateTo != null && $dateTo != '', function ($query) use ($dateTo) {
-            return $query->where('date', '<', $dateTo);
+        $result = Maintenance::when($dateFrom != null && $dateFrom != '', function ($query) use ($dateFrom) {
+            return $query->where(function ($query) use ($dateFrom) {
+                $query->where('date', '>', $dateFrom)
+                    ->orwhere('date', $dateFrom);
+            });
         })
-            ->when($dateFrom != null && $dateFrom != '', function ($query) use ($dateFrom) {
-                return $query->where('date', '>', $dateFrom);
+            ->when($dateTo != null && $dateTo != '', function ($query) use ($dateTo) {
+                return $query->where(function ($query) use ($dateTo) {
+                    $query->where('date', '<', $dateTo)
+                        ->orwhere('date', $dateTo);
+                });
             })
             ->where('companyId', '=', auth('admin')->user()->companyId);
 

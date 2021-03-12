@@ -32,6 +32,11 @@
         </ul>
     </li>
     <li class="c-sidebar-nav-item">
+        <a class="c-sidebar-nav-link" href="{{ route('admin.trips') }}">
+            <i class="c-sidebar-nav-icon fas fa-truck-loading"></i> @lang('Trips')
+        </a>
+    </li>
+    <li class="c-sidebar-nav-item">
         <a class="c-sidebar-nav-link" href="{{ route('admin.settings') }}">
             <i class="c-sidebar-nav-icon fas fa-cogs"></i> @lang('Settings')
         </a>

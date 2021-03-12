@@ -301,7 +301,9 @@
             });
         });
 
-        // SUBMIT FORM
+        // SUBMIT FORMS
+
+        // CARICO SCARICO MERCI
 
         $('#merci').on('submit', function(event) {
             event.preventDefault();
@@ -311,7 +313,7 @@
             $('#form-result').fadeIn();
 
             $.ajax({
-                url: "{{route('tripmerci')}}",
+                url: "{{route('api.trips.merci')}}",
                 type: "POST",
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -347,6 +349,96 @@
                 complete: function() {
                     $('.loader-submit').addClass('hidden');
                     $('.submit-merci').contents().last().replaceWith('@lang("Submit")');
+                },
+            });
+        });
+
+        // OFFICINA
+
+        $('#officina').on('submit', function(event) {
+            event.preventDefault();
+            var form = $(this).closest('form');
+
+            $('#form-result').text('');
+            $('#form-result').fadeIn();
+
+            $.ajax({
+                url: "{{route('tripofficina')}}",
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: $(form).serialize(),
+                dataType: "json",
+                beforeSend: function() {
+                    $('.loader-submit').removeClass('hidden');
+                    $('.submit-officina').contents().last().replaceWith('@lang("Loading...")');
+                },
+                success: function(data) {
+                    var html = '';
+                    if (data.errors) {
+                        html = '<div class="alert alert-danger">';
+                        for (var count = 0; count < data.errors.length; count++) {
+                            html += '<p>' + data.errors[count] + '</p>';
+                        }
+                        html += '</div>';
+                    }
+                    if (data.success) {
+                        html = '<div class="alert alert-success">' + data.success + '</div>';
+                        $('#officina')[0].reset();
+                    }
+                    $(window).scrollTop(0);
+                    $('#form-result').html(html);
+                    $('#form-result').delay(4000).fadeOut();
+                },
+                complete: function() {
+                    $('.loader-submit').addClass('hidden');
+                    $('.submit-officina').contents().last().replaceWith('@lang("Submit")');
+                },
+            });
+        });
+
+        // A VUOTO
+
+        $('#vuoto').on('submit', function(event) {
+            event.preventDefault();
+            var form = $(this).closest('form');
+
+            $('#form-result').text('');
+            $('#form-result').fadeIn();
+
+            $.ajax({
+                url: "{{route('tripvuoto')}}",
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: $(form).serialize(),
+                dataType: "json",
+                beforeSend: function() {
+                    $('.loader-submit').removeClass('hidden');
+                    $('.submit-vuoto').contents().last().replaceWith('@lang("Loading...")');
+                },
+                success: function(data) {
+                    var html = '';
+                    if (data.errors) {
+                        html = '<div class="alert alert-danger">';
+                        for (var count = 0; count < data.errors.length; count++) {
+                            html += '<p>' + data.errors[count] + '</p>';
+                        }
+                        html += '</div>';
+                    }
+                    if (data.success) {
+                        html = '<div class="alert alert-success">' + data.success + '</div>';
+                        $('#vuoto')[0].reset();
+                    }
+                    $(window).scrollTop(0);
+                    $('#form-result').html(html);
+                    $('#form-result').delay(4000).fadeOut();
+                },
+                complete: function() {
+                    $('.loader-submit').addClass('hidden');
+                    $('.submit-vuoto').contents().last().replaceWith('@lang("Submit")');
                 },
             });
         });

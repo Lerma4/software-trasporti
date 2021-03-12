@@ -20,6 +20,12 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::post('/home/autocomplete', [App\Http\Controllers\HomeController::class, 'autocomplete'])->name('autocomplete');
 Route::post('/home/tripmerci', [App\Http\Controllers\HomeController::class, 'tripMerci'])->name('tripmerci');
+Route::post('/home/tripofficina', [App\Http\Controllers\HomeController::class, 'tripOfficina'])->name('tripofficina');
+Route::post('/home/tripvuoto', [App\Http\Controllers\HomeController::class, 'tripVuoto'])->name('tripvuoto');
+
+Route::get('/documents', [App\Http\Controllers\DocumentsController::class, 'index'])->name('documents');
+Route::get('/documents/getDocuments', [App\Http\Controllers\DocumentsController::class, 'getDocuments'])->name('getDocuments');
+Route::post('/documents/store', [App\Http\Controllers\DocumentsController::class, 'store'])->name('document.store');
 
 // ADMIN SIDE
 
@@ -65,7 +71,15 @@ Route::post('/admin/APItrucks/delete', [\App\Http\Controllers\Admin\API\APITruck
 
 Route::get('/admin/maintenance', [\App\Http\Controllers\Admin\MaintenancesController::class, 'index'])->name('admin.maint');
 
-Route::get('/admin/APIMaintenance/trucks/{dateTo?}/{dateFrom?}', [\App\Http\Controllers\Admin\API\APIMaintenancesController::class, 'getMaint'])->name('api.maint');
+Route::get('/admin/APIMaintenance/maint/{dateTo?}/{dateFrom?}', [\App\Http\Controllers\Admin\API\APIMaintenancesController::class, 'getMaint'])->name('api.maint');
 Route::post('/admin/APIMaintenance/store', [\App\Http\Controllers\Admin\API\APIMaintenancesController::class, 'store'])->name('admin.maint.store');
 Route::post('/admin/APIMaintenance/edit', [\App\Http\Controllers\Admin\API\APIMaintenancesController::class, 'edit'])->name('admin.maint.edit');
 Route::post('/admin/APIMaintenance/delete', [\App\Http\Controllers\Admin\API\APIMaintenancesController::class, 'destroy'])->name('admin.maint.delete');
+
+// TRIPS
+
+Route::get('/admin/trips', [\App\Http\Controllers\Admin\TripsController::class, 'index'])->name('admin.trips');
+
+Route::get('/admin/APITrips/trips/{dateTo?}/{dateFrom?}', [\App\Http\Controllers\Admin\API\APITripsController::class, 'getTrips'])->name('api.trips');
+Route::post('/admin/APITrips/trips/autocompletecity', [\App\Http\Controllers\Admin\API\APITripsController::class, 'autocompleteCity'])->name('autocomplete.city');
+Route::post('/admin/APITrips/trips/store', [\App\Http\Controllers\Admin\API\APITripsController::class, 'store'])->name('api.trips.store');

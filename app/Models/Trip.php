@@ -29,6 +29,10 @@ class Trip extends Model
         'companyId'
     ];
 
+    protected $casts = [
+        'date' => 'datetime:d-m-Y',
+    ];
+
     public function user_email()
     {
         return $this->belongsTo('App\Models\User', 'email', 'user_email');
