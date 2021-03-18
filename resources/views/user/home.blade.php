@@ -23,7 +23,8 @@
             <form id="merci">
                 <div class="form-group">
                     <label for="date">@lang('Date'):</label>
-                    <input type="date" class="form-control" name="date" max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" required>
+                    <input type="date" class="form-control" name="date"
+                        max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" required>
                 </div>
                 <div class="form-group">
                     <label for="plate">@lang("Truck's plate"):</label>
@@ -88,7 +89,8 @@
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary submit-merci">
-                        <span class="spinner-border spinner-border-sm loader-submit hidden" role="status" aria-hidden="true"></span>
+                        <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
+                            aria-hidden="true"></span>
                         @lang('Submit')
                     </button>
                 </div>
@@ -97,7 +99,8 @@
             <form id="officina">
                 <div class="form-group">
                     <label for="date">@lang('Date'):</label>
-                    <input type="date" class="form-control" name="date" max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" required>
+                    <input type="date" class="form-control" name="date"
+                        max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" required>
                 </div>
                 <div class="form-group">
                     <label for="plate">@lang("Truck's plate"):</label>
@@ -147,7 +150,8 @@
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary submit-officina">
-                        <span class="spinner-border spinner-border-sm loader-submit hidden" role="status" aria-hidden="true"></span>
+                        <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
+                            aria-hidden="true"></span>
                         @lang('Submit')
                     </button>
                 </div>
@@ -156,7 +160,8 @@
             <form id="vuoto">
                 <div class="form-group">
                     <label for="date">@lang('Date'):</label>
-                    <input type="date" class="form-control" name="date" max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" required>
+                    <input type="date" class="form-control" name="date"
+                        max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" required>
                 </div>
                 <div class="form-group">
                     <label for="plate">@lang("Truck's plate"):</label>
@@ -202,7 +207,8 @@
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary submit-vuoto">
-                        <span class="spinner-border spinner-border-sm loader-submit hidden" role="status" aria-hidden="true"></span>
+                        <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
+                            aria-hidden="true"></span>
                         @lang('Submit')
                     </button>
                 </div>

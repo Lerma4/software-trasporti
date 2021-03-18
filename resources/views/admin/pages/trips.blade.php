@@ -3,7 +3,8 @@
 @section('styles')
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.5/css/buttons.bootstrap4.min.css">
-<link type="text/css" href="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" rel="stylesheet" />
+<link type="text/css" href="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css"
+    rel="stylesheet" />
 
 <link rel="stylesheet" type="text/css" href="{{asset('jqueryui/jquery-ui.min.css')}}">
 @endsection
@@ -13,12 +14,15 @@
 <div class="col-12 pages-content">
     <div class="card">
         <div class="card-body">
+            @include('multiauth::message')
             <div class="row justify-content-between page-row">
                 <div class="col-sm">
-                    <button id="btn-add" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add">
+                    <button id="btn-add" type="button" class="btn btn-primary" data-toggle="modal"
+                        data-target="#modal-add">
                         @lang('New')
                     </button>
-                    <button id="btn-edit" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modal-add" disabled>
+                    <button id="btn-edit" type="button" class="btn btn-secondary" data-toggle="modal"
+                        data-target="#modal-edit" disabled>
                         @lang('Edit')
                     </button>
                     <button type="button" class="btn btn-danger" id="btn-delete" disabled>
@@ -70,7 +74,8 @@
 
 <!-- AGGIUNGI VIAGGI -->
 
-<div class="modal fade" id="modal-add" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="modal-label-add" aria-hidden="true">
+<div class="modal fade" id="modal-add" data-backdrop="static" data-keyboard="false" tabindex="-1"
+    aria-labelledby="modal-label-add" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -82,10 +87,10 @@
 
                 <div class="form-group">
                     <label>@lang('Seleziona la tipologia di viaggio:')</label>
-                    <select class="form-control trip" id="type" name="type" required>
-                        <option value="merci">@lang('Carico/scarico merci')</option>
-                        <option value="officina">@lang('Officina/gommista')</option>
-                        <option value="vuoto">@lang('A vuoto')</option>
+                    <select class="form-control trip" id="type-add" name="type" required>
+                        <option value="0">@lang('Carico/scarico merci')</option>
+                        <option value="1">@lang('Officina/gommista')</option>
+                        <option value="2">@lang('A vuoto')</option>
                     </select>
                 </div>
 
@@ -102,7 +107,8 @@
                     </div>
                     <div class="form-group">
                         <label for="date">@lang('Date'):</label>
-                        <input type="date" class="form-control" name="date" max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" required>
+                        <input type="date" class="form-control" name="date"
+                            max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" required>
                     </div>
                     <div class="form-group">
                         <label for="plate">@lang("Truck's plate"):</label>
@@ -118,15 +124,15 @@
                         <input type="text" class="form-control autocompleteCity" name="start" required>
                     </div>
                     <div class="form-group">
-                        <label id="label-stop">@lang('Stops') (@lang("Optional")):</label>
-                        <div id="row-stop" class="row justify-content-center">
+                        <label class="label-stop">@lang('Stops') (@lang("Optional")):</label>
+                        <div class="row justify-content-center row-stop">
                             <div class="col-auto">
-                                <button id="buttonAdd" type="button" class="btn btn-success btn-license">
+                                <button type="button" class="btn btn-success btn-license buttonAdd">
                                     <i class="fas fa-plus"></i>
                                 </button>
                             </div>
                             <div class="col-auto">
-                                <button id="buttonRemove" type="button" class="btn btn-danger btn-license">
+                                <button type="button" class="btn btn-danger btn-license buttonRemove">
                                     <i class="fas fa-minus"></i>
                                 </button>
                             </div>
@@ -138,7 +144,7 @@
                     </div>
                     <div class="form-group">
                         <label for="km">@lang('Distance') (Km):</label>
-                        <input type="number" class="form-control" name="km" min="0" max="1000" required>
+                        <input type="number" class="form-control" name="km" min="1" max="1000" required>
                     </div>
                     <div class="form-group">
                         <label for="fuel">@lang('Fuel'):</label>
@@ -168,7 +174,8 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">@lang('Close')</button>
                         <button type="submit" class="btn btn-primary submit">
-                            <span class="spinner-border spinner-border-sm loader-submit hidden" role="status" aria-hidden="true"></span>
+                            <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
+                                aria-hidden="true"></span>
                             @lang('Submit')
                         </button>
                     </div>
@@ -187,7 +194,8 @@
                     </div>
                     <div class="form-group">
                         <label for="date">@lang('Date'):</label>
-                        <input type="date" class="form-control" name="date" max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" required>
+                        <input type="date" class="form-control" name="date"
+                            max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" required>
                     </div>
                     <div class="form-group">
                         <label for="plate">@lang("Truck's plate"):</label>
@@ -212,7 +220,7 @@
                     </div>
                     <div class="form-group">
                         <label for="km">@lang('Distance') (Km):</label>
-                        <input type="number" class="form-control" name="km" min="0" max="1000" required>
+                        <input type="number" class="form-control" name="km" min="1" max="1000" required>
                     </div>
                     <div class="form-group">
                         <label for="fuel">@lang('Fuel'):</label>
@@ -238,7 +246,8 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">@lang('Close')</button>
                         <button type="submit" class="btn btn-primary submit">
-                            <span class="spinner-border spinner-border-sm loader-submit hidden" role="status" aria-hidden="true"></span>
+                            <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
+                                aria-hidden="true"></span>
                             @lang('Submit')
                         </button>
                     </div>
@@ -257,7 +266,8 @@
                     </div>
                     <div class="form-group">
                         <label for="date">@lang('Date'):</label>
-                        <input type="date" class="form-control" name="date" max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" required>
+                        <input type="date" class="form-control" name="date"
+                            max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" required>
                     </div>
                     <div class="form-group">
                         <label for="plate">@lang("Truck's plate"):</label>
@@ -278,7 +288,7 @@
                     </div>
                     <div class="form-group">
                         <label for="km">@lang('Distance') (Km):</label>
-                        <input type="number" class="form-control" name="km" min="0" max="1000" required>
+                        <input type="number" class="form-control" name="km" min="1" max="1000" required>
                     </div>
                     <div class="form-group">
                         <label for="fuel">@lang('Fuel'):</label>
@@ -304,7 +314,267 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">@lang('Close')</button>
                         <button type="submit" class="btn btn-primary submit">
-                            <span class="spinner-border spinner-border-sm loader-submit hidden" role="status" aria-hidden="true"></span>
+                            <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
+                                aria-hidden="true"></span>
+                            @lang('Submit')
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODIFICA VIAGGI -->
+
+<div class="modal fade" id="modal-edit" data-backdrop="static" data-keyboard="false" tabindex="-1"
+    aria-labelledby="modal-label-edit" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-label-edit">@lang('Edit trip')</h5>
+            </div>
+            <div id="edit-form" class="modal-body">
+
+                <div id="form-result"></div>
+
+                <div class="form-group">
+                    <label>@lang('Seleziona la tipologia di viaggio:')</label>
+                    <select class="form-control trip" id="type-edit" name="type" required>
+                        <option value="0">@lang('Carico/scarico merci')</option>
+                        <option value="1">@lang('Officina/gommista')</option>
+                        <option value="2">@lang('A vuoto')</option>
+                    </select>
+                </div>
+
+                <form id="merci-edit">
+                    <input type="hidden" name="type" value="0">
+                    <div class="form-group">
+                        <label for="email">@lang('Email'):</label>
+                        <select name="email" class="form-control email-edit" required>
+                            <option value=""></option>
+                            @foreach ($users as $user)
+                            <option value="{{ $user->email }}">{{ $user->name }} ({{ $user->email }})</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">@lang('Date'):</label>
+                        <input type="date" class="form-control date-edit" name="date"
+                            max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" disabled required>
+                    </div>
+                    <div class="form-group">
+                        <label for="plate">@lang("Truck's plate"):</label>
+                        <select name="plate" class="form-control plate-edit" disabled required>
+                            <option value=""></option>
+                            @foreach ($plates as $plate)
+                            <option value="{{ $plate->plate }}">{{ $plate->plate }} (km: {{ $plate->km }})</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="start">@lang('Città di partenza'):</label>
+                        <input type="text" class="form-control autocompleteCity start-edit" name="start" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="label-stop">@lang('Stops') (@lang("Optional")):</label>
+                        <div class="row justify-content-center row-stop row-stop-edit">
+                            <div class="col-auto">
+                                <button type="button" class="btn btn-success btn-license buttonAdd">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <div class="col-auto">
+                                <button type="button" class="btn btn-danger btn-license buttonRemove">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="destination">@lang('Destinazione finale'):</label>
+                        <input type="text" class="form-control autocompleteCity destination-edit" name="destination"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="km">@lang('Distance') (Km):</label>
+                        <input type="number" class="form-control km-edit" name="km" min="1" max="1000" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fuel">@lang('Fuel'):</label>
+                        <input type="number" class="form-control fuel-edit" name="fuel" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cost">@lang('Fuel cost'):</label>
+                        <input type="number" class="form-control cost-edit" name="cost" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="plate_s">@lang("Targa semirimorchio") (@lang("Optional")):</label>
+                        <select name="plate_s" class="plate_s-edit form-control">
+                            <option value=""></option>
+                            @foreach ($plates_semi as $plate)
+                            <option value="{{ $plate->plate }}">{{ $plate->plate }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="container">@lang('Sigla container') (@lang("Optional")):</label>
+                        <input type="text" class="form-control container-edit" name="container">
+                    </div>
+                    <div class="form-group">
+                        <label for="note">@lang('Note') (@lang("Optional")):</label>
+                        <textarea class="form-control note-edit" name="note" rows="3" max="200"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-edit-close"
+                            data-dismiss="modal">@lang('Close')</button>
+                        <button type="submit" class="btn btn-primary submit">
+                            <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
+                                aria-hidden="true"></span>
+                            @lang('Submit')
+                        </button>
+                    </div>
+                </form>
+
+                <form id="officina-edit" class="hidden">
+                    <input type="hidden" name="type" value="1">
+                    <div class="form-group">
+                        <label for="email">@lang('Email'):</label>
+                        <select name="email" class="form-control email-edit" required>
+                            <option value=""></option>
+                            @foreach ($users as $user)
+                            <option value="{{ $user->email }}">{{ $user->name }} ({{ $user->email }})</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">@lang('Date'):</label>
+                        <input type="date" class="form-control date-edit" name="date"
+                            max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="plate">@lang("Truck's plate"):</label>
+                        <select name="plate" class="form-control plate-edit" required>
+                            <option value=""></option>
+                            @foreach ($plates as $plate)
+                            <option value="{{ $plate->plate }}">{{ $plate->plate }} (km: {{ $plate->km }})</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="start">@lang('Città di partenza'):</label>
+                        <input type="text" class="form-control autocompleteCity start-edit" name="start" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="destination">@lang('Destinazione'):</label>
+                        <input type="text" class="form-control autocompleteCity destination-edit" name="destination"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="garage">@lang('Garage'):</label>
+                        <input type="text" class="form-control garage-edit" name="garage" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="km">@lang('Distance') (Km):</label>
+                        <input type="number" class="form-control km-edit" name="km" min="1" max="1000" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fuel">@lang('Fuel'):</label>
+                        <input type="number" class="form-control fuel-edit" name="fuel" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cost">@lang('Fuel cost'):</label>
+                        <input type="number" class="form-control cost-edit" name="cost" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="plate_s">@lang("Targa semirimorchio") (@lang("Optional")):</label>
+                        <select name="plate_s" class="plate_s-edit form-control">
+                            <option value=""></option>
+                            @foreach ($plates_semi as $plate)
+                            <option value="{{ $plate->plate }}">{{ $plate->plate }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="container">@lang('Note') (@lang("Optional")):</label>
+                        <textarea class="form-control note-edit" name="note" rows="3"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-edit-close"
+                            data-dismiss="modal">@lang('Close')</button>
+                        <button type="submit" class="btn btn-primary submit">
+                            <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
+                                aria-hidden="true"></span>
+                            @lang('Submit')
+                        </button>
+                    </div>
+                </form>
+
+                <form id="vuoto-edit" class="hidden">
+                    <input type="hidden" name="type" value="2">
+                    <div class="form-group">
+                        <label for="email">@lang('Email'):</label>
+                        <select name="email" class="form-control email-edit" required>
+                            <option value=""></option>
+                            @foreach ($users as $user)
+                            <option value="{{ $user->email }}">{{ $user->name }} ({{ $user->email }})</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">@lang('Date'):</label>
+                        <input type="date" class="form-control date-edit" name="date"
+                            max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="plate">@lang("Truck's plate"):</label>
+                        <select name="plate" class="form-control plate-edit" required>
+                            <option value=""></option>
+                            @foreach ($plates as $plate)
+                            <option value="{{ $plate->plate }}">{{ $plate->plate }} (km: {{ $plate->km }})</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="start">@lang('Città di partenza'):</label>
+                        <input type="text" class="form-control autocompleteCity start-edit" name="start" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="destination">@lang('Destinazione'):</label>
+                        <input type="text" class="form-control autocompleteCity destination-edit" name="destination"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="km">@lang('Distance') (Km):</label>
+                        <input type="number" class="form-control km-edit" name="km" min="1" max="1000" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fuel">@lang('Fuel'):</label>
+                        <input type="number" class="form-control fuel-edit" name="fuel" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cost">@lang('Fuel cost'):</label>
+                        <input type="number" class="form-control cost-edit" name="cost" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="plate_s">@lang("Targa semirimorchio") (@lang("Optional")):</label>
+                        <select name="plate_s" class="plate_s-edit form-control">
+                            <option value=""></option>
+                            @foreach ($plates_semi as $plate)
+                            <option value="{{ $plate->plate }}">{{ $plate->plate }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="container">@lang('Note') (@lang("Optional")):</label>
+                        <textarea class="form-control note-edit" name="note" rows="3"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-edit-close"
+                            data-dismiss="modal">@lang('Close')</button>
+                        <button type="submit" class="btn btn-primary submit">
+                            <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
+                                aria-hidden="true"></span>
                             @lang('Submit')
                         </button>
                     </div>
@@ -317,18 +587,27 @@
 @endsection
 
 @section('scripts')
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js" defer></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"
+    defer></script>
 
-<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js" defer></script>
+<script type="text/javascript" language="javascript"
+    src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js" defer></script>
 
-<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js" defer></script>
-<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.bootstrap4.min.js" defer></script>
+<script type="text/javascript" language="javascript"
+    src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js" defer></script>
+<script type="text/javascript" language="javascript"
+    src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.bootstrap4.min.js" defer></script>
 
-<script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js" defer></script>
-<script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js" defer></script>
-<script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js" defer></script>
-<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js" defer></script>
-<script type="text/javascript" src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js" defer></script>
+<script type="text/javascript" language="javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js" defer></script>
+<script type="text/javascript" language="javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js" defer></script>
+<script type="text/javascript" language="javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js" defer></script>
+<script type="text/javascript" language="javascript"
+    src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js" defer></script>
+<script type="text/javascript"
+    src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js" defer></script>
 
 <script src="{{asset('jqueryui/jquery-ui.min.js')}}" type="text/javascript" defer></script>
 
@@ -350,6 +629,20 @@
 @endswitch
 
 <script>
+    // FIX SIMBOLI IN JS
+
+    function replaceSymbol(string) {
+        return string.replace("&#039;", "'");
+    }
+
+    // FIX SIMBOLI IN JS
+
+    function formatInternational(date) {
+        var dateAr = date.split('-');
+        var newDate = dateAr[2] + '-' + dateAr[1] + '-' + dateAr[0];
+        return newDate;
+    }
+
     function formatTripData(plate, container, garage, stops, km, note) {
         if (plate == null) {
             plate = '';
@@ -389,21 +682,21 @@
     $(document).ready(function() {
         // SCELTA DELLA TIPOLOGIA DI VIAGGIO
 
-        $('.trip').on('change', function() {
+        $('#type-add').on('change', function() {
             switch ($(this).val()) {
-                case 'officina':
-                    $('#merci').slideUp();
-                    $('#vuoto').slideUp();
-                    $('#officina').slideDown();
-                    break;
-
-                case 'merci':
+                case '0':
                     $('#officina').slideUp();
                     $('#vuoto').slideUp();
                     $('#merci').slideDown();
                     break;
 
-                case 'vuoto':
+                case '1':
+                    $('#merci').slideUp();
+                    $('#vuoto').slideUp();
+                    $('#officina').slideDown();
+                    break;
+
+                case '2':
                     $('#officina').slideUp();
                     $('#merci').slideUp();
                     $('#vuoto').slideDown();
@@ -417,13 +710,41 @@
             }
         });
 
+        $('#type-edit').on('change', function() {
+            switch ($(this).val()) {
+                case '0':
+                    $('#officina-edit').slideUp();
+                    $('#vuoto-edit').slideUp();
+                    $('#merci-edit').slideDown();
+                    break;
+
+                case '1':
+                    $('#merci-edit').slideUp();
+                    $('#vuoto-edit').slideUp();
+                    $('#officina-edit').slideDown();
+                    break;
+
+                case '2':
+                    $('#officina-edit').slideUp();
+                    $('#merci-edit').slideUp();
+                    $('#vuoto-edit').slideDown();
+                    break;
+
+                default:
+                    $('#officina-edit').slideUp();
+                    $('#merci-edit').slideUp();
+                    $('#vuoto-edit').slideUp();
+                    break;
+            }
+        });
+
         // GESTIONE TAPPE
 
-        $('#buttonAdd').on('click', function(event) {
-            var lastInput = $('#row-stop').prev();
+        $('.buttonAdd').on('click', function(event) {
+            var lastInput = $(this).closest('.row-stop').prev();
             var id;
             var idNew = [];
-            if (lastInput.attr('id') == 'label-stop') {
+            if (lastInput.hasClass('label-stop')) {
                 id = 1;
             } else {
                 idNew = lastInput.attr('id').split("_");
@@ -433,13 +754,13 @@
 
             var html = '<input type="text" class="form-control autocompleteCity input-stop" id="stop_' + id + '" name="stop_' + id + '" required>';
 
-            $('#row-stop').before(html);
+            $(this).closest('.row-stop').before(html);
         });
 
-        $('#buttonRemove').on('click', function(event) {
-            var lastInput = $('#row-stop').prev();
+        $('.buttonRemove').on('click', function(event) {
+            var lastInput = $(this).closest('.row-stop').prev();
 
-            if (lastInput.attr('id') != 'label-stop') {
+            if (!(lastInput.hasClass('label-stop'))) {
                 lastInput.remove();
             }
         });
@@ -778,8 +1099,9 @@
                             lastInput = $('#row-stop').prev();
                         }
                         $('#merci')[0].reset();
+                        $('#datatable').DataTable().ajax.reload();
                     }
-                    $(window).scrollTop(0);
+                    $('#modal-add').scrollTop(0);
                     $('#form-result').html(html);
                     $('#form-result').delay(4000).fadeOut();
                 },
@@ -800,7 +1122,7 @@
             $('#form-result').fadeIn();
 
             $.ajax({
-                url: "{{route('tripofficina')}}",
+                url: "{{route('api.trips.store')}}",
                 type: "POST",
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -823,8 +1145,9 @@
                     if (data.success) {
                         html = '<div class="alert alert-success">' + data.success + '</div>';
                         $('#officina')[0].reset();
+                        $('#datatable').DataTable().ajax.reload();
                     }
-                    $(window).scrollTop(0);
+                    $('#modal-add').scrollTop(0);
                     $('#form-result').html(html);
                     $('#form-result').delay(4000).fadeOut();
                 },
@@ -845,7 +1168,7 @@
             $('#form-result').fadeIn();
 
             $.ajax({
-                url: "{{route('tripvuoto')}}",
+                url: "{{route('api.trips.store')}}",
                 type: "POST",
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -868,8 +1191,9 @@
                     if (data.success) {
                         html = '<div class="alert alert-success">' + data.success + '</div>';
                         $('#vuoto')[0].reset();
+                        $('#datatable').DataTable().ajax.reload();
                     }
-                    $(window).scrollTop(0);
+                    $('#modal-add').scrollTop(0);
                     $('#form-result').html(html);
                     $('#form-result').delay(4000).fadeOut();
                 },
@@ -878,6 +1202,120 @@
                     $('.submit-vuoto').contents().last().replaceWith('@lang("Submit")');
                 },
             });
+        });
+
+        // EDIT
+
+        $('#btn-edit').on('click', function(e) {
+
+            var rows_selected = table.column(0).checkboxes.selected();
+
+            if (rows_selected.length == 1) {
+                var row = table.row('#' + rows_selected[0]).data();
+
+                $('#type-edit').val(row['type']);
+
+                switch (row['type']) {
+                    case 0:
+                        $('#officina-edit').css('display', 'none');
+                        $('#vuoto-edit').css('display', 'none');
+                        $('#merci-edit').css('display', 'block');
+                        break;
+
+                    case 1:
+                        $('#merci-edit').css('display', 'none');
+                        $('#vuoto-edit').css('display', 'none');
+                        $('#officina-edit').css('display', 'block');
+                        break;
+
+                    case 2:
+                        $('#officina-edit').css('display', 'none');
+                        $('#merci-edit').css('display', 'none');
+                        $('#vuoto-edit').css('display', 'block');
+                        break;
+
+                    default:
+                        $('#officina-edit').css('display', 'none');
+                        $('#merci-edit').css('display', 'none');
+                        $('#vuoto-edit').css('display', 'none');
+                        break;
+                }
+
+                $('#edit-form').find('.email-edit').val(row['user_email']);
+                $('#edit-form').find('.date-edit').val(formatInternational(row['date']));
+                $('#edit-form').find('.start-edit').val(replaceSymbol(row['start']));
+                $('#edit-form').find('.destination-edit').val(replaceSymbol(row['destination']));
+                $('#edit-form').find('.distance-edit').val(row['distance']);
+                $('#edit-form').find('.fuel-edit').val(row['fuel']);
+                $('#edit-form').find('.garage-edit').val(row['garage']);
+                $('#edit-form').find('.km-edit').val(row['km']);
+                $('#edit-form').find('.note-edit').val(row['note']);
+                $('#edit-form').find('.plate-edit').val(row['plate']);
+                $('#edit-form').find('.cost-edit').val(row['cost']);
+                $('#edit-form').find('.container-edit').val(row['container']);
+                $('#edit-form').find('.plate_s-edit').val(row['plate_s']);
+
+                // CREO GLI STOPS
+                if (row['stops'] != null) {
+                    var stops = row['stops'].replace(/\s+/g, '');
+                    stops = stops.split(",");
+
+                    stops.forEach(function(stop, i) {
+                        var id = i + 1;
+
+                        var html = '<input type="text" class="form-control autocompleteCity input-stop" id="stop_' + id + '" name="stop_' + id + '" required>';
+
+                        $('.row-stop-edit').before(html);
+
+                        $('#stop_' + id).val(replaceSymbol(stop));
+                    });
+                }
+            }
+        });
+
+        $('.btn-edit-close').on('click', function(e){
+            var form = $(this).parents('form');
+            form[0].reset();
+
+            var stops = form.find('.input-stop');
+            stops.remove();
+        });
+
+        // DELETE
+
+        $('#btn-delete').on('click', function(e) {
+
+            var rows_selected = table.column(0).checkboxes.selected();
+            var id = [];
+
+            $.each(rows_selected, function(index, rowId) {
+                id[index] = rowId;
+            });
+
+            $('#message-success').text('');
+            $('#message-success').show();
+
+            $.ajax({
+                url: '{{ route("api.trips.delete") }}',
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    trips: id
+                },
+                success: function(data) {
+                    var html = '';
+                    $('#datatable').DataTable().ajax.reload();
+                    $('html, body').animate({
+                        scrollTop: 0
+                    }, 'fast');
+                    html = '<div class="alert alert-success">' + data.success + '</div>';
+                    $('#message-success').html(html);
+                    $('#message-success').delay(4000).fadeOut();
+                }
+            });
+
         });
 
     });

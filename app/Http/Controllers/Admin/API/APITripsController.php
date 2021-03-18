@@ -64,24 +64,26 @@ class APITripsController extends Controller
         return response()->json($response);
     }
 
-    public function create(Request $request)
+    public function store(Request $request)
     {
         // VARIABILI UTILI
 
-        $truck = Truck::where('companyId', '=', auth()->user()->companyId)
+        $truck = Truck::where('companyId', '=', auth('admin')->user()->companyId)
             ->where('plate', $request->plate)
-            ->get();
+            ->first();
 
-        $truck_s = Truck::where('companyId', '=', auth()->user()->companyId)
+        $truck_s = Truck::where('companyId', '=', auth('admin')->user()->companyId)
             ->where('plate', $request->plate_s)
             ->first();
 
-        $lastTrip = Trip::where('companyId', '=', auth()->user()->companyId)
+        $nextTrip = Trip::where('companyId', '=', auth('admin')->user()->companyId)
             ->where('plate', $request->plate)
-            ->latest()
+            ->where('date', '>', $request->date)
             ->first();
 
-        $distance = $request->km - $truck[0]->km;
+        $user = User::where('companyId', '=', auth('admin')->user()->companyId)
+            ->where('email', $request->email)
+            ->first();
 
         $error = '';
 
@@ -92,7 +94,7 @@ class APITripsController extends Controller
             'date' => ['required', 'date'],
             'start' => ['required', 'max:40'],
             'destination' => ['required', 'max:40'],
-            'km' => ['required', 'numeric', 'min:0'],
+            'km' => ['required', 'numeric', 'min:1'],
             'fuel' => ['required', 'numeric', 'min:0'],
             'cost' => ['required', 'numeric', 'min:0'],
             'plate' => ['required', 'exists:trucks,plate'],
@@ -104,30 +106,38 @@ class APITripsController extends Controller
                 ->json(['errors' => $validator->errors()->all()]);
         }
 
-        if ($truck[0]->km >= $request->km) {
-            $error = __("Il numero di km inserito è inferiore o uguale a quelli che aveva già il veicolo");
+        if ($request->km > 1000) {
+            $error = __("Il numero di km inserito non è valido");
             return response()
                 ->json(['errors' => [$error]]);
-        } elseif (($request->km - $truck[0]->km) > 1000) {
-            $error = __("Il numero di km inserito è troppo elevato rispetto ai km precedenti del veicolo");
-            return response()
-                ->json(['errors' => [$error]]);
-        } elseif ($lastTrip != NULL) {
-            if ($request->date < $lastTrip->date) {
-                $error = __("Con questo mezzo è già stato inserito un viaggio dopo questa data");
+        }
+
+        // CASO 1 : IL VIAGGIO INSERITO è L'ULTIMO
+
+        if ($nextTrip == NULL) {
+            $truck->km += $request->km;
+            $truck->save();
+            $km = $truck->km;
+        }
+
+        // CASO 2 : IL VIAGGIO INSERITO NON è L'ULTIMO
+
+        if ($nextTrip != NULL) {
+            if ($request->km >= $nextTrip->distance) {
+                $error = __("Il numero di km inserito non è valido (km troppo elevati rispetto al viaggio successivo)");
                 return response()
                     ->json(['errors' => [$error]]);
             }
+            $nextTrip->distance -= $request->km;
+            $nextTrip->save();
+            $km = $nextTrip->km - $nextTrip->distance;
         }
 
-        // AGGIORNAMENTO VEICOLI
+        // AGGIORNAMENTO SEMIRIMORCHIO
 
-        $truck[0]->km = $request->km;
-        $truck[0]->save();
-
-        if ($truck_s[0] != NULL) {
-            $truck_s[0]->km += $distance;
-            $truck_s[0]->save();
+        if ($request->plate_s != NULL) {
+            $truck_s->km += $request->km;
+            $truck_s->save();
         }
 
         // CREAZIONE VIAGGIO
@@ -145,24 +155,70 @@ class APITripsController extends Controller
         }
 
         Trip::create([
-            'companyId' => auth()->user()->companyId,
+            'companyId' => auth('admin')->user()->companyId,
             'user_email' => $request->email,
-            'name' => auth()->user()->name,
+            'name' => $user->name,
             'date' => $request->date,
             'type' => $request->type,
             'plate' => $request->plate,
             'plate_s' => $request->plate_s,
             'container' => $request->container,
+            'garage' => $request->garage,
             'start' => $request->start,
             'destination' => $request->destination,
             'stops' => $stops,
-            'km' => $request->km,
-            'distance' => $distance,
+            'km' => $km,
+            'distance' => $request->km,
             'fuel' => $request->fuel,
             'cost' => $request->cost,
             'note' => $request->note,
         ]);
 
         return response()->json(['success' => [__('Trip successfully inserted!')]]);
+    }
+
+    public function edit(Request $request)
+    {
+    }
+
+    public function delete(Request $request)
+    {
+        $trips = Trip::whereIn('id', $request->trips)
+            ->orderBy('date', 'asc')
+            ->get();
+
+        foreach ($trips as $trip) {
+            $nextTrip = Trip::where('companyId', '=', auth('admin')->user()->companyId)
+                ->where('plate', $trip->plate)
+                ->where('date', '>=', $trip->date)
+                ->where('km', '>', $trip->km)
+                ->first();
+
+            if ($nextTrip == NULL) {
+                $truck = Truck::where('companyId', '=', auth('admin')->user()->companyId)
+                    ->where('plate', $trip->plate)
+                    ->first();
+                $truck->km -= $trip->distance;
+                $truck->save();
+            } else {
+                $nextTrip->distance += $trip->distance;
+
+                $nextTrip->save();
+            }
+
+            // aggiorno il semirimorchio
+
+            if ($trip->plate_s != NULL) {
+                $semi = Truck::where('companyId', '=', auth('admin')->user()->companyId)
+                    ->where('plate', $trip->plate_s)
+                    ->first();
+                $semi->km -= $trip->distance;
+                $semi->save();
+            }
+        }
+
+        Trip::destroy($request->trips);
+
+        return response()->json(['success' => count($request->trips) . __(' trip/s successfully deleted!')]);
     }
 }
