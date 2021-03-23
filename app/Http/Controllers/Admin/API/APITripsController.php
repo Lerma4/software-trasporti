@@ -179,6 +179,120 @@ class APITripsController extends Controller
 
     public function edit(Request $request)
     {
+        // VARIABILI UTILI
+
+        $truck = Truck::where('companyId', '=', auth('admin')->user()->companyId)
+            ->where('plate', $request->plate)
+            ->first();
+
+        $truck_s = Truck::where('companyId', '=', auth('admin')->user()->companyId)
+            ->where('plate', $request->plate_s)
+            ->first();
+
+        $thisTrip = Trip::findOrFail($request->id);
+
+        $nextTrip = Trip::where('companyId', '=', auth('admin')->user()->companyId)
+            ->where('plate', $request->plate)
+            ->where('date', '>=', $request->date)
+            ->where('km', '>', $thisTrip->km)
+            ->first();
+
+        $user = User::where('companyId', '=', auth('admin')->user()->companyId)
+            ->where('email', $request->email)
+            ->first();
+
+        $error = '';
+
+        $kmDifference = $thisTrip->distance - $request->km;
+
+        // CHECK
+
+        $validator = Validator::make($request->all(), [
+            'email' => ['required', 'exists:users,email', 'email'],
+            'date' => ['required', 'date'],
+            'start' => ['required', 'max:40'],
+            'destination' => ['required', 'max:40'],
+            'km' => ['required', 'numeric', 'min:1'],
+            'fuel' => ['required', 'numeric', 'min:0'],
+            'cost' => ['required', 'numeric', 'min:0'],
+            'plate' => ['required', 'exists:trucks,plate'],
+            'plate_s' => ['nullable', 'exists:trucks,plate'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()
+                ->json(['errors' => $validator->errors()->all()]);
+        }
+
+        if ($request->km > 1000) {
+            $error = __("Il numero di km inserito non è valido");
+            return response()
+                ->json(['errors' => [$error]]);
+        }
+
+        // CASO 1 : IL VIAGGIO INSERITO è L'ULTIMO
+
+        if ($nextTrip == NULL) {
+            $truck->km -= $kmDifference;
+            $truck->save();
+            $km = $truck->km;
+        }
+
+        // CASO 2 : IL VIAGGIO INSERITO NON è L'ULTIMO
+
+        if ($nextTrip != NULL) {
+            if ($kmDifference >= $nextTrip->distance) {
+                $error = __("Il numero di km inserito non è valido (km troppo elevati rispetto al viaggio successivo)");
+                return response()
+                    ->json(['errors' => [$error]]);
+            }
+            $nextTrip->distance += $kmDifference;
+            $nextTrip->save();
+            $km = $thisTrip->km - $kmDifference;
+        }
+
+        // AGGIORNAMENTO SEMIRIMORCHIO
+
+        if ($request->plate_s != NULL) {
+            $truck_s->km -= $kmDifference;
+            $truck_s->save();
+        }
+
+        // CREAZIONE VIAGGIO
+
+        $i = 1;
+        $stops = '';
+        while (request('stop_' . $i) != NULL) {
+            if ($i == 1) {
+                $stops .= request('stop_' . $i);
+                $i++;
+            } else {
+                $stops .= ' , ' . request('stop_' . $i);
+                $i++;
+            }
+        }
+
+        $thisTrip->update([
+            'companyId' => auth('admin')->user()->companyId,
+            'user_email' => $request->email,
+            'name' => $user->name,
+            'date' => $request->date,
+            'type' => $request->type,
+            'plate' => $request->plate,
+            'plate_s' => $request->plate_s,
+            'container' => $request->container,
+            'garage' => $request->garage,
+            'start' => $request->start,
+            'destination' => $request->destination,
+            'stops' => $stops,
+            'km' => $km,
+            'distance' => $request->km,
+            'fuel' => $request->fuel,
+            'cost' => $request->cost,
+            'note' => $request->note,
+        ]);
+
+        return response()->json(['success' => [__('Trip successfully edited!')]]);
     }
 
     public function delete(Request $request)

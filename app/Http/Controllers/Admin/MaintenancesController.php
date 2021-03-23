@@ -15,7 +15,9 @@ class MaintenancesController extends Controller
 
     public function index()
     {
-        $trucks = Truck::where('companyId', '=', auth('admin')->user()->companyId)->distinct()->get('plate');
+        $trucks = Truck::where('companyId', '=', auth('admin')->user()->companyId)
+            ->distinct()
+            ->get('plate');
 
         return view('admin.pages.maintenances', ['trucks' => $trucks]);
     }

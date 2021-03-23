@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Expiration;
-use App\Models\Maintenance;
+use App\Models\MaintAlreadyDone;
 use App\Models\Truck;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Yajra\DataTables\Facades\DataTables;
 
-class APIMaintenancesController extends Controller
+class APIMaintAlreadyDoneController extends Controller
 {
     public function __construct()
     {
@@ -28,7 +28,7 @@ class APIMaintenancesController extends Controller
             $dateFrom = null;
         };
 
-        $result = Maintenance::when($dateFrom != null && $dateFrom != '', function ($query) use ($dateFrom) {
+        $result = MaintAlreadyDone::when($dateFrom != null && $dateFrom != '', function ($query) use ($dateFrom) {
             return $query->where(function ($query) use ($dateFrom) {
                 $query->where('date', '>', $dateFrom)
                     ->orwhere('date', $dateFrom);
@@ -48,16 +48,6 @@ class APIMaintenancesController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -72,7 +62,8 @@ class APIMaintenancesController extends Controller
             ],
             'type' => ['required', 'max:30'],
             'date' => ['required'],
-            'description' => ['max:50'],
+            'km' => ['nullable', 'numeric', 'min:1'],
+            'notes' => ['max:50'],
         ]);
 
         if ($validator->fails()) {
@@ -80,16 +71,23 @@ class APIMaintenancesController extends Controller
                 ->json(['errors' => $validator->errors()->all()]);
         }
 
-        $maint = Maintenance::create([
+        $truck = Truck::where('companyId', auth('admin')->user()->companyId)
+            ->where('plate', $request->plate)
+            ->first();
+
+        if ($truck->km < $request->km) {
+            return response()
+                ->json(['errors' => [__("I km inseriti sono superiori a quelli attuali del mezzo")]]);
+        }
+
+        $maint = MaintAlreadyDone::create([
+            'date' => $request->date,
             'plate' => $request->plate,
             'type' => $request->type,
+            'km' => $request->km,
             'garage' => $request->garage,
             'price' => $request->price,
-            'km' => $request->km,
-            'date' => $request->date,
-            'description' => $request->description,
-            'period' => $request->period,
-            'alert' => $request->alert,
+            'notes' => $request->notes,
             'companyId' => auth('admin')->user()->companyId,
         ]);
 
@@ -99,18 +97,7 @@ class APIMaintenancesController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Group  $group
-     * @return \Illuminate\Http\Response
-     */
-    public function show()
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
+     * Edit
      *
      * @param  \App\Models\Group  $group
      * @return \Illuminate\Http\Response
@@ -120,17 +107,12 @@ class APIMaintenancesController extends Controller
         $validator = Validator::make($request->all(), [
             'plate' => [
                 'required',
-                Rule::unique('trucks')
-                    ->where('companyId', auth('admin')->user()->companyId)
-                    ->ignore($request->id_truck),
                 'max:30'
             ],
             'type' => ['required', 'max:30'],
-            'km' => ['required'],
-            'brand' => ['max:30'],
-            'model' => ['max:30'],
-            'group' => ['exists:groups,name'],
-            'description' => ['max:50'],
+            'date' => ['required'],
+            'km' => ['nullable', 'numeric', 'min:1'],
+            'notes' => ['max:50'],
         ]);
 
         if ($validator->fails()) {
@@ -138,50 +120,28 @@ class APIMaintenancesController extends Controller
                 ->json(['errors' => $validator->errors()->all()]);
         }
 
+        $truck = Truck::where('companyId', auth('admin')->user()->companyId)
+            ->where('plate', $request->plate)
+            ->first();
 
-        $truck = Truck::findOrFail($request->id_truck);
-
-        $truck->update([
-            'plate' => $request->plate,
-            'type' => $request->type,
-            'brand' => $request->brand,
-            'model' => $request->model,
-            'km' => $request->km,
-            'group' => $request->group,
-            'description' => $request->description,
-            'companyId' => auth('admin')->user()->companyId,
-        ]);
-
-        Expiration::where('truck_id', $request->id_truck)->delete();
-
-        $i = 1;
-
-        while (request('expiration_' . $i) != NULL) {
-            $expiration = new Expiration;
-
-            $expiration->name = request('expiration_' . $i);
-            $expiration->description = request('description_' . $i);
-            $expiration->deadline = request('deadline_' . $i);
-            $expiration->truck_id = $truck->id;
-
-            $expiration->save();
-
-            $i++;
+        if ($truck->km < $request->km) {
+            return response()
+                ->json(['errors' => [__("I km inseriti sono superiori a quelli attuali del mezzo")]]);
         }
 
-        return response()->json(['success' => __('Truck successfully updated!')]);
-    }
+        $maint = MaintAlreadyDone::findOrFail($request->id);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Group  $group
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request)
-    {
-        //
+        $maint->update([
+            'date' => $request->date,
+            'plate' => $request->plate,
+            'type' => $request->type,
+            'km' => $request->km,
+            'garage' => $request->garage,
+            'price' => $request->price,
+            'notes' => $request->notes,
+        ]);
+
+        return response()->json(['success' => __('Record successfully updated!')]);
     }
 
     /**
@@ -192,7 +152,7 @@ class APIMaintenancesController extends Controller
      */
     public function destroy(Request $request)
     {
-        Maintenance::destroy($request->maint);
+        MaintAlreadyDone::destroy($request->maint);
 
         return response()->json(['success' => count($request->maint) . __(' record/s successfully deleted!')]);
     }

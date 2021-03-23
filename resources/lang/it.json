@@ -217,5 +217,14 @@
     "Stops": "Tappe",
     "Date": "Data",
     "Change Language": "Cambia Lingua",
-    "Trips": "Viaggi"
+    "Trips": "Viaggi",
+    "Renew of maintenance": "Rinnovo della manutenzione",
+    "Maintenance already done": "Manutenzione già effettuata",
+    "Maintenance still to do": "Manutenzione ancora da effettuare",
+    "Select": "Seleziona",
+    "Reset": "Rispristina",
+    "Notes": "Note",
+    "Truck's km": "Km del mezzo",
+    "Max 50 characters": "Massimo 50 caratteri",
+    " record/s successfully deleted!": " elemento/i eliminati correttamente!"
 }

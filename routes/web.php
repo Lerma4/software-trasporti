@@ -71,10 +71,10 @@ Route::post('/admin/APItrucks/delete', [\App\Http\Controllers\Admin\API\APITruck
 
 Route::get('/admin/maintenance', [\App\Http\Controllers\Admin\MaintenancesController::class, 'index'])->name('admin.maint');
 
-Route::get('/admin/APIMaintenance/maint/{dateTo?}/{dateFrom?}', [\App\Http\Controllers\Admin\API\APIMaintenancesController::class, 'getMaint'])->name('api.maint');
-Route::post('/admin/APIMaintenance/store', [\App\Http\Controllers\Admin\API\APIMaintenancesController::class, 'store'])->name('admin.maint.store');
-Route::post('/admin/APIMaintenance/edit', [\App\Http\Controllers\Admin\API\APIMaintenancesController::class, 'edit'])->name('admin.maint.edit');
-Route::post('/admin/APIMaintenance/delete', [\App\Http\Controllers\Admin\API\APIMaintenancesController::class, 'destroy'])->name('admin.maint.delete');
+Route::get('/admin/APIMaintAlreadyDone/maint/{dateTo?}/{dateFrom?}', [\App\Http\Controllers\Admin\API\APIMaintAlreadyDoneController::class, 'getMaint'])->name('api.maint');
+Route::post('/admin/APIMaintAlreadyDone/store', [\App\Http\Controllers\Admin\API\APIMaintAlreadyDoneController::class, 'store'])->name('admin.maint.store');
+Route::post('/admin/APIMaintAlreadyDone/edit', [\App\Http\Controllers\Admin\API\APIMaintAlreadyDoneController::class, 'edit'])->name('admin.maint.edit');
+Route::post('/admin/APIMaintAlreadyDone/delete', [\App\Http\Controllers\Admin\API\APIMaintAlreadyDoneController::class, 'destroy'])->name('admin.maint.delete');
 
 // TRIPS
 
@@ -84,3 +84,4 @@ Route::get('/admin/APITrips/trips/{dateTo?}/{dateFrom?}', [\App\Http\Controllers
 Route::post('/admin/APITrips/trips/autocompletecity', [\App\Http\Controllers\Admin\API\APITripsController::class, 'autocompleteCity'])->name('autocomplete.city');
 Route::post('/admin/APITrips/trips/store', [\App\Http\Controllers\Admin\API\APITripsController::class, 'store'])->name('api.trips.store');
 Route::post('/admin/APITrips/trips/delete', [\App\Http\Controllers\Admin\API\APITripsController::class, 'delete'])->name('api.trips.delete');
+Route::post('/admin/APITrips/trips/edit', [\App\Http\Controllers\Admin\API\APITripsController::class, 'edit'])->name('api.trips.edit');

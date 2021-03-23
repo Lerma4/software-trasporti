@@ -36,7 +36,7 @@
                             <input type="date" class="form-control select-input-date-from" data-column="3">
                             <label id="search_group">@lang('To'):</label>
                             <input type="date" class="form-control select-input-date-to" data-column="3">
-                            <button class="btn btn-primary" type="reset" id="btn-reset">Reset</button>
+                            <button class="btn btn-primary btn-reset" type="reset" id="btn-reset">Reset</button>
                         </div>
                     </form>
                 </div>
@@ -58,6 +58,11 @@
                             <th>@lang("Fuel")</th>
                             <th>@lang("Cost")</th>
                             <th>@lang("Plate Semirimorchio")</th>
+                            <th>@lang("Container")</th>
+                            <th>@lang("Garage")</th>
+                            <th>@lang("Stops")</th>
+                            <th>@lang("Truck's km")</th>
+                            <th>@lang("Notes")</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -336,7 +341,7 @@
             </div>
             <div id="edit-form" class="modal-body">
 
-                <div id="form-result"></div>
+                <div id="form-result-edit"></div>
 
                 <div class="form-group">
                     <label>@lang('Seleziona la tipologia di viaggio:')</label>
@@ -349,6 +354,9 @@
 
                 <form id="merci-edit">
                     <input type="hidden" name="type" value="0">
+                    <input type="hidden" name="id" value="" class="id-edit">
+                    <input type="hidden" name="plate" value="" class="plate-edit">
+                    <input type="hidden" name="date" value="" class="date-edit">
                     <div class="form-group">
                         <label for="email">@lang('Email'):</label>
                         <select name="email" class="form-control email-edit" required>
@@ -359,13 +367,13 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="date">@lang('Date'):</label>
-                        <input type="date" class="form-control date-edit" name="date"
+                        <label>@lang('Date'):</label>
+                        <input type="date" class="form-control date-edit"
                             max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" disabled required>
                     </div>
                     <div class="form-group">
-                        <label for="plate">@lang("Truck's plate"):</label>
-                        <select name="plate" class="form-control plate-edit" disabled required>
+                        <label>@lang("Truck's plate"):</label>
+                        <select class="form-control plate-edit" disabled required>
                             <option value=""></option>
                             @foreach ($plates as $plate)
                             <option value="{{ $plate->plate }}">{{ $plate->plate }} (km: {{ $plate->km }})</option>
@@ -438,6 +446,9 @@
 
                 <form id="officina-edit" class="hidden">
                     <input type="hidden" name="type" value="1">
+                    <input type="hidden" name="id" value="" class="id-edit">
+                    <input type="hidden" name="plate" value="" class="plate-edit">
+                    <input type="hidden" name="date" value="" class="date-edit">
                     <div class="form-group">
                         <label for="email">@lang('Email'):</label>
                         <select name="email" class="form-control email-edit" required>
@@ -448,13 +459,13 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="date">@lang('Date'):</label>
-                        <input type="date" class="form-control date-edit" name="date"
-                            max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" required>
+                        <label>@lang('Date'):</label>
+                        <input type="date" class="form-control date-edit"
+                            max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" disabled required>
                     </div>
                     <div class="form-group">
-                        <label for="plate">@lang("Truck's plate"):</label>
-                        <select name="plate" class="form-control plate-edit" required>
+                        <label>@lang("Truck's plate"):</label>
+                        <select class="form-control plate-edit" disabled required>
                             <option value=""></option>
                             @foreach ($plates as $plate)
                             <option value="{{ $plate->plate }}">{{ $plate->plate }} (km: {{ $plate->km }})</option>
@@ -512,6 +523,9 @@
 
                 <form id="vuoto-edit" class="hidden">
                     <input type="hidden" name="type" value="2">
+                    <input type="hidden" name="id" value="" class="id-edit">
+                    <input type="hidden" name="plate" value="" class="plate-edit">
+                    <input type="hidden" name="date" value="" class="date-edit">
                     <div class="form-group">
                         <label for="email">@lang('Email'):</label>
                         <select name="email" class="form-control email-edit" required>
@@ -522,13 +536,13 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="date">@lang('Date'):</label>
-                        <input type="date" class="form-control date-edit" name="date"
-                            max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" required>
+                        <label>@lang('Date'):</label>
+                        <input type="date" class="form-control date-edit"
+                            max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" disabled required>
                     </div>
                     <div class="form-group">
-                        <label for="plate">@lang("Truck's plate"):</label>
-                        <select name="plate" class="form-control plate-edit" required>
+                        <label>@lang("Truck's plate"):</label>
+                        <select class="form-control plate-edit" disabled required>
                             <option value=""></option>
                             @foreach ($plates as $plate)
                             <option value="{{ $plate->plate }}">{{ $plate->plate }} (km: {{ $plate->km }})</option>
@@ -842,11 +856,11 @@
                     "render": function(data, type, row) {
                         var html = "";
 
-                        if (row.plate_s != null || row.garage != null || row.container != null || row.stops != null) {
+                        //if (row.plate_s != null || row.garage != null || row.container != null || row.stops != null) {
                             html = '<button id="btn-details" type="button" class="btn btn-sm btn-success">' +
                                 '<i class="fas fa-plus"></i>' +
                                 '</button>';
-                        }
+                        //}
 
                         return html;
                     },
@@ -953,7 +967,12 @@
                     "searchable": false
                 },
                 {
-                    'targets': [12, 13, 14, 15, 16, 17],
+                    'targets': [15],
+                    'searchable': true,
+                    'visible': false
+                },
+                {
+                    'targets': [12, 13, 14, 16, 17],
                     "searchable": false,
                     'visible': false
                 },
@@ -1093,12 +1112,9 @@
                     }
                     if (data.success) {
                         html = '<div class="alert alert-success">' + data.success + '</div>';
-                        var lastInput = $('#row-stop').prev();
-                        while (lastInput.attr('id') != 'label-stop') {
-                            lastInput.remove();
-                            lastInput = $('#row-stop').prev();
-                        }
                         $('#merci')[0].reset();
+                        var stops = $(this).find('.input-stop');
+                        stops.remove();
                         $('#datatable').DataTable().ajax.reload();
                     }
                     $('#modal-add').scrollTop(0);
@@ -1241,6 +1257,7 @@
                         break;
                 }
 
+                $('#edit-form').find('.id-edit').val(row['id']);
                 $('#edit-form').find('.email-edit').val(row['user_email']);
                 $('#edit-form').find('.date-edit').val(formatInternational(row['date']));
                 $('#edit-form').find('.start-edit').val(replaceSymbol(row['start']));
@@ -1248,7 +1265,7 @@
                 $('#edit-form').find('.distance-edit').val(row['distance']);
                 $('#edit-form').find('.fuel-edit').val(row['fuel']);
                 $('#edit-form').find('.garage-edit').val(row['garage']);
-                $('#edit-form').find('.km-edit').val(row['km']);
+                $('#edit-form').find('.km-edit').val(row['distance']);
                 $('#edit-form').find('.note-edit').val(row['note']);
                 $('#edit-form').find('.plate-edit').val(row['plate']);
                 $('#edit-form').find('.cost-edit').val(row['cost']);
@@ -1256,7 +1273,7 @@
                 $('#edit-form').find('.plate_s-edit').val(row['plate_s']);
 
                 // CREO GLI STOPS
-                if (row['stops'] != null) {
+                if (row['stops'] != '') {
                     var stops = row['stops'].replace(/\s+/g, '');
                     stops = stops.split(",");
 
@@ -1271,6 +1288,146 @@
                     });
                 }
             }
+        });
+
+        // CARICO SCARICO MERCI
+
+        $('#merci-edit').on('submit', function(event) {
+            event.preventDefault();
+            var form = $(this).closest('form');
+
+            $('#form-result-edit').text('');
+            $('#form-result-edit').fadeIn();
+
+            $.ajax({
+                url: "{{route('api.trips.edit')}}",
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: $(form).serialize(),
+                dataType: "json",
+                beforeSend: function() {
+                    $('.loader-submit').removeClass('hidden');
+                    $('.submit-merci').contents().last().replaceWith('@lang("Loading...")');
+                },
+                success: function(data) {
+                    var html = '';
+                    if (data.errors) {
+                        html = '<div class="alert alert-danger">';
+                        for (var count = 0; count < data.errors.length; count++) {
+                            html += '<p>' + data.errors[count] + '</p>';
+                        }
+                        html += '</div>';
+                    }
+                    if (data.success) {
+                        html = '<div class="alert alert-success">' + data.success + '</div>';
+                        $('#merci-edit')[0].reset();
+                        var stops = $(this).find('.input-stop');
+                        stops.remove();
+                        $('#datatable').DataTable().ajax.reload();
+                    }
+                    $('#modal-edit').scrollTop(0);
+                    $('#form-result-edit').html(html);
+                    $('#form-result-edit').delay(4000).fadeOut();
+                },
+                complete: function() {
+                    $('.loader-submit').addClass('hidden');
+                    $('.submit-merci').contents().last().replaceWith('@lang("Submit")');
+                },
+            });
+        });
+
+        // OFFICINA
+
+        $('#officina-edit').on('submit', function(event) {
+            event.preventDefault();
+            var form = $(this).closest('form');
+
+            $('#form-result-edit').text('');
+            $('#form-result-edit').fadeIn();
+
+            $.ajax({
+                url: "{{route('api.trips.edit')}}",
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: $(form).serialize(),
+                dataType: "json",
+                beforeSend: function() {
+                    $('.loader-submit').removeClass('hidden');
+                    $('.submit-officina').contents().last().replaceWith('@lang("Loading...")');
+                },
+                success: function(data) {
+                    var html = '';
+                    if (data.errors) {
+                        html = '<div class="alert alert-danger">';
+                        for (var count = 0; count < data.errors.length; count++) {
+                            html += '<p>' + data.errors[count] + '</p>';
+                        }
+                        html += '</div>';
+                    }
+                    if (data.success) {
+                        html = '<div class="alert alert-success">' + data.success + '</div>';
+                        $('#officina-edit')[0].reset();
+                        $('#datatable').DataTable().ajax.reload();
+                    }
+                    $('#modal-edit').scrollTop(0);
+                    $('#form-result-edit').html(html);
+                    $('#form-result-edit').delay(4000).fadeOut();
+                },
+                complete: function() {
+                    $('.loader-submit').addClass('hidden');
+                    $('.submit-officina').contents().last().replaceWith('@lang("Submit")');
+                },
+            });
+        });
+
+        // A VUOTO
+
+        $('#vuoto-edit').on('submit', function(event) {
+            event.preventDefault();
+            var form = $(this).closest('form');
+
+            $('#form-result-edit').text('');
+            $('#form-result-edit').fadeIn();
+
+            $.ajax({
+                url: "{{route('api.trips.edit')}}",
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: $(form).serialize(),
+                dataType: "json",
+                beforeSend: function() {
+                    $('.loader-submit').removeClass('hidden');
+                    $('.submit-vuoto').contents().last().replaceWith('@lang("Loading...")');
+                },
+                success: function(data) {
+                    var html = '';
+                    if (data.errors) {
+                        html = '<div class="alert alert-danger">';
+                        for (var count = 0; count < data.errors.length; count++) {
+                            html += '<p>' + data.errors[count] + '</p>';
+                        }
+                        html += '</div>';
+                    }
+                    if (data.success) {
+                        html = '<div class="alert alert-success">' + data.success + '</div>';
+                        $('#vuoto-edit')[0].reset();
+                        $('#datatable').DataTable().ajax.reload();
+                    }
+                    $('#modal-edit').scrollTop(0);
+                    $('#form-result-edit').html(html);
+                    $('#form-result-edit').delay(4000).fadeOut();
+                },
+                complete: function() {
+                    $('.loader-submit').addClass('hidden');
+                    $('.submit-vuoto').contents().last().replaceWith('@lang("Submit")');
+                },
+            });
         });
 
         $('.btn-edit-close').on('click', function(e){

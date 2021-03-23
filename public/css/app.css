@@ -10950,12 +10950,12 @@ a.text-dark:focus {
   background-color: white;
 }
 
-.table-row #datatable_filter {
+.table-row .dataTables_filter {
   position: relative;
   margin-top: auto;
 }
 
-.table-row #datatable_filter label {
+.table-row .dataTables_filter label {
   margin-bottom: 4px;
 }
 
@@ -10963,13 +10963,13 @@ a.text-dark:focus {
   display: inline-flex;
 }
 
-.table-row .table-col #datatable_length {
+.table-row .table-col .dataTables_length {
   position: relative;
   margin-top: auto;
   margin-right: 10px;
 }
 
-.table-row .table-col #datatable_length label {
+.table-row .table-col .dataTables_length label {
   margin-bottom: 4px;
 }
 
@@ -10988,7 +10988,7 @@ a.text-dark:focus {
   width: 25%;
 }
 
-#btn-details {
+.btn-details {
   padding-left: 6px;
   padding-right: 6px;
   padding-bottom: 2px;
@@ -11036,7 +11036,11 @@ a.text-dark:focus {
   }
 }
 
-#btn-reset {
+.small-alert {
+  color: red;
+}
+
+.btn-reset {
   margin-left: 10px;
 }
 

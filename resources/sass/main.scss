@@ -24,7 +24,7 @@
 }
 
 .table-row {
-    #datatable_filter {
+    .dataTables_filter {
         position: relative;
         margin-top: auto;
         label {
@@ -33,7 +33,7 @@
     }
     .table-col {
         display: inline-flex;
-        #datatable_length {
+        .dataTables_length {
             position: relative;
             margin-top: auto;
             margin-right: 10px;
@@ -59,7 +59,7 @@
     width: 25%;
 }
 
-#btn-details {
+.btn-details {
     padding-left: 6px;
     padding-right: 6px;
     padding-bottom: 2px;
@@ -118,7 +118,11 @@
 
 // PAGE MAINTENANCE
 
-#btn-reset {
+.small-alert {
+    color: red;
+}
+
+.btn-reset {
     margin-left: 10px;
 }
 

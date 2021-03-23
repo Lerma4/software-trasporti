@@ -6,11 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
-class Maintenance extends Model
+class MaintAlreadyDone extends Model
 {
     use HasFactory, Notifiable;
 
     public $timestamps = false;
+
+    protected $table = 'maint-alreadyDone';
 
     /**
      * The attributes that are mass assignable.
@@ -21,14 +23,21 @@ class Maintenance extends Model
         'plate',
         'type',
         'km',
-        'description',
-        'period',
         'price',
-        'alert',
         'date',
         'garage',
+        'notes',
         'companyId'
     ];
+
+    protected $casts = [
+        'date' => 'datetime:d-m-Y',
+    ];
+
+    public function setPlateAttribute($value)
+    {
+        $this->attributes['plate'] = strtoupper($value);
+    }
 
     public function truck()
     {

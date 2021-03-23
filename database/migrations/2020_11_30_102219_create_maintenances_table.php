@@ -13,17 +13,25 @@ class CreateMaintenancesTable extends Migration
      */
     public function up()
     {
-        Schema::create('maintenances', function (Blueprint $table) {
+        Schema::create('maint-alreadyDone', function (Blueprint $table) {
             $table->id();
             $table->string('plate');
             $table->string('type');
-            $table->string('garage')->nullable()->default(NULL);
-            $table->string('description')->nullable()->default(NULL);
             $table->date('date');
-            $table->boolean('alert')->nullable()->default(FALSE);
             $table->bigInteger('km')->nullable()->default(NULL);
-            $table->bigInteger('period')->nullable()->default(NULL);
+            $table->string('garage')->nullable()->default(NULL);
             $table->bigInteger('price')->nullable()->default(NULL);
+            $table->string('notes')->nullable()->default(NULL);
+            $table->bigInteger('companyId');
+        });
+
+        Schema::create('maint-stillToDo', function (Blueprint $table) {
+            $table->id();
+            $table->string('plate');
+            $table->string('type');
+            $table->bigInteger('km');
+            $table->bigInteger('renew')->nullable()->default(NULL);
+            $table->string('notes')->nullable()->default(NULL);
             $table->bigInteger('companyId');
         });
     }
@@ -35,6 +43,7 @@ class CreateMaintenancesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('maintenances');
+        Schema::dropIfExists('maint-alreadyDone');
+        Schema::dropIfExists('maint-stillToDo');
     }
 }
