@@ -226,5 +226,7 @@
     "Notes": "Note",
     "Truck's km": "Km del mezzo",
     "Max 50 characters": "Massimo 50 caratteri",
-    " record/s successfully deleted!": " elemento/i eliminati correttamente!"
+    " record/s successfully deleted!": " elemento/i eliminati correttamente!",
+    "Done": "Eseguita",
+    "Successful operation!": "Operazione riuscita!"
 }

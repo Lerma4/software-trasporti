@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\API;
 use App\Http\Controllers\Controller;
 use App\Models\Expiration;
 use App\Models\MaintAlreadyDone;
+use App\Models\MaintStillToDo;
 use App\Models\Truck;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -12,35 +13,17 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Yajra\DataTables\Facades\DataTables;
 
-class APIMaintAlreadyDoneController extends Controller
+class APIMaintStillToDoController extends Controller
 {
     public function __construct()
     {
         $this->middleware('role:super;admin');
     }
 
-    public function getMaint($dateTo = null, $dateFrom = null)
+    public function getMaint()
     {
-        if ($dateTo == 'nullValue') {
-            $dateTo = null;
-        };
-        if ($dateFrom == 'nullValue') {
-            $dateFrom = null;
-        };
-
-        $result = MaintAlreadyDone::when($dateFrom != null && $dateFrom != '', function ($query) use ($dateFrom) {
-            return $query->where(function ($query) use ($dateFrom) {
-                $query->where('date', '>', $dateFrom)
-                    ->orwhere('date', $dateFrom);
-            });
-        })
-            ->when($dateTo != null && $dateTo != '', function ($query) use ($dateTo) {
-                return $query->where(function ($query) use ($dateTo) {
-                    $query->where('date', '<', $dateTo)
-                        ->orwhere('date', $dateTo);
-                });
-            })
-            ->where('companyId', '=', auth('admin')->user()->companyId);
+        $result = MaintStillToDo::where('companyId', '=', auth('admin')->user()->companyId)
+            ->orderBy('km', 'asc');
 
         return DataTables::eloquent($result)
             ->setRowId('id')
@@ -61,8 +44,8 @@ class APIMaintAlreadyDoneController extends Controller
                 'max:30'
             ],
             'type' => ['required', 'max:30'],
-            'date' => ['required'],
-            'km' => ['nullable', 'numeric', 'min:1'],
+            'km' => ['required', 'numeric', 'min:1'],
+            'renew' => ['nullable', 'numeric', 'min:1'],
             'notes' => ['max:50'],
         ]);
 
@@ -71,22 +54,11 @@ class APIMaintAlreadyDoneController extends Controller
                 ->json(['errors' => $validator->errors()->all()]);
         }
 
-        $truck = Truck::where('companyId', auth('admin')->user()->companyId)
-            ->where('plate', $request->plate)
-            ->first();
-
-        if ($truck->km < $request->km) {
-            return response()
-                ->json(['errors' => [__("I km inseriti sono superiori a quelli attuali del mezzo")]]);
-        }
-
-        $maint = MaintAlreadyDone::create([
-            'date' => $request->date,
+        MaintStillToDo::create([
             'plate' => $request->plate,
             'type' => $request->type,
             'km' => $request->km,
-            'garage' => $request->garage,
-            'price' => $request->price,
+            'renew' => $request->renew,
             'notes' => $request->notes,
             'companyId' => auth('admin')->user()->companyId,
         ]);
@@ -108,8 +80,8 @@ class APIMaintAlreadyDoneController extends Controller
                 'max:30'
             ],
             'type' => ['required', 'max:30'],
-            'date' => ['required'],
-            'km' => ['nullable', 'numeric', 'min:1'],
+            'km' => ['required', 'numeric', 'min:1'],
+            'renew' => ['nullable', 'numeric', 'min:1'],
             'notes' => ['max:50'],
         ]);
 
@@ -118,24 +90,13 @@ class APIMaintAlreadyDoneController extends Controller
                 ->json(['errors' => $validator->errors()->all()]);
         }
 
-        $truck = Truck::where('companyId', auth('admin')->user()->companyId)
-            ->where('plate', $request->plate)
-            ->first();
-
-        if ($truck->km < $request->km) {
-            return response()
-                ->json(['errors' => [__("I km inseriti sono superiori a quelli attuali del mezzo")]]);
-        }
-
-        $maint = MaintAlreadyDone::findOrFail($request->id);
+        $maint = MaintStillToDo::findOrFail($request->id);
 
         $maint->update([
-            'date' => $request->date,
             'plate' => $request->plate,
             'type' => $request->type,
             'km' => $request->km,
-            'garage' => $request->garage,
-            'price' => $request->price,
+            'renew' => $request->renew,
             'notes' => $request->notes,
         ]);
 
@@ -150,8 +111,38 @@ class APIMaintAlreadyDoneController extends Controller
      */
     public function destroy(Request $request)
     {
-        MaintAlreadyDone::destroy($request->maint);
+        MaintStillToDo::destroy($request->maint);
 
         return response()->json(['success' => count($request->maint) . __(' record/s successfully deleted!')]);
+    }
+
+    // CONFERMA DELLA ESECUZIONE DI UNA MANUTENZIONE
+
+    public function confirm(Request $request)
+    {
+        /* $maint = MaintStillToDo::findOrFail($request->id);
+        $truck = Truck::where('companyId', '=', auth('admin')->user()->companyId)
+            ->where('plate', $maint->plate)
+            ->first();
+
+        if ($truck->km < $request->km) {
+            return response()
+                ->json(['errors' => ['I km inseriti sono superiori ai km totali del mezzo']]);
+        }
+
+        MaintAlreadyDone::create([
+            'date' => $request->date,
+            'plate' => $maint->plate,
+            'type' => $maint->type,
+            'km' => $request->km,
+            'garage' => $request->garage,
+            'price' => $request->price,
+            'notes' => $request->notes,
+            'companyId' => auth('admin')->user()->companyId,
+        ]);
+
+        $maint->delete();*/
+
+        return response()->json(['success' => __('Successful operation!')]);
     }
 }

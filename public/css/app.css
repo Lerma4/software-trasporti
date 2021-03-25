@@ -11044,6 +11044,10 @@ a.text-dark:focus {
   margin-left: 10px;
 }
 
+.maintDone {
+  text-align: center;
+}
+
 #officina {
   display: none;
 }

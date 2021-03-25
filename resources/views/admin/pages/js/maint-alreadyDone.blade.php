@@ -78,12 +78,6 @@
                     },
                     'width': '1%'
                 },
-                /*{
-                    'targets': 3,
-                    'render': function(data) {
-                        return moment(data).format('DD-MM-YYYY');
-                    }
-                },*/
                 {
                     'targets': [4, 5, 6, 7],
                     "orderable": false,
@@ -217,17 +211,19 @@
 
             var rows_selected = table.column(0).checkboxes.selected();
 
+            var form = $("#editMaint");
+
             if (rows_selected.length == 1) {
                 var row = table.row('#' + rows_selected[0]).data();
 
-                $('.maint-id').val(row['id']);
-                $('.maint-plate').val(row['plate']);
-                $('.maint-type').val(row['type']);
-                $('.maint-date').val(formatInternational(row['date']));
-                $('.maint-garage').val(row['garage']);
-                $('.maint-price').val(row['price']);
-                $('.maint-km').val(row['km']);
-                $('.maint-notes').val(row['notes']);
+                form.find('.maint-id').val(row['id']);
+                form.find('.maint-plate').val(row['plate']);
+                form.find('.maint-type').val(row['type']);
+                form.find('.maint-date').val(formatInternational(row['date']));
+                form.find('.maint-garage').val(row['garage']);
+                form.find('.maint-price').val(row['price']);
+                form.find('.maint-km').val(row['km']);
+                form.find('.maint-notes').val(row['notes']);
             }
         });
 
@@ -288,7 +284,7 @@
             url += "/" + date + "/" + $('.select-input-date-from').val();
 
             table.ajax.url(url).load();
-        }); // FILTRO PER GRUPPO
+        }); // FILTRO PER DATA (TO)
 
         $('.select-input-date-from').change(function() {
             var url = "{{ route('api.maint') }}";
@@ -301,7 +297,7 @@
             url += "/" + date + "/" + $(this).val();
 
             table.ajax.url(url).load();
-        }); // FILTRO PER TIPO
+        }); // FILTRO PER DATA (FROM)
 
         $('#btn-reset').click(function(e) {
             table.ajax.url("{{ route('api.maint') }}").load();

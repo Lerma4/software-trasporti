@@ -75,6 +75,11 @@ Route::get('/admin/APIMaintAlreadyDone/maint/{dateTo?}/{dateFrom?}', [\App\Http\
 Route::post('/admin/APIMaintAlreadyDone/store', [\App\Http\Controllers\Admin\API\APIMaintAlreadyDoneController::class, 'store'])->name('admin.maint.store');
 Route::post('/admin/APIMaintAlreadyDone/edit', [\App\Http\Controllers\Admin\API\APIMaintAlreadyDoneController::class, 'edit'])->name('admin.maint.edit');
 Route::post('/admin/APIMaintAlreadyDone/delete', [\App\Http\Controllers\Admin\API\APIMaintAlreadyDoneController::class, 'destroy'])->name('admin.maint.delete');
+Route::get('/admin/APIMaintStillToDo/maint', [\App\Http\Controllers\Admin\API\APIMaintStillToDoController::class, 'getMaint'])->name('api.maintStill');
+Route::post('/admin/APIMaintStillToDo/store', [\App\Http\Controllers\Admin\API\APIMaintStillToDoController::class, 'store'])->name('admin.maintStill.store');
+Route::post('/admin/APIMaintStillToDo/edit', [\App\Http\Controllers\Admin\API\APIMaintStillToDoController::class, 'edit'])->name('admin.maintStill.edit');
+Route::post('/admin/APIMaintStillToDo/delete', [\App\Http\Controllers\Admin\API\APIMaintStillToDoController::class, 'destroy'])->name('admin.maintStill.delete');
+Route::post('/admin/APIMaintStillToDo/confirm', [\App\Http\Controllers\Admin\API\APIMaintStillToDoController::class, 'confirm'])->name('admin.maintStill.confirm');
 
 // TRIPS
 

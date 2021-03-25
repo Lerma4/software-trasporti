@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\MaintStillToDo;
 use App\Models\Truck;
 use Illuminate\Http\Request;
 
@@ -17,7 +18,7 @@ class MaintenancesController extends Controller
     {
         $trucks = Truck::where('companyId', '=', auth('admin')->user()->companyId)
             ->distinct()
-            ->get('plate');
+            ->get();
 
         return view('admin.pages.maintenances', ['trucks' => $trucks]);
     }
