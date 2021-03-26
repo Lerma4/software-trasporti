@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\City;
+use App\Models\MaintStillToDo;
 use App\Models\Trip;
 use App\Models\Truck;
 use App\Models\User;
@@ -85,6 +86,10 @@ class APITripsController extends Controller
             ->where('email', $request->email)
             ->first();
 
+        $maintenances = MaintStillToDo::where('companyId', '=', auth('admin')->user()->companyId)
+            ->where('plate', $request->plate)
+            ->get();
+
         $error = '';
 
         // CHECK
@@ -118,6 +123,13 @@ class APITripsController extends Controller
             $truck->km += $request->km;
             $truck->save();
             $km = $truck->km;
+
+            // AGGIORNAMENTO MANUTENZIONI
+
+            foreach ($maintenances as $maint) {
+                $maint->km -= $request->km;
+                $maint->save();
+            }
         }
 
         // CASO 2 : IL VIAGGIO INSERITO NON è L'ULTIMO
@@ -201,6 +213,10 @@ class APITripsController extends Controller
             ->where('email', $request->email)
             ->first();
 
+        $maintenances = MaintStillToDo::where('companyId', '=', auth('admin')->user()->companyId)
+            ->where('plate', $request->plate)
+            ->get();
+
         $error = '';
 
         $kmDifference = $thisTrip->distance - $request->km;
@@ -236,6 +252,13 @@ class APITripsController extends Controller
             $truck->km -= $kmDifference;
             $truck->save();
             $km = $truck->km;
+
+            // AGGIORNAMENTO MANUTENZIONI
+
+            foreach ($maintenances as $maint) {
+                $maint->km += $kmDifference;
+                $maint->save();
+            }
         }
 
         // CASO 2 : IL VIAGGIO INSERITO NON è L'ULTIMO
@@ -314,6 +337,17 @@ class APITripsController extends Controller
                     ->first();
                 $truck->km -= $trip->distance;
                 $truck->save();
+
+                // AGGIORNAMENTO MANUTENZIONI
+
+                $maintenances = MaintStillToDo::where('companyId', '=', auth('admin')->user()->companyId)
+                    ->where('plate', $trip->plate)
+                    ->get();
+
+                foreach ($maintenances as $maint) {
+                    $maint->km += $trip->distance;
+                    $maint->save();
+                }
             } else {
                 $nextTrip->distance += $trip->distance;
 

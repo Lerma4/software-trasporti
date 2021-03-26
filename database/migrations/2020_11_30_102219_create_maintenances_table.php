@@ -29,7 +29,7 @@ class CreateMaintenancesTable extends Migration
             $table->id();
             $table->string('plate');
             $table->string('type');
-            $table->bigInteger('km');
+            $table->float('km', 8, 0);
             $table->bigInteger('renew')->nullable()->default(NULL);
             $table->string('notes')->nullable()->default(NULL);
             $table->bigInteger('companyId');

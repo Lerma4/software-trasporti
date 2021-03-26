@@ -264,7 +264,7 @@
                     </div>
                     <div class="form-group">
                         <label for="km">@lang("Km mancanti"):</label>
-                        <input type="number" step="1" min="1" class="form-control" name="km" required>
+                        <input type="number" step="1" min="1" max="1000000" class="form-control" name="km" required>
                         <small>@lang('Km mancanti alla prossima manutenzione (si riceverà una notifica 1000 km prima del
                             raggiungimento dei km).')</small>
                     </div>
@@ -322,7 +322,8 @@
                     </div>
                     <div class="form-group">
                         <label for="km">@lang("Km mancanti"):</label>
-                        <input type="number" step="1" min="1" class="form-control maint-km" name="km" required>
+                        <input type="number" step="1" min="1" max="1000000" class="form-control maint-km" name="km"
+                            required>
                         <small>@lang('Km mancanti alla prossima manutenzione (si riceverà una notifica 1000 km prima del
                             raggiungimento dei km).')</small>
                     </div>
@@ -332,6 +333,10 @@
                         <small>@lang("Indicare in questo campo il numero di km necessari tra una manutenzione e
                             l'altra (che verrà automaticamente creata nel momento in cui la manutenzione precedente sarà
                             svolta).")</small>
+                        <br>
+                        <small class="small-alert">
+                            @lang("Per disattivare il rinnovo automatico è sufficiente cancellare il campo qui sopra.")
+                        </small>
                     </div>
                     <div class="form-group">
                         <label for="notes">@lang('Notes') (@lang('Optional')):</label>

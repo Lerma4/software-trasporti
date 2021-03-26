@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\City;
+use App\Models\MaintStillToDo;
 use App\Models\Trip;
 use App\Models\Truck;
 use Illuminate\Http\Request;
@@ -79,6 +80,10 @@ class HomeController extends Controller
             ->latest()
             ->first();
 
+        $maintenances = MaintStillToDo::where('companyId', '=', auth('admin')->user()->companyId)
+            ->where('plate', $request->plate)
+            ->get();
+
         $distance = $request->km - $truck[0]->km;
 
         $error = '';
@@ -125,6 +130,11 @@ class HomeController extends Controller
         if ($truck_s[0] != NULL) {
             $truck_s[0]->km += $distance;
             $truck_s[0]->save();
+        }
+
+        foreach ($maintenances as $maint) {
+            $maint->km -= $request->km;
+            $maint->save();
         }
 
         // CREAZIONE VIAGGIO
@@ -180,6 +190,10 @@ class HomeController extends Controller
             ->latest()
             ->first();
 
+        $maintenances = MaintStillToDo::where('companyId', '=', auth('admin')->user()->companyId)
+            ->where('plate', $request->plate)
+            ->get();
+
         $distance = $request->km - $truck[0]->km;
 
         $error = '';
@@ -227,6 +241,11 @@ class HomeController extends Controller
         if ($truck_s != NULL) {
             $truck_s[0]->km += $distance;
             $truck_s[0]->save();
+        }
+
+        foreach ($maintenances as $maint) {
+            $maint->km -= $request->km;
+            $maint->save();
         }
 
         Trip::create([
@@ -267,6 +286,10 @@ class HomeController extends Controller
             ->latest()
             ->first();
 
+        $maintenances = MaintStillToDo::where('companyId', '=', auth('admin')->user()->companyId)
+            ->where('plate', $request->plate)
+            ->get();
+
         $distance = $request->km - $truck[0]->km;
 
         $error = '';
@@ -314,6 +337,11 @@ class HomeController extends Controller
         if ($truck_s != NULL) {
             $truck_s[0]->km += $distance;
             $truck_s[0]->save();
+        }
+
+        foreach ($maintenances as $maint) {
+            $maint->km -= $request->km;
+            $maint->save();
         }
 
         Trip::create([

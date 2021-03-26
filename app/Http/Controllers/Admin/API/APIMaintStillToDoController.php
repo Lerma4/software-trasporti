@@ -44,7 +44,7 @@ class APIMaintStillToDoController extends Controller
                 'max:30'
             ],
             'type' => ['required', 'max:30'],
-            'km' => ['required', 'numeric', 'min:1'],
+            'km' => ['required', 'numeric', 'min:1', 'max:1000000'],
             'renew' => ['nullable', 'numeric', 'min:1'],
             'notes' => ['max:50'],
         ]);
@@ -80,7 +80,7 @@ class APIMaintStillToDoController extends Controller
                 'max:30'
             ],
             'type' => ['required', 'max:30'],
-            'km' => ['required', 'numeric', 'min:1'],
+            'km' => ['required', 'numeric', 'min:1', 'max:1000000'],
             'renew' => ['nullable', 'numeric', 'min:1'],
             'notes' => ['max:50'],
         ]);
@@ -120,7 +120,7 @@ class APIMaintStillToDoController extends Controller
 
     public function confirm(Request $request)
     {
-        /* $maint = MaintStillToDo::findOrFail($request->id);
+        $maint = MaintStillToDo::findOrFail($request->id);
         $truck = Truck::where('companyId', '=', auth('admin')->user()->companyId)
             ->where('plate', $maint->plate)
             ->first();
@@ -141,7 +141,18 @@ class APIMaintStillToDoController extends Controller
             'companyId' => auth('admin')->user()->companyId,
         ]);
 
-        $maint->delete();*/
+        if ($maint->renew != NULL) {
+            MaintStillToDo::create([
+                'plate' => $maint->plate,
+                'type' => $maint->type,
+                'km' => $maint->renew,
+                'renew' => $maint->renew,
+                'notes' => $request->notes,
+                'companyId' => auth('admin')->user()->companyId,
+            ]);
+        }
+
+        $maint->delete();
 
         return response()->json(['success' => __('Successful operation!')]);
     }
