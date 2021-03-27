@@ -4,7 +4,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -29,11 +30,14 @@
     </div>
     <div class="c-wrapper">
         <header class="c-header c-header-light c-header-fixed">
-            <button class="c-header-toggler c-class-toggler d-lg-none mfe-auto" type="button" data-target="#sidebar" data-class="c-sidebar-show">
+            <button class="c-header-toggler c-class-toggler d-lg-none mfe-auto" type="button" data-target="#sidebar"
+                data-class="c-sidebar-show">
                 <i class="c-icon c-icon-2xl cil-menu"></i>
             </button>
-            <a class="c-header-brand d-lg-none c-header-brand-sm-up-center" href="{{ route('home') }}">{{ config('app.name', 'Laravel') }}</a>
-            <button class="c-header-toggler c-class-toggler mfs-3 d-md-down-none" type="button" data-target="#sidebar" data-class="c-sidebar-lg-show" responsive="true">
+            <a class="c-header-brand d-lg-none c-header-brand-sm-up-center"
+                href="{{ route('home') }}">{{ config('app.name', 'Laravel') }}</a>
+            <button class="c-header-toggler c-class-toggler mfs-3 d-md-down-none" type="button" data-target="#sidebar"
+                data-class="c-sidebar-lg-show" responsive="true">
                 <i class="c-icon c-icon-2xl cil-menu"></i>
             </button>
             <ul class="c-header-nav mfs-auto">
@@ -41,7 +45,8 @@
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                         @csrf
                     </form>
-                    <a class="c-header-nav-btn fas fa-sign-out-alt fa-lg " href="{{ route('logout') }}" title="Logout" onclick="event.preventDefault();document.getElementById('logout-form').submit();"></a>
+                    <a class="c-header-nav-btn fas fa-sign-out-alt fa-lg " href="{{ route('logout') }}" title="Logout"
+                        onclick="event.preventDefault();document.getElementById('logout-form').submit();"></a>
                 </li>
             </ul>
         </header>
@@ -57,8 +62,9 @@
         </div>
 
         <footer class="c-footer">
-            <div><a href="https://coreui.io">CoreUI</a> © 2020 creativeLabs.</div>
-            <div class="mfs-auto">Powered by&nbsp;<a href="https://coreui.io">CoreUI</a></div>
+            <div><a href="#">{{ config('app.name', 'Laravel') }}</a> © {{ \Carbon\Carbon::today()->format('Y') }}
+            </div>
+            <div class="mfs-auto">v. {{ config('app.version') }}</a></div>
         </footer>
 
     </div>

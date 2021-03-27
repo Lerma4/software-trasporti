@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Document;
+use App\Models\DocumentFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Storage;
 use Yajra\DataTables\Facades\DataTables;
 
 class DocumentsController extends Controller
@@ -42,9 +44,7 @@ class DocumentsController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => ['required', 'max:50'],
-            'filename' => ['required'],
-            'filename.*' => ['max:10000', 'mimes:jpg,jpeg,png,pdf,HEIF'],
+            'name' => ['required', 'max:50', 'unique:documents'],
         ]);
 
         if ($validator->fails()) {
@@ -52,18 +52,39 @@ class DocumentsController extends Controller
                 ->json(['errors' => $validator->errors()->all()]);
         }
 
-        $ext = request('file')->getClientOriginalExtension();
+        //$ext = request('file')->getClientOriginalExtension();
         $name = str_replace(' ', '', request('name'));
-        $name = $name . '.' . $ext;
+        //$name = $name . '.' . $ext;
 
-        Document::create([
+        $document = Document::create([
             'companyId' => auth()->user()->companyId,
             'user_email' => auth()->user()->email,
             'user_name' => auth()->user()->name,
-            'name' => $name,
-            'ext' => $ext
+            'name' => $name
         ]);
 
+        DocumentFile::whereIn('id', explode(",", $request->file_ids))
+            ->update(['document_id' => $document->id]);
+
         return response()->json(['success' => __('Document successfully submitted!')]);
+    }
+
+    public function upload(Request $request)
+    {
+        $photos = [];
+        foreach ($request->photos as $photo) {
+            $filename = $photo->store('photos');
+            $product_photo = DocumentFile::create([
+                'filename' => $filename
+            ]);
+
+            $photo_object = new \stdClass();
+            $photo_object->name = str_replace('photos/', '', $photo->getClientOriginalName());
+            $photo_object->size = round(Storage::size($filename) / 1024, 2);
+            $photo_object->fileID = $product_photo->id;
+            $photos[] = $photo_object;
+        }
+
+        return response()->json(array('files' => $photos), 200);
     }
 }

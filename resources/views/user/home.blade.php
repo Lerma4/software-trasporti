@@ -319,7 +319,7 @@
             $('#form-result').fadeIn();
 
             $.ajax({
-                url: "{{route('api.trips.merci')}}",
+                url: "{{route('tripmerci')}}",
                 type: "POST",
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

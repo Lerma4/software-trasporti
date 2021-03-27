@@ -26,6 +26,7 @@ Route::post('/home/tripvuoto', [App\Http\Controllers\HomeController::class, 'tri
 Route::get('/documents', [App\Http\Controllers\DocumentsController::class, 'index'])->name('documents');
 Route::get('/documents/getDocuments', [App\Http\Controllers\DocumentsController::class, 'getDocuments'])->name('getDocuments');
 Route::post('/documents/store', [App\Http\Controllers\DocumentsController::class, 'store'])->name('document.store');
+Route::post('/documents/upload', [App\Http\Controllers\DocumentsController::class, 'upload'])->name('document.upload');
 
 // ADMIN SIDE
 

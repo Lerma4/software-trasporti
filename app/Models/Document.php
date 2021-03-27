@@ -13,7 +13,6 @@ class Document extends Model
     protected $fillable = [
         'name',
         'companyId',
-        'ext',
         'user_email',
         'user_name',
         'note'
