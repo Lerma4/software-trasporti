@@ -98,7 +98,7 @@ class APITrucksController extends Controller
             'km' => ['required'],
             'brand' => ['max:30'],
             'model' => ['max:30'],
-            'group' => ['exists:groups,name'],
+            'group' => ['exists:groups,name', 'nullable'],
             'description' => ['max:50'],
         ]);
 

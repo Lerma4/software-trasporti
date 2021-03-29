@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Company;
 use App\Models\License;
 use App\Models\User;
 use Carbon\Carbon;
@@ -90,13 +91,16 @@ class APIUsersController extends Controller
                 ->json(['errors' => [__('Two or more licenses have the same name')]]);
         }
 
+        $companyName = Company::findOrFail(auth('admin')->user()->companyId);
+
         $user = new User;
 
         $user->name = $request->name;
         $user->email = $request->email;
         $user->group = $request->group;
-        $user->password = Hash::make($request->newPassword);
+        $user->password = Hash::make($request->password);
         $user->companyId = auth('admin')->user()->companyId;
+        $user->company = $companyName->name;
 
         $user->save();
 

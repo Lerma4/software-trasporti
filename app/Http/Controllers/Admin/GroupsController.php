@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Group;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class GroupsController extends Controller
@@ -19,8 +20,6 @@ class GroupsController extends Controller
      */
     public function index()
     {
-        $groups = Group::where('companyId', '=', auth('admin')->user()->companyId)->get();
-
         return view('admin.pages.groups');
     }
 }

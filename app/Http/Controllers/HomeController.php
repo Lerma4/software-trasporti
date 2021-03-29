@@ -31,8 +31,9 @@ class HomeController extends Controller
         $plates = Truck::select('plate', 'km')
             ->where('companyId', '=', auth()->user()->companyId)
             ->where('group', auth()->user()->group)
-            ->where('type', 'motrice')
-            ->orWhere('type', 'trattore')
+            ->where(function ($q) {
+                $q->where('type', 'motrice')->orWhere('type', 'trattore');
+            })
             ->orderBy('plate', 'asc')
             ->get();
 

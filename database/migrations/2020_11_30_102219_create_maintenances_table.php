@@ -13,7 +13,7 @@ class CreateMaintenancesTable extends Migration
      */
     public function up()
     {
-        Schema::create('maint-alreadyDone', function (Blueprint $table) {
+        Schema::create('maintAlreadyDone', function (Blueprint $table) {
             $table->id();
             $table->string('plate');
             $table->string('type');
@@ -25,7 +25,7 @@ class CreateMaintenancesTable extends Migration
             $table->bigInteger('companyId');
         });
 
-        Schema::create('maint-stillToDo', function (Blueprint $table) {
+        Schema::create('maintStillToDo', function (Blueprint $table) {
             $table->id();
             $table->string('plate');
             $table->string('type');
@@ -43,7 +43,7 @@ class CreateMaintenancesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('maint-alreadyDone');
-        Schema::dropIfExists('maint-stillToDo');
+        Schema::dropIfExists('maintAlreadyDone');
+        Schema::dropIfExists('maintStillToDo');
     }
 }

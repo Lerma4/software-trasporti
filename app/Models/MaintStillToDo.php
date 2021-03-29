@@ -12,7 +12,7 @@ class MaintStillToDo extends Model
 
     public $timestamps = false;
 
-    protected $table = 'maint-stillToDo';
+    protected $table = 'maintstilltodo';
 
     /**
      * The attributes that are mass assignable.

@@ -12,7 +12,7 @@ class MaintAlreadyDone extends Model
 
     public $timestamps = false;
 
-    protected $table = 'maint-alreadyDone';
+    protected $table = 'maintalreadydone';
 
     /**
      * The attributes that are mass assignable.
