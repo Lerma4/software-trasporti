@@ -17,16 +17,21 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
 
+// HOME
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::post('/home/autocomplete', [App\Http\Controllers\HomeController::class, 'autocomplete'])->name('autocomplete');
 Route::post('/home/tripmerci', [App\Http\Controllers\HomeController::class, 'tripMerci'])->name('tripmerci');
 Route::post('/home/tripofficina', [App\Http\Controllers\HomeController::class, 'tripOfficina'])->name('tripofficina');
 Route::post('/home/tripvuoto', [App\Http\Controllers\HomeController::class, 'tripVuoto'])->name('tripvuoto');
 
+// DOCUMENT
+
 Route::get('/documents', [App\Http\Controllers\DocumentsController::class, 'index'])->name('documents');
 Route::get('/documents/getDocuments', [App\Http\Controllers\DocumentsController::class, 'getDocuments'])->name('getDocuments');
 Route::post('/documents/store', [App\Http\Controllers\DocumentsController::class, 'store'])->name('document.store');
 Route::post('/documents/upload', [App\Http\Controllers\DocumentsController::class, 'upload'])->name('document.upload');
+Route::get('/documents/download/{id?}', [App\Http\Controllers\DocumentsController::class, 'download'])->name('document.download');
 
 // ADMIN SIDE
 
@@ -35,6 +40,7 @@ Route::post('/documents/upload', [App\Http\Controllers\DocumentsController::clas
 Route::get('/admin/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'index'])->name('admin.settings');
 Route::post('/admin/settings/setLang', [\App\Http\Controllers\Admin\SettingsController::class, 'setLang'])->name('admin.lang');
 Route::post('/admin/settings/psw', [\App\Http\Controllers\Admin\SettingsController::class, 'pswChange'])->name('admin.psw.change');
+Route::post('/admin/settings/company', [\App\Http\Controllers\Admin\SettingsController::class, 'companyChange'])->name('admin.company.change');
 
 // GROUPS
 
@@ -91,3 +97,14 @@ Route::post('/admin/APITrips/trips/autocompletecity', [\App\Http\Controllers\Adm
 Route::post('/admin/APITrips/trips/store', [\App\Http\Controllers\Admin\API\APITripsController::class, 'store'])->name('api.trips.store');
 Route::post('/admin/APITrips/trips/delete', [\App\Http\Controllers\Admin\API\APITripsController::class, 'delete'])->name('api.trips.delete');
 Route::post('/admin/APITrips/trips/edit', [\App\Http\Controllers\Admin\API\APITripsController::class, 'edit'])->name('api.trips.edit');
+
+// DOCUMENTS
+
+Route::get('/admin/documents', [\App\Http\Controllers\Admin\DocumentsController::class, 'index'])->name('admin.documents');
+
+Route::get('/admin/APIDocuments/documents/get', [\App\Http\Controllers\Admin\API\APIDocumentsController::class, 'getDocuments'])->name('api.documents');
+Route::post('/admin/APIDocuments/documents/store', [App\Http\Controllers\Admin\API\APIDocumentsController::class, 'store'])->name('api.document.store');
+Route::post('/admin/APIDocuments/documents/upload', [App\Http\Controllers\Admin\API\APIDocumentsController::class, 'upload'])->name('api.document.upload');
+Route::get('/admin/APIDocuments/documents/download/{id?}', [App\Http\Controllers\Admin\API\APIDocumentsController::class, 'download'])->name('api.document.download');
+Route::post('/admin/APIDocuments/documents/delete', [\App\Http\Controllers\Admin\API\APIDocumentsController::class, 'delete'])->name('api.documents.delete');
+Route::post('/admin/APIDocuments/documents/edit', [\App\Http\Controllers\Admin\API\APIDocumentsController::class, 'edit'])->name('api.documents.edit');

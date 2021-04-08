@@ -372,7 +372,8 @@
                     name: 'group'
                 },
             ],
-            "columnDefs": [{
+            "columnDefs": [
+                {
                     'targets': 0,
                     'checkboxes': {
                         'selectRow': true

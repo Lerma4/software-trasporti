@@ -26,4 +26,9 @@ class Document extends Model
     {
         return $this->belongsTo('App\Models\User', 'email', 'user_email');
     }
+
+    public function pdf()
+    {
+        return $this->hasOne('App\Models\DocumentFile');
+    }
 }

@@ -171,6 +171,8 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        // Aggiunti dopo
+        Barryvdh\DomPDF\ServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -186,7 +188,6 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
-        // Aggiunti dopo
 
     ],
 
@@ -241,6 +242,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         // Aggiunti dopo
+        'PDF' => Barryvdh\DomPDF\Facade::class,
     ],
 
     'languages' => [

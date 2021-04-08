@@ -229,5 +229,11 @@
     " record/s successfully deleted!": " elemento/i eliminati correttamente!",
     "Done": "Eseguita",
     "Successful operation!": "Operazione riuscita!",
-    "Uploading...": "Caricamento..."
+    "Uploading...": "Caricamento...",
+    "Documents": "Documenti",
+    "Document name": "Nome del documento",
+    "Select driver": "Seleziona autista",
+    "Photos": "Foto",
+    "Select file formats": "Seleziona il formato del file",
+    "Add document": "Aggiungi documento"
 }

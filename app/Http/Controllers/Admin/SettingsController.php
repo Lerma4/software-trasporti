@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Company;
+use App\Models\User;
 use Bitfumes\Multiauth\Model\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -17,7 +19,9 @@ class SettingsController extends Controller
 
     public function index()
     {
-        return view('admin.settings');
+        $company = auth('admin')->user()->company->name;
+
+        return view('admin.settings', ['company' => $company]);
     }
 
     public function setLang(Request $request)
@@ -27,6 +31,26 @@ class SettingsController extends Controller
         $user->update(['language' => $request->lang]);
 
         return back();
+    }
+
+    public function companyChange(Request $request)
+    {
+        $validator = Company::where('name', $request->company)
+            ->count();
+
+        if ($validator > 0) {
+            return response()
+                ->json(['errors' => [__('There is another company with this name')]]);
+        };
+
+        $company = Company::findOrFail(auth('admin')->user()->companyId);
+
+        $company->update(['name' => $request->company]);
+
+        $users = User::where('companyId', auth('admin')->user()->companyId)
+            ->update(['company' => $request->company]);
+
+        return response()->json(['success' => __("Company's name successfully changed!")]);
     }
 
     public function pswChange(Request $request)

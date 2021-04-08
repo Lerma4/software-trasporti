@@ -91,8 +91,6 @@ class APIUsersController extends Controller
                 ->json(['errors' => [__('Two or more licenses have the same name')]]);
         }
 
-        $companyName = Company::findOrFail(auth('admin')->user()->companyId);
-
         $user = new User;
 
         $user->name = $request->name;
@@ -100,7 +98,7 @@ class APIUsersController extends Controller
         $user->group = $request->group;
         $user->password = Hash::make($request->password);
         $user->companyId = auth('admin')->user()->companyId;
-        $user->company = $companyName->name;
+        $user->company = auth('admin')->user()->company->name;
 
         $user->save();
 
