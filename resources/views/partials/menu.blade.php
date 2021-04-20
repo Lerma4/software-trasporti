@@ -5,7 +5,7 @@
         </a>
     </li>
     <li class="c-sidebar-nav-item">
-        <a class="c-sidebar-nav-link" href="#">
+        <a class="c-sidebar-nav-link" href="{{ route('crash') }}">
             <i class="c-sidebar-nav-icon fas fa-car-crash"></i> @lang('Report crash')
         </a>
     </li>

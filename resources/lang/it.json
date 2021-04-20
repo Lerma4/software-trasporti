@@ -235,5 +235,9 @@
     "Select driver": "Seleziona autista",
     "Photos": "Foto",
     "Select file formats": "Seleziona il formato del file",
-    "Add document": "Aggiungi documento"
+    "Add document": "Aggiungi documento",
+    "Load trip": "Carica viaggio",
+    "Crashes": "Incidenti",
+    "Crash": "Incidente",
+    "Incident report": "Report incidente"
 }

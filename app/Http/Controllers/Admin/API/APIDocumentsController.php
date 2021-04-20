@@ -35,7 +35,7 @@ class APIDocumentsController extends Controller
     {
         $files = [];
         foreach ($request->upl as $file) {
-            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $filename = auth('admin')->user()->id . 'doc_' . time() . '.' . $file->getClientOriginalExtension();
             if ($file->getClientOriginalExtension() != "pdf") {
                 $img = Image::make($file)->encode(null, 50);
                 Storage::put($filename, $img);
@@ -44,7 +44,7 @@ class APIDocumentsController extends Controller
                     'filename' => $filename
                 ]);
             } else {
-                $path = $file->store('public/documents');
+                $path = $file->storeAs('public/documents', $filename);
                 $product_photo = DocumentFile::create([
                     'filename' => $path
                 ]);
@@ -65,7 +65,8 @@ class APIDocumentsController extends Controller
         }
 
         $user = User::findOrFail($request->user);
-        $oldDocuments = Document::where('user_email', $user->email)
+        $oldDocuments = Document::where('companyId', auth('admin')->user()->companyId)
+            ->where('user_email', $user->email)
             ->where('name', $request->name)
             ->count();
 
@@ -97,7 +98,6 @@ class APIDocumentsController extends Controller
 
         switch ($request->format) {
             case 'pdf':
-                error_log($document->id);
                 DocumentFile::where('id', $request->file_ids)
                     ->update(['document_id' => $document->id]);
                 break;

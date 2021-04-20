@@ -11177,3 +11177,7 @@ a.text-dark:focus {
   color: red;
 }
 
+#document .uploads-list {
+  padding-left: 0px;
+}
+

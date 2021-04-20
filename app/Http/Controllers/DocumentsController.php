@@ -50,7 +50,7 @@ class DocumentsController extends Controller
         $photos = [];
         foreach ($request->upl as $photo) {
             $img = Image::make($photo)->encode(null, 50);
-            $filename = time() . '.' . $photo->getClientOriginalExtension();
+            $filename = auth()->user()->id . 'doc_' . time() . '.' . $photo->getClientOriginalExtension();
             Storage::put($filename, $img);
             Storage::move($filename, 'photos/' . $filename);
             $product_photo = DocumentFile::create([
@@ -66,13 +66,19 @@ class DocumentsController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'max:50', 'unique:documents'],
-        ]);
-
-        if ($validator->fails()) {
+        if ($request->file_ids == "") {
             return response()
-                ->json(['errors' => $validator->errors()->all()]);
+                ->json(['errors' => [__("Insert at least one photo.")]]);
+        }
+
+        $oldDocuments = Document::where('companyId', auth()->user()->companyId)
+            ->where('user_email', auth()->user()->email)
+            ->where('name', $request->name)
+            ->count();
+
+        if ($oldDocuments != 0) {
+            return response()
+                ->json(['errors' => [__("Already exists a document with this name.")]]);
         }
 
         $name = str_replace(' ', '', request('name'));
@@ -92,7 +98,7 @@ class DocumentsController extends Controller
 
         $pdf = PDF::loadView('pdf.document', compact('data'));
         $content = $pdf->download()->getOriginalContent();
-        $filename = "documents/" . $name . ".pdf";
+        $filename = "public/documents/" . auth()->user()->id . $name . ".pdf";
 
         foreach ($data as $photo) {
             $path = "photos/" . $photo->filename;
@@ -104,7 +110,7 @@ class DocumentsController extends Controller
         DocumentFile::whereIn('id', explode(",", $request->file_ids))
             ->delete(['document_id' => $document->id]);
 
-        Storage::put("public/" . $filename, $content);
+        Storage::put($filename, $content);
 
         DocumentFile::create([
             'filename' => $filename,
@@ -117,7 +123,7 @@ class DocumentsController extends Controller
     public function download($id)
     {
         $pdf_data = Document::findOrFail($id);
-        $location = public_path("storage/" . $pdf_data->pdf->filename);
+        $location = storage_path("app/" . $pdf_data->pdf->filename);
         // Optional: serve the file under a different filename:
         $filename = $pdf_data->name . '.pdf';
         // optional headers

@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
 
-// HOME
+// HOME (LOAD TRIP)
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::post('/home/autocomplete', [App\Http\Controllers\HomeController::class, 'autocomplete'])->name('autocomplete');
@@ -32,6 +32,12 @@ Route::get('/documents/getDocuments', [App\Http\Controllers\DocumentsController:
 Route::post('/documents/store', [App\Http\Controllers\DocumentsController::class, 'store'])->name('document.store');
 Route::post('/documents/upload', [App\Http\Controllers\DocumentsController::class, 'upload'])->name('document.upload');
 Route::get('/documents/download/{id?}', [App\Http\Controllers\DocumentsController::class, 'download'])->name('document.download');
+
+// REPORT CRASH
+
+Route::get('/report-crash', [App\Http\Controllers\CrashController::class, 'index'])->name('crash');
+Route::post('/report-crash/upload', [App\Http\Controllers\CrashController::class, 'upload'])->name('crash.upload');
+Route::post('/report-crash/store', [App\Http\Controllers\CrashController::class, 'store'])->name('crash.store');
 
 // ADMIN SIDE
 
@@ -108,3 +114,13 @@ Route::post('/admin/APIDocuments/documents/upload', [App\Http\Controllers\Admin\
 Route::get('/admin/APIDocuments/documents/download/{id?}', [App\Http\Controllers\Admin\API\APIDocumentsController::class, 'download'])->name('api.document.download');
 Route::post('/admin/APIDocuments/documents/delete', [\App\Http\Controllers\Admin\API\APIDocumentsController::class, 'delete'])->name('api.documents.delete');
 Route::post('/admin/APIDocuments/documents/edit', [\App\Http\Controllers\Admin\API\APIDocumentsController::class, 'edit'])->name('api.documents.edit');
+
+// REPORT CRASH
+
+Route::get('/admin/crashes', [App\Http\Controllers\Admin\CrashController::class, 'index'])->name('admin.crash');
+
+Route::get('/admin/APICrash/crashes/get', [\App\Http\Controllers\Admin\API\APICrashController::class, 'getCrashes'])->name('api.crash');
+Route::get('/admin/APICrash/crashes/download/{id?}', [\App\Http\Controllers\Admin\API\APICrashController::class, 'download'])->name('api.crash.download');
+Route::post('/admin/APICrash/crashes/upload', [\App\Http\Controllers\Admin\API\APICrashController::class, 'upload'])->name('api.crash.upload');
+Route::post('/admin/APICrash/crashes/store', [\App\Http\Controllers\Admin\API\APICrashController::class, 'store'])->name('api.crash.store');
+Route::post('/admin/APICrash/crashes/delete', [\App\Http\Controllers\Admin\API\APICrashController::class, 'delete'])->name('api.crash.delete');
