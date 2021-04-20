@@ -22,7 +22,7 @@
 
 <body>
     @foreach ($data as $photo)
-    <img src="{{ public_path('photos') }}/{{ $photo->filename }}" alt="">
+    <img src="{{ storage_path('app/photos') }}/{{ $photo->filename }}" alt="">
     @endforeach
 </body>
 
