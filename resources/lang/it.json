@@ -222,7 +222,7 @@
     "Maintenance already done": "Manutenzione già effettuata",
     "Maintenance still to do": "Manutenzione ancora da effettuare",
     "Select": "Seleziona",
-    "Reset": "Rispristina",
+    "Reset": "Ripristina",
     "Notes": "Note",
     "Truck's km": "Km del mezzo",
     "Max 50 characters": "Massimo 50 caratteri",
@@ -239,5 +239,6 @@
     "Load trip": "Carica viaggio",
     "Crashes": "Incidenti",
     "Crash": "Incidente",
-    "Incident report": "Report incidente"
+    "Incident report": "Report incidente",
+    "Show expiring licenses": "Mostra patenti in scadenza"
 }

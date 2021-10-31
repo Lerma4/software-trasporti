@@ -318,6 +318,7 @@
 
             fail:function(e, data){
                 // Something has gone wrong!
+                data.context.text(__("Error"));
                 data.context.addClass('error');
             }
 
