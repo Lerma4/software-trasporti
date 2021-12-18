@@ -34,8 +34,8 @@
                 data-class="c-sidebar-show">
                 <i class="c-icon c-icon-2xl cil-menu"></i>
             </button>
-            <a class="c-header-brand d-lg-none c-header-brand-sm-up-center"
-                href="{{ route('admin.home') }}">{{ config('app.name', 'Laravel') }}</a>
+            <a class="c-header-brand d-lg-none c-header-brand-sm-up-center" href="{{ route('admin.home') }}">{{
+                config('app.name', 'Laravel') }}</a>
             <button class="c-header-toggler c-class-toggler mfs-3 d-md-down-none" type="button" data-target="#sidebar"
                 data-class="c-sidebar-lg-show" responsive="true">
                 <i class="c-icon c-icon-2xl cil-menu"></i>

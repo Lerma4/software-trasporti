@@ -11,6 +11,7 @@ use Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Intervention\Image\Facades\Image;
 use PDF;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class DocumentsController extends Controller
 {
@@ -45,89 +46,67 @@ class DocumentsController extends Controller
             ->make(true);
     }
 
-    public function upload(Request $request)
+    public function storePdf(Request $request)
     {
-        $photos = [];
-        foreach ($request->upl as $photo) {
-            $img = Image::make($photo)->encode(null, 50);
-            $filename = auth()->user()->id . 'doc_' . time() . '.' . $photo->getClientOriginalExtension();
-            Storage::put($filename, $img);
-            Storage::move($filename, 'photos/' . $filename);
-            $product_photo = DocumentFile::create([
-                'filename' => $filename
-            ]);
-            $photo_object = new \stdClass();
-            $photo_object->fileID = $product_photo->id;
-            $photos[] = $photo_object;
+        if (!isset($request->pdf)) {
+            return back()->withErrors([__('Insert at least one photo or PDF!')]);
         }
 
-        return response()->json(array('files' => $photos));
-    }
-
-    public function store(Request $request)
-    {
-        if ($request->file_ids == "") {
-            return response()
-                ->json(['errors' => [__("Insert at least one photo.")]]);
-        }
-
-        $oldDocuments = Document::where('companyId', auth()->user()->companyId)
-            ->where('user_email', auth()->user()->email)
-            ->where('name', $request->name)
-            ->count();
-
-        if ($oldDocuments != 0) {
-            return response()
-                ->json(['errors' => [__("Already exists a document with this name.")]]);
-        }
-
-        $name = str_replace(' ', '', request('name'));
-
-        $document = Document::create([
-            'companyId' => auth()->user()->companyId,
+        $doc = Document::create([
+            'name' => $request->name,
             'user_email' => auth()->user()->email,
             'user_name' => auth()->user()->name,
-            'name' => $name
+            'companyId' => auth()->user()->companyId,
         ]);
 
-        // CREAZIONE PDF
+        $doc->addFromMediaLibraryRequest($request->pdf)
+            ->toMediaCollection('pdf');
 
-        $data = DocumentFile::whereIn('id', explode(",", $request->file_ids))
-            ->orderBy('id', 'asc')
-            ->get();
+        return back()->with('message', __('Document successfully submitted!'));
+    }
 
-        $pdf = PDF::loadView('pdf.document', compact('data'));
-        $content = $pdf->download()->getOriginalContent();
-        $filename = "public/documents/" . auth()->user()->id . $name . ".pdf";
-
-        foreach ($data as $photo) {
-            $path = "photos/" . $photo->filename;
-            if (File::exists($path)) {
-                File::delete($path);
-            }
+    public function storePhotos(Request $request)
+    {
+        if (!isset($request->photos)) {
+            return back()->withErrors([__('Insert at least one photo or PDF!')]);
         }
 
-        DocumentFile::whereIn('id', explode(",", $request->file_ids))
-            ->delete(['document_id' => $document->id]);
-
-        Storage::put($filename, $content);
-
-        DocumentFile::create([
-            'filename' => $filename,
-            'document_id' => $document->id
+        $doc = Document::create([
+            'name' => $request->name,
+            'user_email' => auth()->user()->email,
+            'user_name' => auth()->user()->name,
+            'companyId' => auth()->user()->companyId,
         ]);
 
-        return response()->json(['success' => __('Document successfully submitted!')]);
+        $doc->addFromMediaLibraryRequest($request->photos)
+            ->toMediaCollection('pdf_temp');
+
+        $data = Media::where('model_id', $doc->id)
+            ->where('collection_name', 'pdf_temp')
+            ->get();
+
+        $pdf = PDF::loadView('pdf.document', compact('data'))->save('pdf_temp/' . $data[0]->id . '.pdf');
+
+        foreach ($data as $img) {
+            $img->delete();
+        }
+
+        $doc->addMedia('pdf_temp/' . $data[0]->id . '.pdf')
+            ->usingName($request->name)
+            ->toMediaCollection('pdf'); // oltre ad associare il PDF allo User, cancella anche il PDF nella cartella in cui era prima
+
+        return back()->with('message', __('Document successfully submitted!'));
     }
 
     public function download($id)
     {
-        $pdf_data = Document::findOrFail($id);
-        $location = storage_path("app/" . $pdf_data->pdf->filename);
-        // Optional: serve the file under a different filename:
-        $filename = $pdf_data->name . '.pdf';
-        // optional headers
-        $headers = [];
-        return response()->download($location, $filename, $headers);
+        $doc = Document::find($id);
+
+        $media = Media::where('model_type', 'App\Models\Document')
+            ->where('model_id', $id)
+            ->where('collection_name', 'pdf')
+            ->get();
+
+        return response()->download($media[0]->getPath(), $doc->name . '.pdf');
     }
 }

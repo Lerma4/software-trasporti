@@ -27,8 +27,14 @@
     @endif
     <p>@lang('Description') : {{ $crash->description }}</p>
 
-    @foreach ($data as $photo)
-    <img src="{{ storage_path('app') }}/{{ $photo->filename }}" alt="">
+    <?php
+    $dim = sizeof($data);   
+    ?>
+    @foreach ($data as $n => $img)
+    <img src="{{ $img->getPath() }}">
+    @if ($n != $dim-1)
+    <div class="page-break"></div>
+    @endif
     @endforeach
 </body>
 

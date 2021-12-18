@@ -10932,7 +10932,7 @@ a.text-dark:focus {
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 .dataTables_wrapper .dataTables_processing {

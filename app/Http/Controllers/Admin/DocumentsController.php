@@ -20,7 +20,7 @@ class DocumentsController extends Controller
     public function index()
     {
         $users = User::where('companyId', auth('admin')->user()->companyId)
-            ->orderBy('email', 'asc')
+            ->orderBy('name', 'asc')
             ->get();
 
         return view('admin.pages.document', ['users' => $users]);

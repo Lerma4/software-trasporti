@@ -8,6 +8,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/file-uploader/5.16.2/fine-uploader.min.css"
     integrity="sha512-RIjvm40hf5zylq2bAzo6gq7zle9d02ivUUrIB9FjBZYd2N87P9VcKoSufenZp5NSMR47IjvG1R2g3EnQ0qEjYA=="
     crossorigin="anonymous" />
+
+<!-- NECESSARI PER MEDIALIBRARY PRO -->
+@livewireStyles
+<link rel="stylesheet" type="text/css" href="{{ asset('medialibrary_css/styles.css') }}" />
 @endsection
 
 @section('content')
@@ -77,8 +81,7 @@
                             eliminati) per effettuare l'upload dei documenti condivisi con l'autista"):</label>
                     </div>
                 </div>
-                <div id="form-result"></div>
-                <form id="document" enctype="multipart/form-data">
+                <form action="{{ route('api.crash.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <select class="form-control" name="user" required>
@@ -114,22 +117,12 @@
 
                     <div class="form-group">
                         <label for="description">@lang('Incident description'):</label>
-                        <textarea class="form-control" name="description" rows="3" maxlength="200" minlength="10"
+                        <textarea class="form-control" name="description" rows="3" maxlength="20000" minlength="10"
                             required></textarea>
                     </div>
 
-                    <div id="drop">
-                        @lang("Drop here or")
-                        <a>@lang("Browse")</a>
-                        <input id="upload" type="file" name="upl[]" accept="" multiple />
-                    </div>
-
-
-                    <ul class="uploads-list">
-                        <!-- The file uploads will be shown here -->
-                    </ul>
-
-                    <input type="hidden" name="file_ids" id="file_ids" value="">
+                    <x-media-library-attachment multiple max-items="5" rules="mimes:png,jpg,jpeg,heif|max:2000"
+                        name="photos" />
 
                     <div class="modal-footer">
                         <button type="button" id="btn-close-document" class="btn btn-secondary"
@@ -161,19 +154,39 @@
                 <div id="form-result-edit"></div>
                 <form id="edit-document" enctype="multipart/form-data">
                     @csrf
-                    <input type="hidden" name="id" id="id_document">
+                    <input type="hidden" name="id" id="id_crash">
 
                     <div class="form-group">
-                        <select class="form-control" id="email" name="user" required>
+                        <select id="email" class="form-control" name="email" required>
                             <option value="" disabled selected>@lang("Select driver")</option>
                             @foreach ($users as $user)
                             <option value="{{ $user->email }}">{{ $user->name }} ({{ $user->email }})</option>
                             @endforeach
                         </select>
                     </div>
+
                     <div class="form-group">
-                        <input type="text" class="form-control" id="name" name="name"
-                            placeholder='@lang("Document name")' required>
+                        <input id="date" type="date" class="form-control" name="date"
+                            max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" placeholder='@lang("Date")' required>
+                    </div>
+
+                    <div class="form-group">
+                        <select id="plate" class="form-control" name="plate" required>
+                            <option value="" disabled selected>@lang("Plate")</option>
+                            @foreach ($plates as $plate)
+                            <option value="{{ $plate->plate }}">{{ $plate->plate }} </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <select id="plate_s" class="form-control" name="plate_s">
+                            <option value="" disabled selected>@lang("Plate semitrailer")</option>
+                            <option value=""> @lang('No semitrailer')</option>
+                            @foreach ($plates_semi as $plate)
+                            <option value="{{ $plate->plate }}">{{ $plate->plate }} </option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div class="modal-footer">
@@ -211,15 +224,9 @@
 <script type="text/javascript"
     src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js" defer></script>
 
-<!-- LIBRERIA PER COMPRIMERE FILE PRIMA DELL'UPLOAD -->
-
-<script src="{{ asset('js/fileupload/vendor/jquery.ui.widget.js') }}" defer></script>
-<script src="{{ asset('js/fileupload/jquery.iframe-transport.js') }}" defer></script>
-<script src="{{ asset('js/fileupload/jquery.fileupload.js') }}" defer></script>
-<script src="{{ asset('js/fileupload/jquery.fileupload-process.js') }}" defer></script>
-<script src="{{ asset('js/fileupload/jquery.fileupload-image.js') }}" defer></script>
-
-<script src="{{ asset('js/knob/jquery.knob.js') }}" defer></script>
+<!-- LIBRERIE NECESSARIE PER MEDIALIBRARY PRO -->
+@livewireScripts
+<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.6.0/dist/alpine.min.js" defer></script>
 
 @switch(App::getLocale())
 @case('it')
@@ -239,116 +246,10 @@
 @endswitch
 
 <script>
-    $(function(){
-
-        var ul = $('#document ul');
-
-        $('#drop a').click(function(){
-            // Simulate a click on the file input button
-            // to show the file browser dialog
-            $(this).parent().find('input').click();
-        });
-
-        // Initialize the jQuery File Upload plugin
-        $('#upload').fileupload({
-            url: "{{ route('api.crash.upload') }}",
-            // This element will accept file drag/drop uploading
-            dropZone: $('#drop'),
-
-            // This function is called when a file is added to the queue;
-            // either via the browse button, or via drag/drop:
-            add: function (e, data) {
-
-                var tpl = $('<li class="working"><input type="text" value="0" data-width="48" data-height="48"'+
-                    ' data-fgColor="#0788a5" data-readOnly="1" data-bgColor="#3e4043" /><p></p><span></span></li>');
-
-                // Append the file name and file size
-                tpl.find('p').text(data.files[0].name)
-                            .append('<i>' + formatFileSize(data.files[0].size) + '</i>');
-
-                // Add the HTML to the UL element
-                data.context = tpl.appendTo(ul);
-
-                // Initialize the knob plugin
-                tpl.find('input').knob();
-
-                // Listen for clicks on the cancel icon
-                tpl.find('span').click(function(){
-
-                    if(tpl.hasClass('working')){
-                        jqXHR.abort();
-                    }
-
-                    tpl.fadeOut(function(){
-                        tpl.remove();
-                    });
-
-                });
-
-                // Automatically upload the file once it is added to the queue
-                var jqXHR = data.submit();
-            },
-            progress: function(e, data){
-
-                // Calculate the completion percentage of the upload
-                var progress = parseInt(data.loaded / data.total * 100, 10);
-
-                // Update the hidden input field and trigger a change
-                // so that the jQuery knob plugin knows to update the dial
-                data.context.find('input').val(progress).change();
-
-                if(progress == 100){
-                    data.context.removeClass('working');
-                }
-            },
-
-            progressServerRate: 0.5,
-            progressServerDecayExp:3.5,
-
-            done: function (e, data) {
-                $.each(data.result.files, function (index, file) {
-                    $('<p/>').html(file.name + ' (' + file.size + ' KB)').appendTo($('#files_list'));
-                    if ($('#file_ids').val() != '') {
-                        $('#file_ids').val($('#file_ids').val() + ',');
-                    }
-                    $('#file_ids').val($('#file_ids').val() + file.fileID);
-                });
-                $('#loading').text('');
-            },
-
-            fail:function(e, data){
-                // Something has gone wrong!
-                data.context.text(__("Error"));
-                data.context.addClass('error');
-            }
-
-        });
-
-        // Prevent the default action when a file is dropped on the window
-        $(document).on('drop dragover', function (e) {
-            e.preventDefault();
-        });
-
-        // Helper function that formats the file sizes
-        function formatFileSize(bytes) {
-            if (typeof bytes !== 'number') {
-                return '';
-            }
-
-            if (bytes >= 1000000000) {
-                return (bytes / 1000000000).toFixed(2) + ' GB';
-            }
-
-            if (bytes >= 1000000) {
-                return (bytes / 1000000).toFixed(2) + ' MB';
-            }
-
-            return (bytes / 1000).toFixed(2) + ' KB';
-        }
-
-    });
-
     $(document).ready(function() {
+        // FADE OUT DEI MESSAGGI DAI CONTROLLER
+
+        $('.message').delay(4000).fadeOut();
 
         // DATATABLE
 
@@ -449,63 +350,6 @@
             }
         }); // DESELEZIONA I BUTTONS EDIT E DELETE
 
-        // ADD DOCUMENT
-
-        $('#btn-close-document').on('click', function(event) {
-            $("#upload").prop("disabled", true);
-            $(this).closest("form")[0].reset();
-            $(".uploads-list").children().remove();
-            $('#file_ids').val("");
-        });
-
-        $('#document').on('submit', function(event) {
-            event.preventDefault();
-            var form = $(this).closest('form');
-            var formData = new FormData(this);
-
-            $('#form-result').text('');
-            $('#form-result').fadeIn();
-
-            $.ajax({
-                url: "{{route('api.crash.store')}}",
-                type: "POST",
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data: formData,
-                cache: false,
-                contentType: false,
-                processData: false,
-                beforeSend: function() {
-                    $('.loader-submit').removeClass('hidden');
-                    $('.submit-document').contents().last().replaceWith('@lang("Loading...")');
-                },
-                success: function(data) {
-                    var html = '';
-                    if (data.errors) {
-                        html = '<div class="alert alert-danger">';
-                        for (var count = 0; count < data.errors.length; count++) {
-                            html += '<p>' + data.errors[count] + '</p>';
-                        }
-                        html += '</div>';
-                    }
-                    if (data.success) {
-                        html = '<div class="alert alert-success">' + data.success + '</div>';
-                        $('#document')[0].reset();
-                        $(".uploads-list").children().remove();
-                        $('#file_ids').val("");
-                        table.ajax.reload();
-                    }
-                    $('#form-result').html(html);
-                    $('#form-result').delay(4000).fadeOut();
-                },
-                complete: function() {
-                    $('.loader-submit').addClass('hidden');
-                    $('.submit-document').contents().last().replaceWith('@lang("Add document")');
-                },
-            });
-        });
-
         // DELETE DOCUMENT
 
         $('#btn-delete').on('click', function(e) {
@@ -550,12 +394,18 @@
             var rows_selected = table.column(0).checkboxes.selected();
 
             if (rows_selected.length == 1) {
-                $('#id_user').val(rows_selected[0]);
+                $('#id_crash').val(rows_selected[0]);
                 var row = table.row('#' + rows_selected[0]).data();
 
-                $('#email').val(row['user_email']);
-                $('#name').val(row['name']);
-                $('#id_document').val(row['id']);
+                var date = new Date(row['date']);
+                var day = ("0" + date.getMonth() + 1).slice(-2); // USO IL MESE AL POSTO DEL GIORNO PERCHé DATE SI ASPETTA UNA DATA AMERICANA INVECE GLI DO UNA DATA IN FORMATO ITALIANO
+                var month = ("0" + (date.getDate())).slice(-2);
+                var format_date = date.getFullYear()+"-"+(month)+"-"+(day);
+
+                $('#email').val(row['email']);
+                $('#plate').val(row['plate']);
+                $('#plate_s').val(row['plate_s']);
+                $('#date').val(format_date);
             }
 
         });
@@ -568,7 +418,7 @@
             $('#form-result-edit').fadeIn();
 
             $.ajax({
-                url: "{{route('api.documents.edit')}}",
+                url: "{{route('api.crash.edit')}}",
                 type: "POST",
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -590,7 +440,6 @@
                     }
                     if (data.success) {
                         html = '<div class="alert alert-success">' + data.success + '</div>';
-                        $('#edit-document')[0].reset();
                         $('#datatable').DataTable().ajax.reload();
                     }
                     $('#form-result-edit').html(html);

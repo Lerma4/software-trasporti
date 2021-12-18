@@ -1,0 +1,1 @@
+Questa cartella serve per ospitare i PDF prima che vengano "legati" allo User.

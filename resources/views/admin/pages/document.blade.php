@@ -5,13 +5,14 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.bootstrap4.min.css">
 <link type="text/css" href="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css"
     rel="stylesheet" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/file-uploader/5.16.2/fine-uploader.min.css"
-    integrity="sha512-RIjvm40hf5zylq2bAzo6gq7zle9d02ivUUrIB9FjBZYd2N87P9VcKoSufenZp5NSMR47IjvG1R2g3EnQ0qEjYA=="
-    crossorigin="anonymous" />
+
+<!-- NECESSARI PER MEDIALIBRARY PRO -->
+@livewireStyles
+<link rel="stylesheet" type="text/css" href="{{ asset('medialibrary_css/styles.css') }}" />
 @endsection
 
 @section('content')
-<div class="col-12 pages-content">
+<div class=" col-12 pages-content">
     <div class="card">
         <div class="card-body">
             @include('multiauth::message')
@@ -61,6 +62,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="documentLabel">@lang("Add document")</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -86,12 +90,19 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <label>@lang("Compilare il form sottostante (se nel nome saranno inseriti degli spazi verranno
-                            eliminati) per effettuare l'upload dei documenti condivisi con l'autista"):</label>
+                        <label>@lang("Compilare il form sottostante per effettuare l'upload dei documenti condivisi con
+                            l'autista"):</label>
                     </div>
                 </div>
                 <div id="form-result"></div>
-                <form id="document" enctype="multipart/form-data">
+                <div class="form-group">
+                    <select id="format" class="form-control" name="format" required>
+                        <option value="" disabled selected>@lang("Select file format")</option>
+                        <option value="pdf">@lang("PDF")</option>
+                        <option value="photos">@lang("Photos")</option>
+                    </select>
+                </div>
+                <form id="document-pdf" class="hidden" action="{{ route('api.document.store.pdf') }}" method="POST">
                     @csrf
                     <div class="form-group">
                         <select class="form-control" name="user" required>
@@ -105,25 +116,38 @@
                         <input type="text" class="form-control" name="name" placeholder='@lang("Document name")'
                             required>
                     </div>
+
+                    <x-media-library-attachment rules="mimes:pdf|max:5000" name="pdf" />
+
+                    <div class="modal-footer">
+                        <button type="button" id="btn-close-document" class="btn btn-secondary"
+                            data-dismiss="modal">@lang(' Close')
+                        </button>
+                        <button type="submit" class="submit-document btn btn-primary">
+                            <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
+                                aria-hidden="true"></span>
+                            @lang('Submit')
+                        </button>
+                    </div>
+                </form>
+                <form id="document-photos" class="hidden" action="{{ route('api.document.store.photos') }}"
+                    method="POST">
+                    @csrf
                     <div class="form-group">
-                        <select id="format" class="form-control" name="format" required>
-                            <option value="" disabled selected>@lang("Select file format")</option>
-                            <option value="pdf">@lang("PDF")</option>
-                            <option value="photos">@lang("Photos")</option>
+                        <select class="form-control" name="user" required>
+                            <option value="" disabled selected>@lang("Select driver")</option>
+                            @foreach ($users as $user)
+                            <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</option>
+                            @endforeach
                         </select>
                     </div>
-
-                    <div id="drop" class="hidden">
-                        @lang("Drop here or")
-                        <a>@lang("Browse")</a>
-                        <input id="upload" type="file" name="upl[]" accept="" multiple disabled />
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="name" placeholder='@lang("Document name")'
+                            required>
                     </div>
 
-                    <ul class="uploads-list">
-                        <!-- The file uploads will be shown here -->
-                    </ul>
-
-                    <input type="hidden" name="file_ids" id="file_ids" value="">
+                    <x-media-library-attachment multiple max-items="5" rules="mimes:png,jpg,jpeg,heif|max:2000"
+                        name="photos" />
 
                     <div class="modal-footer">
                         <button type="button" id="btn-close-document" class="btn btn-secondary"
@@ -205,15 +229,9 @@
 <script type="text/javascript"
     src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js" defer></script>
 
-<!-- LIBRERIA PER COMPRIMERE FILE PRIMA DELL'UPLOAD -->
-
-<script src="{{ asset('js/fileupload/vendor/jquery.ui.widget.js') }}" defer></script>
-<script src="{{ asset('js/fileupload/jquery.iframe-transport.js') }}" defer></script>
-<script src="{{ asset('js/fileupload/jquery.fileupload.js') }}" defer></script>
-<script src="{{ asset('js/fileupload/jquery.fileupload-process.js') }}" defer></script>
-<script src="{{ asset('js/fileupload/jquery.fileupload-image.js') }}" defer></script>
-
-<script src="{{ asset('js/knob/jquery.knob.js') }}" defer></script>
+<!-- LIBRERIE NECESSARIE PER MEDIALIBRARY PRO -->
+@livewireScripts
+<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.6.0/dist/alpine.min.js" defer></script>
 
 @switch(App::getLocale())
 @case('it')
@@ -233,115 +251,10 @@
 @endswitch
 
 <script>
-    $(function(){
-
-        var ul = $('#document ul');
-
-        $('#drop a').click(function(){
-            // Simulate a click on the file input button
-            // to show the file browser dialog
-            $(this).parent().find('input').click();
-        });
-
-        // Initialize the jQuery File Upload plugin
-        $('#upload').fileupload({
-            url: "{{ route('api.document.upload') }}",
-            // This element will accept file drag/drop uploading
-            dropZone: $('#drop'),
-
-            // This function is called when a file is added to the queue;
-            // either via the browse button, or via drag/drop:
-            add: function (e, data) {
-
-                var tpl = $('<li class="working"><input type="text" value="0" data-width="48" data-height="48"'+
-                    ' data-fgColor="#0788a5" data-readOnly="1" data-bgColor="#3e4043" /><p></p><span></span></li>');
-
-                // Append the file name and file size
-                tpl.find('p').text(data.files[0].name)
-                            .append('<i>' + formatFileSize(data.files[0].size) + '</i>');
-
-                // Add the HTML to the UL element
-                data.context = tpl.appendTo(ul);
-
-                // Initialize the knob plugin
-                tpl.find('input').knob();
-
-                // Listen for clicks on the cancel icon
-                tpl.find('span').click(function(){
-
-                    if(tpl.hasClass('working')){
-                        jqXHR.abort();
-                    }
-
-                    tpl.fadeOut(function(){
-                        tpl.remove();
-                    });
-
-                });
-
-                // Automatically upload the file once it is added to the queue
-                var jqXHR = data.submit();
-            },
-            progress: function(e, data){
-
-                // Calculate the completion percentage of the upload
-                var progress = parseInt(data.loaded / data.total * 100, 10);
-
-                // Update the hidden input field and trigger a change
-                // so that the jQuery knob plugin knows to update the dial
-                data.context.find('input').val(progress).change();
-
-                if(progress == 100){
-                    data.context.removeClass('working');
-                }
-            },
-
-            progressServerRate: 0.5,
-            progressServerDecayExp:3.5,
-
-            done: function (e, data) {
-                $.each(data.result.files, function (index, file) {
-                    $('<p/>').html(file.name + ' (' + file.size + ' KB)').appendTo($('#files_list'));
-                    if ($('#file_ids').val() != '') {
-                        $('#file_ids').val($('#file_ids').val() + ',');
-                    }
-                    $('#file_ids').val($('#file_ids').val() + file.fileID);
-                });
-                $('#loading').text('');
-            },
-
-            fail:function(e, data){
-                // Something has gone wrong!
-                data.context.addClass('error');
-            }
-
-        });
-
-        // Prevent the default action when a file is dropped on the window
-        $(document).on('drop dragover', function (e) {
-            e.preventDefault();
-        });
-
-        // Helper function that formats the file sizes
-        function formatFileSize(bytes) {
-            if (typeof bytes !== 'number') {
-                return '';
-            }
-
-            if (bytes >= 1000000000) {
-                return (bytes / 1000000000).toFixed(2) + ' GB';
-            }
-
-            if (bytes >= 1000000) {
-                return (bytes / 1000000).toFixed(2) + ' MB';
-            }
-
-            return (bytes / 1000).toFixed(2) + ' KB';
-        }
-
-    });
-
     $(document).ready(function() {
+        // FADE OUT DEI MESSAGGI DAI CONTROLLER
+
+        $('.message').delay(4000).fadeOut();
 
         // DATATABLE
 
@@ -443,85 +356,19 @@
         $('#format').on('change', function(event) {
             switch ($(this).val()) {
                 case "pdf":
-                    $("#upload").prop("multiple", false);
-                    $("#upload").prop("disabled", false);
-                    $("#upload").prop("accept", "application/pdf");
-                    $("#drop").removeClass("hidden");
-                    // resetto i file uploadati
-                    $(".uploads-list").children().remove();
-                    $('#file_ids').val("");
+                    $("#document-pdf").removeClass("hidden");
+                    $("#document-photos").addClass("hidden");
                     break;
 
                 case "photos":
-                    $("#upload").prop("multiple", true);
-                    $("#upload").prop("disabled", false);
-                    $("#upload").prop("accept", "image/*");
-                    $("#drop").removeClass("hidden");
-                    // resetto i file uploadati
-                    $(".uploads-list").children().remove();
-                    $('#file_ids').val("");
+                    $("#document-photos").removeClass("hidden");
+                    $("#document-pdf").addClass("hidden");
                     break;
 
                 default:
                     $("#upload").prop("disabled", true);
                     break;
             }
-        });
-
-        $('#btn-close-document').on('click', function(event) {
-            $("#upload").prop("disabled", true);
-            $("#drop").addClass("hidden");
-            $(this).closest("form")[0].reset();
-            $(".uploads-list").children().remove();
-            $('#file_ids').val("");
-        });
-
-        $('#document').on('submit', function(event) {
-            event.preventDefault();
-            var form = $(this).closest('form');
-            var formData = new FormData(this);
-
-            $('#form-result').text('');
-            $('#form-result').fadeIn();
-
-            $.ajax({
-                url: "{{route('api.document.store')}}",
-                type: "POST",
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data: formData,
-                cache: false,
-                contentType: false,
-                processData: false,
-                beforeSend: function() {
-                    $('.loader-submit').removeClass('hidden');
-                    $('.submit-document').contents().last().replaceWith('@lang("Loading...")');
-                },
-                success: function(data) {
-                    var html = '';
-                    if (data.errors) {
-                        html = '<div class="alert alert-danger">';
-                        for (var count = 0; count < data.errors.length; count++) {
-                            html += '<p>' + data.errors[count] + '</p>';
-                        }
-                        html += '</div>';
-                    }
-                    if (data.success) {
-                        html = '<div class="alert alert-success">' + data.success + '</div>';
-                        $('#document')[0].reset();
-                        $(".uploads-list").children().remove();
-                        $('#file_ids').val("");
-                        table.ajax.reload();
-                    }
-                    $('#form-result').html(html);
-                    $('#form-result').delay(4000).fadeOut();
-                },
-                complete: function() {
-                    $('.loader-submit').addClass('hidden');
-                    $('.submit-document').contents().last().replaceWith('@lang("Add document")');
-                },
-            });
         });
 
         // DELETE DOCUMENT

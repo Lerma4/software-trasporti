@@ -29,7 +29,8 @@ Route::post('/home/tripvuoto', [App\Http\Controllers\HomeController::class, 'tri
 
 Route::get('/documents', [App\Http\Controllers\DocumentsController::class, 'index'])->name('documents');
 Route::get('/documents/getDocuments', [App\Http\Controllers\DocumentsController::class, 'getDocuments'])->name('getDocuments');
-Route::post('/documents/store', [App\Http\Controllers\DocumentsController::class, 'store'])->name('document.store');
+Route::post('/documents/store/pdf', [App\Http\Controllers\DocumentsController::class, 'storePdf'])->name('document.store.pdf');
+Route::post('/documents/store/photos', [App\Http\Controllers\DocumentsController::class, 'storePhotos'])->name('document.store.photos');
 Route::post('/documents/upload', [App\Http\Controllers\DocumentsController::class, 'upload'])->name('document.upload');
 Route::get('/documents/download/{id?}', [App\Http\Controllers\DocumentsController::class, 'download'])->name('document.download');
 
@@ -38,6 +39,12 @@ Route::get('/documents/download/{id?}', [App\Http\Controllers\DocumentsControlle
 Route::get('/report-crash', [App\Http\Controllers\CrashController::class, 'index'])->name('crash');
 Route::post('/report-crash/upload', [App\Http\Controllers\CrashController::class, 'upload'])->name('crash.upload');
 Route::post('/report-crash/store', [App\Http\Controllers\CrashController::class, 'store'])->name('crash.store');
+
+// SETTINGS
+
+Route::get('/settings', [\App\Http\Controllers\SettingsController::class, 'index'])->name('settings');
+Route::post('/settings/setLang', [\App\Http\Controllers\SettingsController::class, 'setLang'])->name('lang');
+Route::post('/settings/psw', [\App\Http\Controllers\SettingsController::class, 'pswChange'])->name('psw.change');
 
 // ADMIN SIDE
 
@@ -109,7 +116,8 @@ Route::post('/admin/APITrips/trips/edit', [\App\Http\Controllers\Admin\API\APITr
 Route::get('/admin/documents', [\App\Http\Controllers\Admin\DocumentsController::class, 'index'])->name('admin.documents');
 
 Route::get('/admin/APIDocuments/documents/get', [\App\Http\Controllers\Admin\API\APIDocumentsController::class, 'getDocuments'])->name('api.documents');
-Route::post('/admin/APIDocuments/documents/store', [App\Http\Controllers\Admin\API\APIDocumentsController::class, 'store'])->name('api.document.store');
+Route::post('/admin/APIDocuments/documents/store/pdf', [App\Http\Controllers\Admin\API\APIDocumentsController::class, 'storePdf'])->name('api.document.store.pdf');
+Route::post('/admin/APIDocuments/documents/store/photos', [App\Http\Controllers\Admin\API\APIDocumentsController::class, 'storePhotos'])->name('api.document.store.photos');
 Route::post('/admin/APIDocuments/documents/upload', [App\Http\Controllers\Admin\API\APIDocumentsController::class, 'upload'])->name('api.document.upload');
 Route::get('/admin/APIDocuments/documents/download/{id?}', [App\Http\Controllers\Admin\API\APIDocumentsController::class, 'download'])->name('api.document.download');
 Route::post('/admin/APIDocuments/documents/delete', [\App\Http\Controllers\Admin\API\APIDocumentsController::class, 'delete'])->name('api.documents.delete');
@@ -124,3 +132,8 @@ Route::get('/admin/APICrash/crashes/download/{id?}', [\App\Http\Controllers\Admi
 Route::post('/admin/APICrash/crashes/upload', [\App\Http\Controllers\Admin\API\APICrashController::class, 'upload'])->name('api.crash.upload');
 Route::post('/admin/APICrash/crashes/store', [\App\Http\Controllers\Admin\API\APICrashController::class, 'store'])->name('api.crash.store');
 Route::post('/admin/APICrash/crashes/delete', [\App\Http\Controllers\Admin\API\APICrashController::class, 'delete'])->name('api.crash.delete');
+Route::post('/admin/APICrash/crashes/edit', [\App\Http\Controllers\Admin\API\APICrashController::class, 'edit'])->name('api.crash.edit');
+
+// ROUTE DI MEDIALIBRARY
+
+Route::mediaLibrary();

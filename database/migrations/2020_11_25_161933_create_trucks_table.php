@@ -15,7 +15,7 @@ class CreateTrucksTable extends Migration
     {
         Schema::create('trucks', function (Blueprint $table) {
             $table->id();
-            $table->string('plate')->unique();
+            $table->string('plate');
             $table->string('brand')->nullable();
             $table->string('model')->nullable();
             $table->float('km');

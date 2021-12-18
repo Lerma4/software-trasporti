@@ -12,6 +12,7 @@ use Intervention\Image\Facades\Image;
 use Illuminate\Http\Request;
 use Storage;
 use PDF;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class APICrashController extends Controller
 {
@@ -23,7 +24,7 @@ class APICrashController extends Controller
     public function getCrashes()
     {
         $document = Crash::where('companyId', '=', auth('admin')->user()->companyId)
-            ->select('name', 'email', 'name', 'date', 'id', 'plate', 'plate_s');
+            ->select('name', 'email', 'name', 'date', 'id', 'plate', 'plate_s', 'description');
 
         return DataTables::eloquent($document)
             ->setRowId('id')
@@ -32,50 +33,20 @@ class APICrashController extends Controller
 
     public function download($id)
     {
-        $crash = Crash::findOrFail($id);
-        $data = CrashPhoto::where('crash_id', $id)
+        $doc = Crash::find($id);
+
+        $media = Media::where('model_type', 'App\Models\Crash')
+            ->where('model_id', $id)
+            ->where('collection_name', 'crash')
             ->get();
-        $filename = __('Crash') . '_' . $crash->date->format('d-m-Y') . '_' . $crash->name . '.pdf';
 
-        $pdf = PDF::loadView('pdf.crash', compact('data', 'crash'));
-        return $pdf->download($filename);
-    }
-
-    public function upload(Request $request)
-    {
-        $photos = [];
-        foreach ($request->upl as $photo) {
-            $img = Image::make($photo)->encode(null, 50);
-            $filename = auth('admin')->user()->id . 'crash_' . time() . '.' . $photo->getClientOriginalExtension();
-            Storage::put($filename, $img);
-            Storage::move($filename, 'public/crashes/' . $filename);
-            $product_photo = CrashPhoto::create([
-                'filename' => 'public/crashes/' . $filename
-            ]);
-            $photo_object = new \stdClass();
-            $photo_object->fileID = $product_photo->id;
-            $photos[] = $photo_object;
-        }
-
-        return response()->json(array('files' => $photos));
+        return response()->download($media[0]->getPath(), $doc->name . '.pdf');
     }
 
     public function store(Request $request)
     {
-        if ($request->file_ids == "") {
-            return response()
-                ->json(['errors' => [__("Insert at least one photo.")]]);
-        }
-
-        $photos = CrashPhoto::whereIn('id', explode(",", $request->file_ids))
-            ->orderBy('id', 'asc')
-            ->get();
-
-        foreach ($photos as $photo) {
-            if (!(File::exists(storage_path('app/' . $photo->filename)))) {
-                return response()
-                    ->json(['errors' => [__("Upload error, please refresh the page.")]]);
-            }
+        if (!isset($request->photos)) {
+            return back()->withErrors([__('Insert at least one photo!')]);
         }
 
         $user = User::findOrFail($request->user);
@@ -83,7 +54,7 @@ class APICrashController extends Controller
         $email = $user->email;
         $name = $user->name;
 
-        $document = Crash::create([
+        $crash = Crash::create([
             'companyId' => auth('admin')->user()->companyId,
             'email' => $email,
             'name' => $name,
@@ -93,9 +64,53 @@ class APICrashController extends Controller
             'description' => $request->description
         ]);
 
-        CrashPhoto::whereIn('id', explode(",", $request->file_ids))
-            ->update(['crash_id' => $document->id]);
+        $crash->addFromMediaLibraryRequest($request->photos)
+            ->toMediaCollection('pdf_temp');
 
-        return response()->json(['success' => __('Document successfully submitted!')]);
+        $data = Media::where('model_id', $crash->id)
+            ->where('collection_name', 'pdf_temp')
+            ->get();
+
+        $pdf = PDF::loadView('pdf.crash', compact('crash', 'data'))->save('pdf_temp/' . $data[0]->id . '.pdf');
+
+        foreach ($data as $img) {
+            $img->delete();
+        }
+
+        $crash->addMedia('pdf_temp/' . $data[0]->id . '.pdf')
+            ->usingName($request->date . '_' . $request->plate . '_' . $user->name)
+            ->toMediaCollection('crash'); // oltre ad associare il PDF allo User, cancella anche il PDF nella cartella in cui era prima
+
+        return back()->with('message', __('Document successfully submitted!'));
+    }
+
+    public function delete(Request $request)
+    {
+        foreach ($request->ids as $id) {
+            Crash::find($id)->delete();
+        }
+
+        return response()->json(['success' => __('Document/s successfully deleted!')]);
+    }
+
+    public function edit(Request $request)
+    {
+        $user = User::where('email', $request->email)->get();
+        $plate_s = $request->plate_s;
+
+        if ($plate_s == '') {
+            $plate_s = null;
+        }
+
+        Crash::where('id', $request->id)
+            ->update([
+                'email' => $request->email,
+                'name' => $user[0]->name,
+                'date' => $request->date,
+                'plate' => $request->plate,
+                'plate_s' => $plate_s
+            ]);
+
+        return response()->json(['success' => __('Document/s successfully edited!')]);
     }
 }
