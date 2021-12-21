@@ -22,7 +22,8 @@ class User extends Authenticatable
         'group',
         'password',
         'companyId',
-        'company'
+        'company',
+        'language'
     ];
 
     /**

@@ -22,6 +22,7 @@
 
     <div class="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show c-sidebar-md" id="sidebar">
         <div class="c-sidebar-brand d-md-down-none">
+            <img src="{{ asset('images/logo/logo.png') }}" class="main-logo" alt="logo">
             {{ config('app.name', 'Laravel') }}
         </div>
 
@@ -34,8 +35,10 @@
                 data-class="c-sidebar-show">
                 <i class="c-icon c-icon-2xl cil-menu"></i>
             </button>
-            <a class="c-header-brand d-lg-none c-header-brand-sm-up-center"
-                href="{{ route('home') }}">{{ config('app.name', 'Laravel') }}</a>
+            <a class="c-header-brand d-lg-none c-header-brand-sm-up-center" href="{{ route('home') }}">
+                <img src="{{ asset('images/logo/logo.png') }}"
+                    class="main-logo-responsive c-header-brand d-lg-none c-header-brand-sm-up-center" alt="logo">
+            </a>
             <button class="c-header-toggler c-class-toggler mfs-3 d-md-down-none" type="button" data-target="#sidebar"
                 data-class="c-sidebar-lg-show" responsive="true">
                 <i class="c-icon c-icon-2xl cil-menu"></i>

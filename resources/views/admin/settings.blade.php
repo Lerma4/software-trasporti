@@ -33,8 +33,8 @@
             <div id="form-result"></div>
             <form id="change-psw">
                 <div class="form-group row">
-                    <label for="oldPassword"
-                        class="col-md-4 col-form-label text-md-right">{{ __('Old Password') }}</label>
+                    <label for="oldPassword" class="col-md-4 col-form-label text-md-right">{{ __('Old Password')
+                        }}</label>
 
                     <div class="col-md-3">
                         <input id="oldPassword" type="password" class="form-control" name="oldPassword"
@@ -52,8 +52,8 @@
                 </div>
 
                 <div class="form-group row">
-                    <label for="password-confirm"
-                        class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
+                    <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm
+                        Password') }}</label>
 
                     <div class="col-md-3">
                         <input id="password-confirm" type="password" class="form-control" name="password_confirmation"
@@ -83,9 +83,13 @@
                     <label class="col-md-4 col-form-label text-md-right">@lang("Select new language")</label>
                     <div class="col-md-3">
                         <select class="form-control" name="lang" required>
-                            <option></option>
+                            @if (auth('admin')->user()->language == 'it')
                             <option value="it">@lang("Italian")</option>
                             <option value="en">@lang("English")</option>
+                            @else
+                            <option value="en">@lang("English")</option>
+                            <option value="it">@lang("Italian")</option>
+                            @endif
                         </select>
                     </div>
                 </div>

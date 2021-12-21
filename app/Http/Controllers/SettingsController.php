@@ -11,7 +11,7 @@ class SettingsController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('role:super;admin');
+        $this->middleware('auth');
     }
 
     public function index()

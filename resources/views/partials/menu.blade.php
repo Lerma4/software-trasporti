@@ -15,7 +15,7 @@
         </a>
     </li>
     <li class="c-sidebar-nav-item">
-        <a class="c-sidebar-nav-link" href="#">
+        <a class="c-sidebar-nav-link" href="{{ route('settings') }}">
             <i class="c-sidebar-nav-icon fas fa-cogs"></i> @lang('Settings')
         </a>
     </li>

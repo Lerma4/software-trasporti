@@ -6,6 +6,18 @@
     display: none !important;
 }
 
+.main-logo {
+    max-width: 50px;
+    max-height: 50px;
+    border-radius: 10%;
+    margin: 5px;
+}
+
+.main-logo-responsive {
+    max-width: 50px;
+    max-height: 50px;
+}
+
 // DATATABLES
 
 .dataTables_wrapper .dataTables_processing {

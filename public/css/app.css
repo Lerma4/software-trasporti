@@ -10935,6 +10935,18 @@ a.text-dark:focus {
   display: none !important;
 }
 
+.main-logo {
+  max-width: 50px;
+  max-height: 50px;
+  border-radius: 10%;
+  margin: 5px;
+}
+
+.main-logo-responsive {
+  max-width: 50px;
+  max-height: 50px;
+}
+
 .dataTables_wrapper .dataTables_processing {
   position: absolute;
   z-index: 100 !important;
@@ -11080,104 +11092,5 @@ a.text-dark:focus {
 
 .document-download {
   text-align: center;
-}
-
-/*----------------------------
-    The file upload form
------------------------------*/
-
-#drop {
-  background-color: white;
-  padding: 40px 50px;
-  margin-bottom: 30px;
-  border: 1px solid #3c4b64;
-  border-radius: 3px;
-  text-align: center;
-  text-transform: uppercase;
-  font-size: 16px;
-  font-weight: bold;
-  color: #7f858a;
-}
-
-#drop a {
-  background-color: #3c4b64;
-  padding: 12px 26px;
-  color: #fff;
-  font-size: 14px;
-  border-radius: 2px;
-  cursor: pointer;
-  display: inline-block;
-  margin-top: 12px;
-  line-height: 1;
-}
-
-#drop a:hover {
-  background-color: #303c54;
-}
-
-#drop input {
-  display: none;
-}
-
-#document ul {
-  list-style: none;
-  margin-bottom: 30px;
-}
-
-#document ul li {
-  padding: 15px;
-  height: 52px;
-  margin-bottom: 10px;
-  position: relative;
-}
-
-#document ul li input {
-  display: none;
-}
-
-#document ul li p {
-  overflow: hidden;
-  white-space: nowrap;
-  color: black;
-  font-size: 16px;
-  font-weight: bold;
-  position: absolute;
-  top: 20px;
-  left: 100px;
-}
-
-#document ul li i {
-  font-weight: normal;
-  font-style: normal;
-  color: #7f7f7f;
-  display: block;
-}
-
-#document ul li canvas {
-  top: 15px;
-  left: 32px;
-  position: absolute;
-}
-
-#document ul li span {
-  width: 15px;
-  height: 12px;
-  position: absolute;
-  top: 34px;
-  right: 33px;
-  cursor: pointer;
-}
-
-#document ul li.working span {
-  height: 16px;
-  background-position: 0 -12px;
-}
-
-#document ul li.error p {
-  color: red;
-}
-
-#document .uploads-list {
-  padding-left: 0px;
 }
 
