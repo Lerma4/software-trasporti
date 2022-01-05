@@ -32,14 +32,14 @@ class HomeController extends Controller
             ->where('companyId', '=', auth()->user()->companyId)
             ->where('group', auth()->user()->group)
             ->where(function ($q) {
-                $q->where('type', 'motrice')->orWhere('type', 'trattore');
+                $q->where('type', 0)->orWhere('type', 1);
             })
             ->orderBy('plate', 'asc')
             ->get();
 
         $plates_semi = Truck::where('companyId', '=', auth()->user()->companyId)
             ->where('group', auth()->user()->group)
-            ->where('type', 'semirimorchio')
+            ->where('type', 2)
             ->orderBy('plate', 'asc')
             ->get('plate');
 
@@ -81,7 +81,7 @@ class HomeController extends Controller
             ->latest()
             ->first();
 
-        $maintenances = MaintStillToDo::where('companyId', '=', auth('admin')->user()->companyId)
+        $maintenances = MaintStillToDo::where('companyId', '=', auth()->user()->companyId)
             ->where('plate', $request->plate)
             ->get();
 
@@ -96,6 +96,7 @@ class HomeController extends Controller
             'start' => ['required', 'max:40'],
             'destination' => ['required', 'max:40'],
             'km' => ['required', 'numeric', 'min:0'],
+            'petrol_station' => ['required', 'max:40'],
             'fuel' => ['required', 'numeric', 'min:0'],
             'cost' => ['required', 'numeric', 'min:0'],
             'plate' => ['required', 'exists:trucks,plate'],
@@ -166,6 +167,7 @@ class HomeController extends Controller
             'stops' => $stops,
             'km' => $request->km,
             'distance' => $distance,
+            'petrol_station' => $request->petrol_station,
             'fuel' => $request->fuel,
             'cost' => $request->cost,
             'note' => $request->note,
@@ -191,7 +193,7 @@ class HomeController extends Controller
             ->latest()
             ->first();
 
-        $maintenances = MaintStillToDo::where('companyId', '=', auth('admin')->user()->companyId)
+        $maintenances = MaintStillToDo::where('companyId', '=', auth()->user()->companyId)
             ->where('plate', $request->plate)
             ->get();
 
@@ -206,6 +208,7 @@ class HomeController extends Controller
             'start' => ['required', 'max:40'],
             'destination' => ['required', 'max:40'],
             'km' => ['required', 'numeric', 'min:0'],
+            'petrol_station' => ['required', 'max:40'],
             'fuel' => ['required', 'numeric', 'min:0'],
             'cost' => ['required', 'numeric', 'min:0'],
             'plate' => ['required', 'exists:trucks,plate'],
@@ -262,6 +265,7 @@ class HomeController extends Controller
             'garage' => $request->garage,
             'km' => $request->km,
             'distance' => $distance,
+            'petrol_station' => $request->petrol_station,
             'fuel' => $request->fuel,
             'cost' => $request->cost,
             'note' => $request->note,
@@ -287,7 +291,7 @@ class HomeController extends Controller
             ->latest()
             ->first();
 
-        $maintenances = MaintStillToDo::where('companyId', '=', auth('admin')->user()->companyId)
+        $maintenances = MaintStillToDo::where('companyId', '=', auth()->user()->companyId)
             ->where('plate', $request->plate)
             ->get();
 
@@ -302,6 +306,7 @@ class HomeController extends Controller
             'start' => ['required', 'max:40'],
             'destination' => ['required', 'max:40'],
             'km' => ['required', 'numeric', 'min:0'],
+            'petrol_station' => ['required', 'max:40'],
             'fuel' => ['required', 'numeric', 'min:0'],
             'cost' => ['required', 'numeric', 'min:0'],
             'plate' => ['required', 'exists:trucks,plate'],
@@ -357,6 +362,7 @@ class HomeController extends Controller
             'destination' => $request->destination,
             'km' => $request->km,
             'distance' => $distance,
+            'petrol_station' => $request->petrol_station,
             'fuel' => $request->fuel,
             'cost' => $request->cost,
             'note' => $request->note,

@@ -55,7 +55,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="destination">@lang('Destinazione finale'):</label>
+                    <label for="destination">@lang('Destination'):</label>
                     <input type="text" class="form-control autocomplete" name="destination" required>
                 </div>
                 <div class="form-group">
@@ -63,15 +63,23 @@
                     <input type="number" class="form-control" name="km" min="0" required>
                 </div>
                 <div class="form-group">
-                    <label for="fuel">@lang('Fuel'):</label>
-                    <input type="number" class="form-control" name="fuel" min="0" required>
+                    <label for="petrol_station">@lang('Luogo rifornimento'):</label>
+                    <select name="petrol_station" class="form-control">
+                        <option selected value="not done">@lang('Not done')</option>
+                        <option value="petrol_station">@lang('Petrol station')</option>
+                        <option value="tank">@lang('Tank')</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="fuel">@lang('Fuel') (@lang('litres')):</label>
+                    <input type="number" class="form-control" name="fuel" min="0" value="0" required>
                 </div>
                 <div class="form-group">
                     <label for="cost">@lang('Fuel cost'):</label>
-                    <input type="number" class="form-control" name="cost" min="0" required>
+                    <input type="number" class="form-control" name="cost" min="0" value="0" required>
                 </div>
                 <div class="form-group">
-                    <label for="plate_s">@lang("Targa semirimorchio") (@lang("Optional")):</label>
+                    <label for="plate_s">@lang("Semitrailer's plate") (@lang("Optional")):</label>
                     <select name="plate_s" class="form-control">
                         <option value=""></option>
                         @foreach ($plates_semi as $plate)
@@ -87,7 +95,7 @@
                     <label for="note">@lang('Note') (@lang("Optional")):</label>
                     <textarea class="form-control" name="note" rows="3" max="200"></textarea>
                 </div>
-                <div class="form-group">
+                <div class="modal-footer">
                     <button type="submit" class="btn btn-primary submit-merci">
                         <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
                             aria-hidden="true"></span>
@@ -128,12 +136,20 @@
                     <input type="number" class="form-control" name="km" min="0" required>
                 </div>
                 <div class="form-group">
-                    <label for="fuel">@lang('Fuel'):</label>
-                    <input type="number" class="form-control" name="fuel" min="0" required>
+                    <label for="petrol_station">@lang('Luogo rifornimento'):</label>
+                    <select name="petrol_station" class="form-control">
+                        <option selected value="not done">@lang('Not done')</option>
+                        <option value="petrol_station">@lang('Petrol station')</option>
+                        <option value="tank">@lang('Tank')</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="fuel">@lang('Fuel') (@lang('litres')):</label>
+                    <input type="number" class="form-control" name="fuel" min="0" value="0" required>
                 </div>
                 <div class="form-group">
                     <label for="cost">@lang('Fuel cost'):</label>
-                    <input type="number" class="form-control" name="cost" min="0" required>
+                    <input type="number" class="form-control" name="cost" min="0" value="0" required>
                 </div>
                 <div class="form-group">
                     <label for="plate_s">@lang("Targa semirimorchio") (@lang("Optional")):</label>
@@ -148,7 +164,7 @@
                     <label for="container">@lang('Note') (@lang("Optional")):</label>
                     <textarea class="form-control" name="note" rows="3"></textarea>
                 </div>
-                <div class="form-group">
+                <div class="modal-footer">
                     <button type="submit" class="btn btn-primary submit-officina">
                         <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
                             aria-hidden="true"></span>
@@ -185,12 +201,20 @@
                     <input type="number" class="form-control" name="km" min="0" required>
                 </div>
                 <div class="form-group">
-                    <label for="fuel">@lang('Fuel'):</label>
-                    <input type="number" class="form-control" name="fuel" min="0" required>
+                    <label for="petrol_station">@lang('Luogo rifornimento'):</label>
+                    <select name="petrol_station" class="form-control">
+                        <option selected value="not done">@lang('Not done')</option>
+                        <option value="petrol_station">@lang('Petrol station')</option>
+                        <option value="tank">@lang('Tank')</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="fuel">@lang('Fuel') (@lang('litres')):</label>
+                    <input type="number" class="form-control" name="fuel" min="0" value="0" required>
                 </div>
                 <div class="form-group">
                     <label for="cost">@lang('Fuel cost'):</label>
-                    <input type="number" class="form-control" name="cost" min="0" required>
+                    <input type="number" class="form-control" name="cost" min="0" value="0" required>
                 </div>
                 <div class="form-group">
                     <label for="plate_s">@lang("Targa semirimorchio") (@lang("Optional")):</label>
@@ -205,7 +229,7 @@
                     <label for="container">@lang('Note') (@lang("Optional")):</label>
                     <textarea class="form-control" name="note" rows="3"></textarea>
                 </div>
-                <div class="form-group">
+                <div class="modal-footer">
                     <button type="submit" class="btn btn-primary submit-vuoto">
                         <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
                             aria-hidden="true"></span>

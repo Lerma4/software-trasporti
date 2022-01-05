@@ -53,7 +53,7 @@
 
                 <br>
 
-                <div class="form-group">
+                <div class="modal-footer">
                     <button type="submit" class="btn btn-primary submit-document">
                         <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
                             aria-hidden="true"></span>

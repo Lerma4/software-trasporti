@@ -13,6 +13,68 @@
 
 <div class="col-12 pages-content">
     <div class="card">
+        <h5 class="card-header">@lang("Gestione giornate lavorative")</h5>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm">
+                    <!-- MESSAGGIO SOLO PER L'ESPORTAZIONE DEI GIORNI DI LAVORO -->
+                    @if (session()->has('error') || session()->has('status'))
+                    <div class="alert alert-danger message">{{ session()->get('error') }}</div>
+                    @endif
+                </div>
+            </div>
+            <div class="row page-row">
+                <div class="col-sm">
+                    <form action="{{ route('api.trips.export') }}" method="POST">
+                        @csrf
+                        <label>@lang('Esportazione giornate lavorative di tutti i dipendenti:')</label>
+                        <br>
+                        <br>
+                        <div class="form-inline">
+                            <label>@lang('mese'):</label>
+                            <input min="1" max="12" value="{{ Carbon\Carbon::now()->format('m') }}" type="number"
+                                class="form-control" name="month" required>
+                            <label>@lang('anno'):</label>
+                            <input min="1900" max="9999" value="{{ Carbon\Carbon::now()->format('Y') }}" type="number"
+                                class="form-control" name="year" required>
+                            <button class="btn btn-primary" type="submit">@lang("Submit")</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row page-row">
+                <div class="col-sm">
+                    <form action="{{ route('api.trips.exportUser') }}" method="POST">
+                        @csrf
+                        <label>@lang('Esportazione giornate lavorative di un dipendente:')</label>
+                        <br>
+                        <br>
+                        <div class="form-inline">
+                            <label>@lang('Driver'):</label>
+                            <select name="id" class="form-control" required>
+                                <option value=""></option>
+                                @foreach ($users as $user)
+                                <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <br>
+                        <div class="form-inline">
+                            <label>@lang('From'):</label>
+                            <input value="{{ Carbon\Carbon::now()->format('Y-m-d') }}" type="date" class="form-control"
+                                name="from" required>
+                            <label>@lang('To'):</label>
+                            <input value="{{ Carbon\Carbon::now()->format('Y-m-d') }}" type="date" class="form-control"
+                                name="to" required>
+                            <button class="btn btn-primary" type="submit">@lang("Submit")</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <h5 class="card-header">@lang("Gestione viaggi")</h5>
         <div class="card-body">
             @include('multiauth::message')
             <div class="row justify-content-between page-row">
@@ -29,6 +91,28 @@
                         @lang('Delete')
                     </button>
                 </div>
+            </div>
+            <div class="row justify-content-between page-row">
+                <div class="col-lg-6">
+                    <div class="row">
+                        <div class="col-xl-5">
+                            <select id="select-type" class="form-control" aria-label="category">
+                                <option value="" selected>@lang('All trip types')</option>
+                                <option value="0">@lang('Carico/scarico merci')</option>
+                                <option value="1">@lang('Officina/gommista')</option>
+                                <option value="2">@lang('A vuoto')</option>
+                            </select>
+                        </div>
+                        <div class="col-xl-5">
+                            <select id="select-refuelling" class="form-control" aria-label="category">
+                                <option value="" selected>@lang('All')</option>
+                                <option value="0">@lang('Refuelling not done')</option>
+                                <option value="1">@lang('Petrol station')</option>
+                                <option value="2">@lang('Tank')</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-sm-auto">
                     <form>
                         <div class="form-inline">
@@ -36,7 +120,8 @@
                             <input type="date" class="form-control select-input-date-from" data-column="3">
                             <label id="search_group">@lang('To'):</label>
                             <input type="date" class="form-control select-input-date-to" data-column="3">
-                            <button class="btn btn-primary btn-reset" type="reset" id="btn-reset">Reset</button>
+                            <button class="btn btn-primary btn-reset" type="reset"
+                                id="btn-reset">@lang("Reset")</button>
                         </div>
                     </form>
                 </div>
@@ -50,24 +135,34 @@
                             <th>@lang('Type')</th>
                             <th>@lang('Date')</th>
                             <th>@lang('Name')</th>
-                            <th>@lang('Email')</th>
                             <th>@lang("Plate")</th>
                             <th>@lang("Start")</th>
                             <th>@lang("Destination")</th>
                             <th>@lang("Km")</th>
                             <th>@lang("Fuel")</th>
-                            <th>@lang("Cost")</th>
-                            <th>@lang("Plate Semirimorchio")</th>
+                            <th>@lang("Consumption")</th>
+                            <th>@lang("Petrol Costs")</th>
+                            <th>@lang("AdBlue")</th>
+                            <th>@lang("AdBlue Costs")</th>
+                            <th>@lang("Total Costs")</th>
+                            <!--<th>@lang("Plate Semirimorchio")</th>
                             <th>@lang("Container")</th>
                             <th>@lang("Garage")</th>
                             <th>@lang("Stops")</th>
+                            <th>@lang("Petrol station")</th>
                             <th>@lang("Truck's km")</th>
-                            <th>@lang("Notes")</th>
+                            <th>@lang("Insert date")</th>
+                            <th>@lang("Notes")</th>-->
                         </tr>
                     </thead>
                     <tbody>
                     </tbody>
                     <tfoot>
+                        <tr>
+                            @for ($i = 0; $i < 15; $i++) <th>
+                                </th>
+                                @endfor
+                        </tr>
                     </tfoot>
                 </table>
             </div>
@@ -152,12 +247,20 @@
                         <input type="number" class="form-control" name="km" min="1" max="1000" required>
                     </div>
                     <div class="form-group">
+                        <label for="petrol_station">@lang('Luogo rifornimento'):</label>
+                        <select name="petrol_station" class="form-control">
+                            <option selected value="0">@lang('Not done')</option>
+                            <option value="1">@lang('Petrol station')</option>
+                            <option value="2">@lang('Tank')</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="fuel">@lang('Fuel'):</label>
-                        <input type="number" class="form-control" name="fuel" min="0" required>
+                        <input type="number" class="form-control" name="fuel" min="0" value="0" required>
                     </div>
                     <div class="form-group">
                         <label for="cost">@lang('Fuel cost'):</label>
-                        <input type="number" class="form-control" name="cost" min="0" required>
+                        <input type="number" class="form-control" name="cost" min="0" value="0" required>
                     </div>
                     <div class="form-group">
                         <label for="plate_s">@lang("Targa semirimorchio") (@lang("Optional")):</label>
@@ -228,12 +331,20 @@
                         <input type="number" class="form-control" name="km" min="1" max="1000" required>
                     </div>
                     <div class="form-group">
+                        <label for="petrol_station">@lang('Luogo rifornimento'):</label>
+                        <select name="petrol_station" class="form-control">
+                            <option selected value="0">@lang('Not done')</option>
+                            <option value="1">@lang('Petrol station')</option>
+                            <option value="2">@lang('Tank')</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="fuel">@lang('Fuel'):</label>
-                        <input type="number" class="form-control" name="fuel" min="0" required>
+                        <input type="number" class="form-control" name="fuel" min="0" value="0" required>
                     </div>
                     <div class="form-group">
                         <label for="cost">@lang('Fuel cost'):</label>
-                        <input type="number" class="form-control" name="cost" min="0" required>
+                        <input type="number" class="form-control" name="cost" min="0" value="0" required>
                     </div>
                     <div class="form-group">
                         <label for="plate_s">@lang("Targa semirimorchio") (@lang("Optional")):</label>
@@ -296,12 +407,20 @@
                         <input type="number" class="form-control" name="km" min="1" max="1000" required>
                     </div>
                     <div class="form-group">
+                        <label for="petrol_station">@lang('Luogo rifornimento'):</label>
+                        <select name="petrol_station" class="form-control">
+                            <option selected value="0">@lang('Not done')</option>
+                            <option value="1">@lang('Petrol station')</option>
+                            <option value="2">@lang('Tank')</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="fuel">@lang('Fuel'):</label>
-                        <input type="number" class="form-control" name="fuel" min="0" required>
+                        <input type="number" class="form-control" name="fuel" min="0" value="0" required>
                     </div>
                     <div class="form-group">
                         <label for="cost">@lang('Fuel cost'):</label>
-                        <input type="number" class="form-control" name="cost" min="0" required>
+                        <input type="number" class="form-control" name="cost" min="0" value="0" required>
                     </div>
                     <div class="form-group">
                         <label for="plate_s">@lang("Targa semirimorchio") (@lang("Optional")):</label>
@@ -409,6 +528,14 @@
                         <input type="number" class="form-control km-edit" name="km" min="1" max="1000" required>
                     </div>
                     <div class="form-group">
+                        <label for="petrol_station">@lang('Luogo rifornimento'):</label>
+                        <select name="petrol_station" class="form-control petrol-edit">
+                            <option selected value="0">@lang('Not done')</option>
+                            <option value="1">@lang('Petrol station')</option>
+                            <option value="2">@lang('Tank')</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="fuel">@lang('Fuel'):</label>
                         <input type="number" class="form-control fuel-edit" name="fuel" min="0" required>
                     </div>
@@ -490,6 +617,14 @@
                         <input type="number" class="form-control km-edit" name="km" min="1" max="1000" required>
                     </div>
                     <div class="form-group">
+                        <label for="petrol_station">@lang('Luogo rifornimento'):</label>
+                        <select name="petrol_station" class="form-control petrol-edit">
+                            <option selected value="0">@lang('Not done')</option>
+                            <option value="1">@lang('Petrol station')</option>
+                            <option value="2">@lang('Tank')</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="fuel">@lang('Fuel'):</label>
                         <input type="number" class="form-control fuel-edit" name="fuel" min="0" required>
                     </div>
@@ -561,6 +696,14 @@
                     <div class="form-group">
                         <label for="km">@lang('Distance') (Km):</label>
                         <input type="number" class="form-control km-edit" name="km" min="1" max="1000" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="petrol_station">@lang('Luogo rifornimento'):</label>
+                        <select name="petrol_station" class="form-control petrol-edit">
+                            <option selected value="0">@lang('Not done')</option>
+                            <option value="1">@lang('Petrol station')</option>
+                            <option value="2">@lang('Tank')</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="fuel">@lang('Fuel'):</label>
@@ -657,7 +800,7 @@
         return newDate;
     }
 
-    function formatTripData(plate, container, garage, stops, km, note) {
+    function formatTripData(email, plate, container, garage, stops, km,  created_at, note, petrol_station) {
         if (plate == null) {
             plate = '';
         }
@@ -674,26 +817,56 @@
             note = '';
         }
 
-        var html = '<table class="table table-sm table-borderless table-exp"><thead>' +
-            '<tr> <th scope = "col" > @lang("Targa semirimorchio")' +
+        var html = '<table class="table table-sm table-borderless table-exp"><thead class="thead-light">' +
+            '<tr> <th scope = "col" > @lang("Email")' +
+            '</th> <th scope = "col" > @lang("Targa semirimorchio")' +
             '</th> <th scope = "col" > @lang("Container")' +
             '</th> <th scope = "col" > @lang("Garage")' +
-            '</th> <th scope = "col" > @lang("Stops")' +
-            `</th> <th scope = "col" > @lang("Truck's Km") ` +
-            '</th> <th scope = "col" > @lang("Notes") </th> </thead>' +
+            '</th> <th scope = "col" > @lang("Stops") </th> </tr> </thead>' +
             '<tbody>' +
-            '<tr>' + '<td>' + plate + '</td>' +
+            '<tr>' + '<td>' + email + '</td>' +
+            '<td>' + plate + '</td>' +
             '<td>' + container + '</td>' +
             '<td>' + garage + '</td>' +
-            '<td>' + stops + '</td>' +
-            '<td>' + km + '</td>' +
+            '<td>' + stops + '</td>' + '</tr>';
+
+        html += '</tbody></table>';
+
+        html += '<table class="table table-sm table-borderless table-exp"><thead class="thead-light">' +
+            `<tr> <th scope = "col" > @lang("Luogo rifornimento") ` +
+            `</th> <th scope = "col" > @lang("Truck's Km") ` +
+            `</th> <th scope = "col" > @lang("Insert at") ` +
+            '</th> <th scope = "col" > @lang("Notes") </th> </> </thead>' +
+            '<tbody>' +
+            '<tr>';
+
+        switch (petrol_station) {
+            case 0:
+                html += '<td>' + "@lang('Not done')" + '</td>';
+                break;
+            case 1:
+                html += '<td>' + "@lang('Petrol station')" + '</td>';
+                break;
+            case 2:
+                html += '<td>' + "@lang('Tank')" + '</td>';
+                break;
+            default:
+                html += '<td>error</td>';
+                break;
+        }
+
+        html += '<td>' + new Intl.NumberFormat('de-DE').format(km) + '</td>' +
+            '<td>' + created_at + '</td>' +
             '<td>' + note + '</td>' + '</tr>';
 
         html += '</tbody></table>';
+
         return html;
     }
 
     $(document).ready(function() {
+        $(".message").delay(5000).fadeOut();
+
         // SCELTA DELLA TIPOLOGIA DI VIAGGIO
 
         $('#type-add').on('change', function() {
@@ -817,17 +990,19 @@
             buttons: {
                 buttons: [{
                         extend: 'excelHtml5',
+                        footer: true,
                         className: 'btn btn-success',
                         exportOptions: {
-                            columns: [2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+                            columns: [2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
                         },
-                        text: '@lang("Export EXCEL")'
+                        text: '@lang("Export EXCEL")',
                     },
                     {
                         extend: 'pdfHtml5',
+                        footer: true,
                         className: 'btn btn-danger',
                         exportOptions: {
-                            columns: [2, 3, 4, 6, 7, 8, 9, 10, 11]
+                            columns: [2, 3, 4, 6, 7, 8, 9, 10, 11, 12]
                         },
                         text: '@lang("Export PDF")',
                         orientation: 'landscape',
@@ -856,11 +1031,9 @@
                     "render": function(data, type, row) {
                         var html = "";
 
-                        //if (row.plate_s != null || row.garage != null || row.container != null || row.stops != null) {
-                            html = '<button id="btn-details" type="button" class="btn btn-sm btn-success">' +
-                                '<i class="fas fa-plus"></i>' +
-                                '</button>';
-                        //}
+                        html = '<button id="btn-details" type="button" class="btn btn-sm btn-success">' +
+                            '<i class="fas fa-plus"></i>' +
+                            '</button>';
 
                         return html;
                     },
@@ -896,10 +1069,6 @@
                     name: 'name'
                 },
                 {
-                    data: 'user_email',
-                    name: 'user_email'
-                },
-                {
                     data: 'plate',
                     name: 'plate'
                 },
@@ -913,15 +1082,46 @@
                 },
                 {
                     data: 'distance',
-                    name: 'distance'
+                    "render": function(data, type, row) {
+                        return new Intl.NumberFormat('de-DE').format(data)
+                    },
                 },
                 {
                     data: 'fuel',
                     name: 'fuel'
                 },
                 {
+                    data: null,
+                    defaultContent: ''
+                },
+                {
                     data: 'cost',
-                    name: 'cost'
+                    "render": function(data, type, row) {
+                        return new Intl.NumberFormat('de-DE').format(data)
+                    },
+                },
+                {
+                    data: 'adblue',
+                    "render": function(data, type, row) {
+                        return new Intl.NumberFormat('de-DE').format(data)
+                    },
+                },
+                {
+                    data: 'adblue_cost',
+                    "render": function(data, type, row) {
+                        return new Intl.NumberFormat('de-DE').format(data)
+                    },
+                },
+                {
+                    data: null,
+                    "render": function(data, type, row) {
+                        total_cost = row.cost + row.adblue_cost;
+                        return new Intl.NumberFormat('de-DE').format(total_cost)
+                    },
+                },
+                {
+                    data: 'user_email',
+                    name: 'user_email'
                 },
                 {
                     data: 'plate_s',
@@ -940,8 +1140,18 @@
                     name: 'stops'
                 },
                 {
+                    data: 'petrol_station',
+                    name: 'petrol_station'
+                },
+                {
                     data: 'km',
-                    name: 'km'
+                    "render": function(data, type, row) {
+                        return new Intl.NumberFormat('de-DE').format(data)
+                    },
+                },
+                {
+                    data: 'created_at',
+                    name: 'created_at'
                 },
                 {
                     data: 'note',
@@ -962,19 +1172,23 @@
                     'width': '1%'
                 },
                 {
-                    'targets': [2, 9, 10, 11],
+                    'targets': [8, 9, 10, 11, 12, 13, 14],
                     "orderable": false,
                     "searchable": false
                 },
                 {
-                    'targets': [15],
-                    'searchable': true,
+                    'targets': [2],
+                    "orderable": false // colonna tipologia viaggio
+                },
+                {
+                    'targets': [15, 16, 17, 18, 19, 21, 22, 23],
+                    "searchable": false,
                     'visible': false
                 },
                 {
-                    'targets': [12, 13, 14, 16, 17],
-                    "searchable": false,
-                    'visible': false
+                    'targets': [20],
+                    "searchable": true,
+                    'visible': false // colonna luogo rifornimento
                 },
             ],
             'select': {
@@ -984,7 +1198,122 @@
                 "url": language,
             },
             "responsive": true,
+            "footerCallback": function ( row, data, start, end, display ) {
+                var api = this.api(), data;
+    
+                // Remove the formatting to get integer data for summation
+                var intVal = function ( i ) {
+                    return typeof i === 'string' ?
+                        i.replace(/[\$,]/g, '')*1 :
+                        typeof i === 'number' ?
+                            i : 0;
+                };
+    
+                // Total over this page
+                km = api
+                    .column( 8, { page: 'current'} )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+
+                // Total over this page
+                fuel = api
+                    .column( 9, { page: 'current'} )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+             
+                // Total over this page
+                cost = api
+                    .column( 11, { page: 'current'} )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+
+                // Total over this page
+                adblue = api
+                    .column( 12, { page: 'current'} )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+
+                // Total over this page
+                adblue_cost = api
+                    .column( 13, { page: 'current'} )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+    
+                // Raporto km/l
+
+                // Update footer
+                consumption = km/fuel;
+                consumption = new Intl.NumberFormat('de-DE', { maximumSignificantDigits: 2 }).format(consumption);
+                if (consumption == 'NaN') {
+                    consumption = 0;
+                }
+                $( api.column( 10 ).footer() ).html(
+                    consumption + ' km/l'
+                );
+
+                // Costo totale
+
+                // Update footer
+                total_cost = cost + adblue_cost;
+                total_cost = new Intl.NumberFormat('de-DE').format(total_cost);
+                $( api.column( 14 ).footer() ).html(
+                    total_cost + ' €'
+                );
+
+                // Update footer
+                km = new Intl.NumberFormat('de-DE').format(km)
+                $( api.column( 8 ).footer() ).html(
+                    km + ' km'
+                );
+
+                // Update footer
+                fuel = new Intl.NumberFormat('de-DE').format(fuel)
+                $( api.column( 9 ).footer() ).html(
+                    fuel + ' l'
+                );
+
+                // Update footer
+                cost = new Intl.NumberFormat('de-DE').format(cost)
+                $( api.column( 11 ).footer() ).html(
+                    cost + ' €'
+                );
+
+                // Update footer
+                adblue = new Intl.NumberFormat('de-DE').format(adblue)
+                $( api.column( 12 ).footer() ).html(
+                    adblue + ' l'
+                );
+
+                // Update footer
+                adblue_cost = new Intl.NumberFormat('de-DE').format(adblue_cost)
+                $( api.column( 13 ).footer() ).html(
+                    adblue_cost + ' €'
+                );
+            },
         });
+
+        $('#select-type').change(function() {
+            console.log($(this).val());
+                table.column(2)
+                    .search($(this).val())
+                    .draw();
+        }); // FILTRO TIPOLOGIA VIAGGIO
+
+        $('#select-refuelling').change(function() {
+            table.column(20)
+                .search($(this).val())
+                .draw();
+        }); // FILTRO RIFORNIMENTO
 
         $('#datatable tbody').on('click', '#btn-details', function() {
             var tr = $(this).closest('tr');
@@ -1001,7 +1330,7 @@
             } else {
                 // Open this row
                 rowData = row.data();
-                row.child(formatTripData(rowData.plate_s, rowData.container, rowData.garage, rowData.stops, rowData.km, rowData.note)).show();
+                row.child(formatTripData(rowData.user_email, rowData.plate_s, rowData.container, rowData.garage, rowData.stops, rowData.km, rowData.created_at, rowData.note, rowData.petrol_station)).show();
                 tr.addClass('shown');
                 $(this).find('.fas').removeClass('fa-plus');
                 $(this).find('.fas').addClass('fa-minus');
@@ -1263,6 +1592,7 @@
                 $('#edit-form').find('.start-edit').val(replaceSymbol(row['start']));
                 $('#edit-form').find('.destination-edit').val(replaceSymbol(row['destination']));
                 $('#edit-form').find('.distance-edit').val(row['distance']);
+                $('#edit-form').find('.petrol-edit').val(row['petrol_station']);
                 $('#edit-form').find('.fuel-edit').val(row['fuel']);
                 $('#edit-form').find('.garage-edit').val(row['garage']);
                 $('#edit-form').find('.km-edit').val(row['distance']);
@@ -1293,6 +1623,7 @@
         // CARICO SCARICO MERCI
 
         $('#merci-edit').on('submit', function(event) {
+            if(!confirm("@lang('Are you sure?')")) return;
             event.preventDefault();
             var form = $(this).closest('form');
 
@@ -1322,7 +1653,6 @@
                     }
                     if (data.success) {
                         html = '<div class="alert alert-success">' + data.success + '</div>';
-                        $('#merci-edit')[0].reset();
                         var stops = $(this).find('.input-stop');
                         stops.remove();
                         $('#datatable').DataTable().ajax.reload();
@@ -1341,6 +1671,7 @@
         // OFFICINA
 
         $('#officina-edit').on('submit', function(event) {
+            if(!confirm("@lang('Are you sure?')")) return;
             event.preventDefault();
             var form = $(this).closest('form');
 
@@ -1370,7 +1701,6 @@
                     }
                     if (data.success) {
                         html = '<div class="alert alert-success">' + data.success + '</div>';
-                        $('#officina-edit')[0].reset();
                         $('#datatable').DataTable().ajax.reload();
                     }
                     $('#modal-edit').scrollTop(0);
@@ -1387,6 +1717,7 @@
         // A VUOTO
 
         $('#vuoto-edit').on('submit', function(event) {
+            if(!confirm("@lang('Are you sure?')")) return;
             event.preventDefault();
             var form = $(this).closest('form');
 
@@ -1416,7 +1747,6 @@
                     }
                     if (data.success) {
                         html = '<div class="alert alert-success">' + data.success + '</div>';
-                        $('#vuoto-edit')[0].reset();
                         $('#datatable').DataTable().ajax.reload();
                     }
                     $('#modal-edit').scrollTop(0);
@@ -1441,7 +1771,7 @@
         // DELETE
 
         $('#btn-delete').on('click', function(e) {
-
+            if(!confirm("@lang('Are you sure?')")) return;
             var rows_selected = table.column(0).checkboxes.selected();
             var id = [];
 

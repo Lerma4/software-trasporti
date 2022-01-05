@@ -3,7 +3,7 @@
 }
 
 .hidden {
-    display: none !important;
+    display: none;
 }
 
 .main-logo {
@@ -17,6 +17,23 @@
     max-width: 50px;
     max-height: 50px;
 }
+
+.c-footer {
+    background-color: white;
+}
+
+.c-main .container-fluid {
+    @media (max-width: 650px) {
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+}
+
+// INTERFACCIA
+
+.dropleft .dropdown-toggle::before {
+    display: none;
+} // elimino la freccetta affianco alla campanellina in alto a sinistra
 
 // DATATABLES
 
@@ -78,6 +95,10 @@
     padding-top: 2px;
 }
 
+.icon-read {
+    text-align: center;
+}
+
 // DATATABLES
 
 // PAGES
@@ -125,8 +146,6 @@
         margin-left: 10px;
     }
 }
-
-// PAGE TRUCK
 
 // PAGE MAINTENANCE
 

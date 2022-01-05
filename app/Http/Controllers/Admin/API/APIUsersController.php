@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\API;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\CreationUserEmailJob;
 use App\Models\Company;
 use App\Models\License;
 use App\Models\User;
@@ -115,6 +116,10 @@ class APIUsersController extends Controller
 
             $i++;
         }
+
+        $send_mail = $request->email;
+
+        dispatch(new CreationUserEmailJob($send_mail));
 
         return response()->json(['success' => __('Form successfully submitted!')]);
     }

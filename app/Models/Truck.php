@@ -13,6 +13,7 @@ class Truck extends Model
     protected $fillable = [
         'plate',
         'type',
+        'chassis',
         'brand',
         'model',
         'km',
@@ -20,6 +21,11 @@ class Truck extends Model
         'group',
         'companyId'
     ];
+
+    public function getTypeAttribute($value)
+    {
+        return __($value);
+    }
 
     public function setPlateAttribute($value)
     {

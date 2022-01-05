@@ -16,20 +16,20 @@ class TripsController extends Controller
 
     public function index()
     {
-        $users = User::select('name', 'email')
+        $users = User::select('name', 'email', 'id')
             ->where('companyId', '=', auth('admin')->user()->companyId)
             ->orderBy('name', 'asc')
             ->get();
 
         $plates = Truck::select('plate', 'km')
             ->where('companyId', '=', auth('admin')->user()->companyId)
-            ->where('type', 'motrice')
-            ->orWhere('type', 'trattore')
+            ->where('type', 0)
+            ->orWhere('type', 1)
             ->orderBy('plate', 'asc')
             ->get();
 
         $plates_semi = Truck::where('companyId', '=', auth('admin')->user()->companyId)
-            ->where('type', 'semirimorchio')
+            ->where('type', 2)
             ->orderBy('plate', 'asc')
             ->get('plate');
 

@@ -56,7 +56,9 @@
                 },
                 {
                     data: 'km',
-                    name: 'km'
+                    "render": function(data, type, row) {
+                        return new Intl.NumberFormat('de-DE').format(data)
+                    },
                 },
                 {
                     data: 'garage',
@@ -64,7 +66,9 @@
                 },
                 {
                     data: 'price',
-                    name: 'price'
+                    "render": function(data, type, row) {
+                        return new Intl.NumberFormat('de-DE').format(data)
+                    },
                 },
                 {
                     data: 'notes',
@@ -97,6 +101,31 @@
             search: {
                 "regex": true
             },
+            "footerCallback": function ( row, data, start, end, display ) {
+                var api = this.api(), data;
+    
+                // Remove the formatting to get integer data for summation
+                var intVal = function ( i ) {
+                    return typeof i === 'string' ?
+                        i.replace(/[\$,]/g, '')*1 :
+                        typeof i === 'number' ?
+                            i : 0;
+                };
+    
+                // Total over this page
+                cost = api
+                    .column( 6, { page: 'current'} )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+
+                // Update footer
+                cost = new Intl.NumberFormat('de-DE').format(cost)
+                $( api.column( 6 ).footer() ).html(
+                    cost + ' €'
+                );
+            }
         });
 
         $('#maint_already').on('draw.dt', function() {
@@ -127,7 +156,8 @@
         });
 
         $('#btn-delete').on('click', function(e) {
-
+            if(!confirm("@lang('Are you sure?')")) return;
+            
             var rows_selected = table.column(0).checkboxes.selected();
             var id = [];
 
@@ -228,6 +258,7 @@
         });
 
         $('#editMaint').on('submit', function(event) {
+            if(!confirm("@lang('Are you sure?')")) return;
             event.preventDefault();
 
             var result = $(this).find(".form-result");

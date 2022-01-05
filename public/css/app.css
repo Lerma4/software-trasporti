@@ -10932,7 +10932,7 @@ a.text-dark:focus {
 }
 
 .hidden {
-  display: none !important;
+  display: none;
 }
 
 .main-logo {
@@ -10945,6 +10945,25 @@ a.text-dark:focus {
 .main-logo-responsive {
   max-width: 50px;
   max-height: 50px;
+}
+
+.c-footer {
+  background-color: white;
+}
+
+@media (max-width: 650px) {
+  .c-main .container-fluid,
+  .c-main .container-sm,
+  .c-main .container-md,
+  .c-main .container-lg,
+  .c-main .container-xl {
+    padding-right: 0px;
+    padding-left: 0px;
+  }
+}
+
+.dropleft .dropdown-toggle::before {
+  display: none;
 }
 
 .dataTables_wrapper .dataTables_processing {
@@ -11005,6 +11024,10 @@ a.text-dark:focus {
   padding-right: 6px;
   padding-bottom: 2px;
   padding-top: 2px;
+}
+
+.icon-read {
+  text-align: center;
 }
 
 .page-row {

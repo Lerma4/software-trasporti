@@ -60,6 +60,11 @@
                     <tbody>
                     </tbody>
                     <tfoot>
+                        <tr>
+                            @for ($i = 0; $i < 8; $i++) <th>
+                                </th>
+                                @endfor
+                        </tr>
                     </tfoot>
                 </table>
             </div>
@@ -197,6 +202,13 @@
                             <option value="{{ $plate->plate }}">{{ $plate->plate }}</option>
                             @endforeach
                         </select>
+                        <small class="form-text text-muted">
+                            <p class="text-danger">
+                                @lang('Nel caso non venga visualizzata la targa del mezzo che si vuole modificare, vuol
+                                dire che esso è stato cancellato dall\'anagrafica dei mezzi (quindi non è più possibile
+                                modificarlo).')
+                            </p>
+                        </small>
                     </div>
                     <div class="form-group">
                         <label for="type">@lang('Type'):</label>

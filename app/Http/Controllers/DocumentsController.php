@@ -39,7 +39,7 @@ class DocumentsController extends Controller
     {
         $document = Document::where('companyId', '=', auth()->user()->companyId)
             ->where('user_email', '=', auth()->user()->email)
-            ->select('name', 'created_at', 'id');
+            ->select('name', 'created_at', 'id', 'read');
 
         return datatables::eloquent($document)
             ->setRowId('id')
@@ -57,6 +57,7 @@ class DocumentsController extends Controller
             'user_email' => auth()->user()->email,
             'user_name' => auth()->user()->name,
             'companyId' => auth()->user()->companyId,
+            'read' => true
         ]);
 
         $doc->addFromMediaLibraryRequest($request->pdf)
@@ -76,6 +77,7 @@ class DocumentsController extends Controller
             'user_email' => auth()->user()->email,
             'user_name' => auth()->user()->name,
             'companyId' => auth()->user()->companyId,
+            'read' => true
         ]);
 
         $doc->addFromMediaLibraryRequest($request->photos)
@@ -101,6 +103,9 @@ class DocumentsController extends Controller
     public function download($id)
     {
         $doc = Document::find($id);
+
+        $doc->read = true;
+        $doc->save();
 
         $media = Media::where('model_type', 'App\Models\Document')
             ->where('model_id', $id)

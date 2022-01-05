@@ -44,7 +44,15 @@
                 },
                 {
                     data: 'km',
-                    name: 'km'
+                    "render": function(data, type, row) {
+                        if (data > 1000) {
+                            return new Intl.NumberFormat('de-DE').format(data)
+                        } else {
+                            html = new Intl.NumberFormat('de-DE').format(data) +
+                            '<i class="fas fa-exclamation-triangle fa-lg alert-expiration"></i>';
+                            return html;
+                        }
+                    },
                 },
                 {
                     data: 'plate',
@@ -135,7 +143,8 @@
         });
 
         $('#btn-delete-stillToDo').on('click', function(e) {
-
+            if(!confirm("@lang('Are you sure?')")) return;
+            
             var rows_selected = tableStill.column(0).checkboxes.selected();
             var id = [];
 
@@ -234,6 +243,8 @@
         });
 
         $('#editMaint-stillToDo').on('submit', function(event) {
+            if(!confirm("@lang('Are you sure?')")) return;
+            
             event.preventDefault();
 
             var result = $(this).find(".form-result");

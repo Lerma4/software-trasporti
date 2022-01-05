@@ -42,6 +42,7 @@
                             <th>@lang("Driver's name")</th>
                             <th>@lang('Date')</th>
                             <th>@lang('Download')</th>
+                            <th>@lang('Read')</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -307,6 +308,24 @@
                         return html;
                     },
                 },
+                {
+                    className: 'icon-read',
+                    searchable: false,
+                    orderable: false,
+                    data: 'read',
+                    "width": '1%',
+                    "render": function(data, type, row) {
+                        var html = "";
+
+                        if (data == true) {
+                            html += '<i class="fas fa-check"></i>';
+                        } else {
+                            html += '<i class="fas fa-times"></i>';
+                        }
+
+                        return html;
+                    },
+                },
             ],
             "columnDefs": [
             {
@@ -374,6 +393,7 @@
         // DELETE DOCUMENT
 
         $('#btn-delete').on('click', function(e) {
+            if(!confirm("@lang('Are you sure?')")) return;
 
             var rows_selected = table.column(0).checkboxes.selected();
             var id = [];
@@ -426,6 +446,8 @@
         });
 
         $('#edit-document').on('submit', function(event) {
+            if(!confirm("@lang('Are you sure?')")) return;
+
             event.preventDefault();
             var form = $(this).closest('form');
 

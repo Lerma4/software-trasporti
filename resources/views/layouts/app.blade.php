@@ -44,6 +44,31 @@
                 <i class="c-icon c-icon-2xl cil-menu"></i>
             </button>
             <ul class="c-header-nav mfs-auto">
+                <li class="c-header-nav-item dropdown">
+                    <div class="btn-group dropleft">
+                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <i class="far fa-bell"></i>
+                            @php
+                            $notifications = 0;
+                            foreach ($docs_notifications as $doc) {
+                            if ($doc->user_email == auth()->user()->email
+                            && $doc->companyId == auth()->user()->companyId)
+                            $notifications++;
+                            }
+                            @endphp
+                            @if ($notifications > 0)
+                            <span class="badge badge-warning">{{ $notifications }}</span>
+                            @endif
+                        </button>
+                        <div class="dropdown-menu">
+                            @if ($notifications > 0)
+                            <a class="dropdown-item" href="{{ route('documents') }}">@lang('New documents')</a>
+                            @else
+                            <p>@lang('No notifications')</p>
+                            @endif
+                        </div>
+                    </div>
+                </li>
                 <li class="c-header-nav-item px-3 c-d-legacy-none">
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                         @csrf

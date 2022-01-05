@@ -25,7 +25,7 @@ class APIDocumentsController extends Controller
     public function getDocuments()
     {
         $document = Document::where('companyId', '=', auth('admin')->user()->companyId)
-            ->select('name', 'user_email', 'user_name', 'created_at', 'id');
+            ->select('name', 'user_email', 'user_name', 'created_at', 'id', 'read');
 
         return datatables::eloquent($document)
             ->setRowId('id')

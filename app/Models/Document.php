@@ -18,7 +18,8 @@ class Document extends Model implements HasMedia
         'companyId',
         'user_email',
         'user_name',
-        'note'
+        'note',
+        'read'
     ];
 
     protected $casts = [

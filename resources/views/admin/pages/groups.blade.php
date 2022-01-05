@@ -3,7 +3,8 @@
 @section('styles')
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.bootstrap4.min.css">
-<link type="text/css" href="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" rel="stylesheet" />
+<link type="text/css" href="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css"
+    rel="stylesheet" />
 @endsection
 
 @section('content')
@@ -14,10 +15,12 @@
 
             <div class="row justify-content-between page-row">
                 <div class="col-sm">
-                    <button id="btn-add" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add">
+                    <button id="btn-add" type="button" class="btn btn-primary" data-toggle="modal"
+                        data-target="#modal-add">
                         @lang('New')
                     </button>
-                    <button id="btn-edit" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modal-add" disabled>
+                    <button id="btn-edit" type="button" class="btn btn-secondary" data-toggle="modal"
+                        data-target="#modal-add" disabled>
                         @lang('Edit')
                     </button>
                     <button type="button" class="btn btn-danger" id="btn-delete" disabled>
@@ -46,7 +49,8 @@
 
 <!-- FINESTRE MODAL -->
 
-<div class="modal fade" id="modal-add" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="modal-label-add" aria-hidden="true">
+<div class="modal fade" id="modal-add" data-backdrop="static" data-keyboard="false" tabindex="-1"
+    aria-labelledby="modal-label-add" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -58,18 +62,22 @@
                     <input type="hidden" id="id_group" name="id_group" value="">
                     <div class="form-group">
                         <label for="name">@lang('Nome')</label>
-                        <input type="text" class="form-control" id="name" value="{{ old('nome') }}" name="name" required>
+                        <input type="text" class="form-control" id="name" value="{{ old('nome') }}" name="name"
+                            required>
                     </div>
                     <div class="form-group">
                         <label for="name">@lang('Description')</label>
-                        <textarea class="form-control" id="description" name="description" rows="3" maxlength="150"></textarea>
+                        <textarea class="form-control" id="description" name="description" rows="3"
+                            maxlength="150"></textarea>
                         <small>@lang('Max 150 characters.')</small>
                     </div>
                     <div id="form-result"></div>
                     <div class="modal-footer">
-                        <button id="btn-close" type="button" class="btn btn-secondary" data-dismiss="modal">@lang('Close')</button>
+                        <button id="btn-close" type="button" class="btn btn-secondary"
+                            data-dismiss="modal">@lang('Close')</button>
                         <button type="submit" class="btn btn-primary submit">
-                            <span class="spinner-border spinner-border-sm loader-submit hidden" role="status" aria-hidden="true"></span>
+                            <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
+                                aria-hidden="true"></span>
                             @lang('Submit')
                         </button>
                     </div>
@@ -82,18 +90,27 @@
 @endsection
 
 @section('scripts')
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js" defer></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"
+    defer></script>
 
-<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js" defer></script>
+<script type="text/javascript" language="javascript"
+    src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js" defer></script>
 
-<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.6.4/js/dataTables.buttons.min.js" defer></script>
-<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.bootstrap4.min.js" defer></script>
+<script type="text/javascript" language="javascript"
+    src="https://cdn.datatables.net/buttons/1.6.4/js/dataTables.buttons.min.js" defer></script>
+<script type="text/javascript" language="javascript"
+    src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.bootstrap4.min.js" defer></script>
 
-<script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js" defer></script>
-<script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js" defer></script>
-<script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js" defer></script>
-<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.html5.min.js" defer></script>
-<script type="text/javascript" src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js" defer></script>
+<script type="text/javascript" language="javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js" defer></script>
+<script type="text/javascript" language="javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js" defer></script>
+<script type="text/javascript" language="javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js" defer></script>
+<script type="text/javascript" language="javascript"
+    src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.html5.min.js" defer></script>
+<script type="text/javascript"
+    src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js" defer></script>
 
 @switch(App::getLocale())
 @case('it')
@@ -225,6 +242,7 @@
             if (form.attr('id') == 'addGroup') {
                 url = '{{ route("admin.groups.store") }}';
             } else {
+                if(!confirm("@lang('Are you sure?')")) return;
                 url = '{{ route("admin.groups.edit") }}';
             };
 
@@ -266,6 +284,7 @@
         });
 
         $('#btn-delete').on('click', function(e) {
+            if(!confirm("@lang('Are you sure?')")) return;
 
             var rows_selected = table.column(0).checkboxes.selected();
             var id = [];
@@ -301,7 +320,7 @@
 
         $('#btn-edit').on('click', function(e) {
 
-            $('#modal-label-add').text('Edit group');
+            $('#modal-label-add').text("@lang('Edit group')");
             $('#addGroup').prop('id', 'editGroup');
 
             var rows_selected = table.column(0).checkboxes.selected();
@@ -317,7 +336,7 @@
 
         $('#btn-add').on('click', function(e) {
 
-            $('#modal-label-add').text('Add group');
+            $('#modal-label-add').text("@lang('Add group')");
             $('#editGroup').attr('id', 'addGroup');
 
             $('#password').prop('required', true);

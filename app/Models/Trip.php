@@ -23,14 +23,17 @@ class Trip extends Model
         'stops',
         'km',
         'distance',
+        'petrol_station',
         'fuel',
         'cost',
         'note',
-        'companyId'
+        'companyId',
+        'created_at'
     ];
 
     protected $casts = [
         'date' => 'datetime:d-m-Y',
+        'created_at' => 'datetime:d-m-Y / H:m',
     ];
 
     public function user_email()

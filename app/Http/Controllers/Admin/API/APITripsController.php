@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin\API;
 
+use App\Exports\UserWorkingDaysExport;
+use App\Exports\WorkingDaysExport;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\City;
@@ -9,6 +11,9 @@ use App\Models\MaintStillToDo;
 use App\Models\Trip;
 use App\Models\Truck;
 use App\Models\User;
+use Auth;
+use Carbon\Carbon;
+use Excel;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 
@@ -100,6 +105,7 @@ class APITripsController extends Controller
             'start' => ['required', 'max:40'],
             'destination' => ['required', 'max:40'],
             'km' => ['required', 'numeric', 'min:1'],
+            'petrol_station' => ['required', 'max:40'],
             'fuel' => ['required', 'numeric', 'min:0'],
             'cost' => ['required', 'numeric', 'min:0'],
             'plate' => ['required', 'exists:trucks,plate'],
@@ -181,6 +187,7 @@ class APITripsController extends Controller
             'stops' => $stops,
             'km' => $km,
             'distance' => $request->km,
+            'petrol_station' => $request->petrol_station,
             'fuel' => $request->fuel,
             'cost' => $request->cost,
             'note' => $request->note,
@@ -223,12 +230,17 @@ class APITripsController extends Controller
 
         // CHECK
 
+        if ($truck === null) {
+            return response()->json(['errors' => [__('Non è possibile modificare un veicolo che non è più presente nella sezione "Veicoli"!')]]);
+        }
+
         $validator = Validator::make($request->all(), [
             'email' => ['required', 'exists:users,email', 'email'],
             'date' => ['required', 'date'],
             'start' => ['required', 'max:40'],
             'destination' => ['required', 'max:40'],
             'km' => ['required', 'numeric', 'min:1'],
+            'petrol_station' => ['required', 'max:40'],
             'fuel' => ['required', 'numeric', 'min:0'],
             'cost' => ['required', 'numeric', 'min:0'],
             'plate' => ['required', 'exists:trucks,plate'],
@@ -310,6 +322,7 @@ class APITripsController extends Controller
             'stops' => $stops,
             'km' => $km,
             'distance' => $request->km,
+            'petrol_station' => $request->petrol_station,
             'fuel' => $request->fuel,
             'cost' => $request->cost,
             'note' => $request->note,
@@ -335,8 +348,11 @@ class APITripsController extends Controller
                 $truck = Truck::where('companyId', '=', auth('admin')->user()->companyId)
                     ->where('plate', $trip->plate)
                     ->first();
-                $truck->km -= $trip->distance;
-                $truck->save();
+
+                if ($truck != NULL) {
+                    $truck->km -= $trip->distance;
+                    $truck->save();
+                }
 
                 // AGGIORNAMENTO MANUTENZIONI
 
@@ -350,7 +366,6 @@ class APITripsController extends Controller
                 }
             } else {
                 $nextTrip->distance += $trip->distance;
-
                 $nextTrip->save();
             }
 
@@ -360,13 +375,53 @@ class APITripsController extends Controller
                 $semi = Truck::where('companyId', '=', auth('admin')->user()->companyId)
                     ->where('plate', $trip->plate_s)
                     ->first();
-                $semi->km -= $trip->distance;
-                $semi->save();
+
+                if ($semi != NULL) {
+                    $semi->km -= $trip->distance;
+                    $semi->save();
+                }
             }
         }
 
         Trip::destroy($request->trips);
 
         return response()->json(['success' => count($request->trips) . __(' trip/s successfully deleted!')]);
+    }
+
+    public function export(Request $request)
+    {
+        $month = $request->month;
+        $year = $request->year;
+
+        $giorniDelMese = 31;
+
+        $viaggi = Trip::select('user_email')
+            ->distinct('user_email')
+            ->where('companyId', auth('admin')->user()->companyId)
+            ->whereMonth('date', $month)
+            ->whereYear('date', $year)
+            ->get();
+
+        if ($viaggi->count() == 0) {
+            return redirect(route('admin.trips'))->with('error', "Nessun autista ha lavorato il mese selezionato");
+        };
+
+        return Excel::download(new WorkingDaysExport($month, $year, $giorniDelMese), __('workingDays_') . $month . '_' . $year . '.xlsx');
+    }
+
+    public function exportUser(Request $request)
+    {
+        $user = User::findOrFail($request->id);
+        $viaggi = Trip::where('user_email', $user->email)
+            ->where('date', '>=', $request->from)
+            ->where('date', '<=', $request->to)
+            ->get();
+
+
+        if ($viaggi->count() == 0) {
+            return redirect(route('admin.trips'))->with('error', "L'autista non ha lavorato in questo periodo");
+        };
+
+        return Excel::download(new UserWorkingDaysExport($user, $request->from, $request->to), __('workingDays_') . $user->name . '_' . '.xlsx');
     }
 }

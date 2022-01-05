@@ -3,7 +3,8 @@
 @section('styles')
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.bootstrap4.min.css">
-<link type="text/css" href="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" rel="stylesheet" />
+<link type="text/css" href="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css"
+    rel="stylesheet" />
 @endsection
 
 @section('content')
@@ -11,12 +12,13 @@
     <div class="card">
         <div class="card-body">
             @include('multiauth::message')
-            <form method="post" enctype="multipart/form-data" action="">
+            <!--<form method="post" enctype="multipart/form-data" action="">
                 @csrf
                 <div class="form-group">
                     <table class="table">
                         <tr>
-                            <td width="40%" align="right"><label>@lang('Select File for Upload (limit of 1000 records, formats XLS and XLSX)') DA AGGIUNGERE REGOLE PASSWORD</label></td>
+                            <td width="40%" align="right"><label>@lang('Select File for Upload (limit of 1000 records,
+                                    formats XLS and XLSX)') DA AGGIUNGERE REGOLE PASSWORD</label></td>
                             <td width="30">
                                 <input type="file" name="import_file" required />
                             </td>
@@ -31,13 +33,32 @@
                         </tr>
                     </table>
                 </div>
-            </form>
+            </form>-->
             <div class="row justify-content-between page-row">
                 <div class="col-sm">
-                    <button id="btn-add" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add">
+                    <div class="alert alert-warning" role="alert">
+                        @lang('Il conteggio dei KM totali dei semirimorchi e rimorchi è SOLO INDICATIVO.')
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-between page-row">
+                <div class="col-sm">
+                    <div id="delete-alert" class="alert alert-danger hidden" role="alert">
+                        @lang('ATTENZIONE! Quando si elimina una veicolo, vengono cancellate solo le manutenzioni ancora
+                        da effettuare ad esso collegate. Nel caso si voglia cancellare anche i viaggi e le manutenzioni
+                        già effettuate sarà necessario farlo nelle apposite sezioni. Inoltre non sarà più possibile
+                        modificare i parametri di questi viaggi.')
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-between page-row">
+                <div class="col-sm">
+                    <button id="btn-add" type="button" class="btn btn-primary" data-toggle="modal"
+                        data-target="#modal-add">
                         @lang('New')
                     </button>
-                    <button id="btn-edit" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modal-add" disabled>
+                    <button id="btn-edit" type="button" class="btn btn-secondary" data-toggle="modal"
+                        data-target="#modal-add" disabled>
                         @lang('Edit')
                     </button>
                     <button type="button" class="btn btn-danger" id="btn-delete" disabled>
@@ -52,9 +73,9 @@
                         <label id="search_type">@lang('Search for type'):</label>
                         <select class="form-control select-input-type" data-column="3">
                             <option default value="">@lang('All')</option>
-                            <option value="semirimorchio">@lang('Semirimorchio')</option>
-                            <option value="trattore">@lang('Trattore')</option>
-                            <option value="motrice">@lang('Motrice')</option>
+                            <option value="0">@lang('Tractor')</option>
+                            <option value="1">@lang('Motrice/autocarro')</option>
+                            <option value="2">@lang('Semi-trailer/trailer')</option>
                         </select>
                         <label id="search_group">@lang('Search for group'):</label>
                         <select class="form-control select-input-group" data-column="8">
@@ -74,6 +95,7 @@
                             <th></th>
                             <th>@lang('Plate')</th>
                             <th>@lang('Type')</th>
+                            <th>@lang('Chassis')</th>
                             <th>@lang('Brand')</th>
                             <th>@lang('Model')</th>
                             <th>@lang('Km')</th>
@@ -93,7 +115,8 @@
 
 <!-- FINESTRE MODAL -->
 
-<div class="modal fade" id="modal-add" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="modal-label-add" aria-hidden="true">
+<div class="modal fade" id="modal-add" data-backdrop="static" data-keyboard="false" tabindex="-1"
+    aria-labelledby="modal-label-add" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -111,10 +134,14 @@
                         <label for="type">@lang('Type')</label>
                         <select name="type" id="type" class="custom-select" required>
                             <option value=""></option>
-                            <option value="semirimorchio">@lang('Semirimorchio')</option>
-                            <option value="trattore">@lang('Trattore')</option>
-                            <option value="motrice">@lang('Motrice')</option>
+                            <option value="0">@lang('Tractor')</option>
+                            <option value="1">@lang('Truck')</option>
+                            <option value="2">@lang('Semi-trailer/trailer')</option>
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="chassis">@lang('Chassis') (@lang('Optional'))</label>
+                        <input type="text" id="chassis" class="form-control" name="chassis">
                     </div>
                     <div class="form-group">
                         <label for="brand">@lang('Brand') (@lang('Optional'))</label>
@@ -129,7 +156,7 @@
                         <input type="number" step="0.01" class="form-control" id="km" name="km" required>
                     </div>
                     <div class="form-group">
-                        <label for="description">@lang('Description (optional)')</label>
+                        <label for="description">@lang('Description') (@lang('Optional'))</label>
                         <input type="text" class="form-control" id="description" maxlength="150" name="description">
                         <small>@lang('Max 50 characters.')</small>
                     </div>
@@ -162,9 +189,11 @@
                     </div>
                     <div id="form-result"></div>
                     <div class="modal-footer">
-                        <button id="btn-close" type="button" class="btn btn-secondary" data-dismiss="modal">@lang('Close')</button>
+                        <button id="btn-close" type="button" class="btn btn-secondary"
+                            data-dismiss="modal">@lang('Close')</button>
                         <button type="submit" class="btn btn-primary submit">
-                            <span class="spinner-border spinner-border-sm loader-submit hidden" role="status" aria-hidden="true"></span>
+                            <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
+                                aria-hidden="true"></span>
                             @lang('Submit')
                         </button>
                     </div>
@@ -177,18 +206,27 @@
 @endsection
 
 @section('scripts')
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js" defer></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"
+    defer></script>
 
-<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js" defer></script>
+<script type="text/javascript" language="javascript"
+    src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js" defer></script>
 
-<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.6.4/js/dataTables.buttons.min.js" defer></script>
-<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.bootstrap4.min.js" defer></script>
+<script type="text/javascript" language="javascript"
+    src="https://cdn.datatables.net/buttons/1.6.4/js/dataTables.buttons.min.js" defer></script>
+<script type="text/javascript" language="javascript"
+    src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.bootstrap4.min.js" defer></script>
 
-<script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js" defer></script>
-<script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js" defer></script>
-<script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js" defer></script>
-<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.html5.min.js" defer></script>
-<script type="text/javascript" src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js" defer></script>
+<script type="text/javascript" language="javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js" defer></script>
+<script type="text/javascript" language="javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js" defer></script>
+<script type="text/javascript" language="javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js" defer></script>
+<script type="text/javascript" language="javascript"
+    src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.html5.min.js" defer></script>
+<script type="text/javascript"
+    src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js" defer></script>
 
 @switch(App::getLocale())
 @case('it')
@@ -224,7 +262,7 @@
         var today = new Date();
         var deadline;
         today.setDate(today.getDate() + 16);
-        var html = '<table class="table table-sm table-borderless table-exp"><thead>' +
+        var html = '<table class="table table-sm table-borderless table-exp"><thead class="thead-light">' +
             '<tr> <th scope = "col" > @lang("Name")' +
             '</th> <th scope = "col" > @lang("Deadline")' +
             '</th> <th scope = "col" > @lang("Description") </th> </thead>' +
@@ -332,7 +370,28 @@
                 },
                 {
                     data: 'type',
-                    name: 'type'
+                    "render": function(data, type, row) {
+                        switch (data) {
+                            case 0:
+                                return "@lang('Tractor')"
+                                break;
+                        
+                            case 1:
+                                return "@lang('Truck')"
+                                break;
+
+                            case 2:
+                                return "@lang('Semi-trailer/trailer')"
+                                break;
+
+                            default:
+                                break;
+                        }
+                    },
+                },
+                {
+                    data: 'chassis',
+                    name: 'chassis'
                 },
                 {
                     data: 'brand',
@@ -344,7 +403,9 @@
                 },
                 {
                     data: 'km',
-                    name: 'km'
+                    "render": function(data, type, row) {
+                        return new Intl.NumberFormat('de-DE').format(data)
+                    },
                 },
                 {
                     data: 'description',
@@ -368,7 +429,7 @@
                     "searchable": false,
                     'width': '1%'
                 }, {
-                    'targets': 7,
+                    'targets': 8,
                     "orderable": false,
                 }
             ],
@@ -417,14 +478,17 @@
         $('#datatable').change(function() {
             switch ((table.column(0).checkboxes.selected().count())) {
                 case 0:
+                    $('#delete-alert').fadeOut();
                     $('#btn-delete').prop('disabled', true);
                     $('#btn-edit').prop('disabled', true);
                     break;
                 case 1:
+                    $('#delete-alert').fadeIn("slow");
                     $('#btn-delete').prop('disabled', false);
                     $('#btn-edit').prop('disabled', false);
                     break;
                 default:
+                    $('#delete-alert').fadeIn("slow");
                     $('#btn-delete').prop('disabled', false);
                     $('#btn-edit').prop('disabled', true);
                     break;
@@ -449,7 +513,7 @@
             html += '<label>@lang("Description")</label>';
             html += '<input type="text" id="description_' + id + '" class="form-control" name="description_' + id + '">'
             html += ' <label>@lang("Deadline")</label>';
-            html += '<input type="date" id="deadline_' + id + '" class="form-control" name="deadline_' + id + '"' + ` min="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" required>`
+            html += '<input type="date" id="deadline_' + id + '" class="form-control" name="deadline_' + id + '"' + ` required>`
             html += '</div>'
 
             $('#expirations-row').before(html);
@@ -486,6 +550,7 @@
             if (form.attr('id') == 'addTruck') {
                 url = '{{ route("admin.trucks.store") }}';
             } else {
+                if(!confirm("@lang('Are you sure?')")) return;
                 url = '{{ route("admin.trucks.edit") }}';
             };
 
@@ -504,6 +569,7 @@
                 success: function(data) {
                     var html = '';
                     if (data.errors) {
+                        $('#delete-alert').fadeOut();
                         html = '<div class="alert alert-danger">';
                         for (var count = 0; count < data.errors.length; count++) {
                             html += '<p>' + data.errors[count] + '</p>';
@@ -511,6 +577,7 @@
                         html += '</div>';
                     }
                     if (data.success) {
+                        $('#delete-alert').fadeOut();
                         html = '<div class="alert alert-success">' + data.success + '</div>';
                         if ($('#addTruck').length != 0) {
                             $('#addTruck')[0].reset(); //PER CONTROLLARE SE SONO IN EDIT O IN ADD E EVITARE ERRORI DEL JAVASCRIPT
@@ -534,6 +601,7 @@
         });
 
         $('#btn-delete').on('click', function(e) {
+            if(!confirm("@lang('ATTENZIONE! Quando si elimina una veicolo, vengono cancellate solo le manutenzioni ancora da effettuare ad esso collegate. Nel caso si voglia cancellare anche i viaggi e le manutenzioni già effettuate sarà necessario farlo nelle apposite sezioni. Inoltre non sarà più possibile modificare i parametri di questi viaggi.')")) return;
 
             var rows_selected = table.column(0).checkboxes.selected();
             var id = [];
@@ -561,6 +629,7 @@
                         scrollTop: 0
                     }, 'fast');
                     html = '<div class="alert alert-success">' + data.success + '</div>';
+                    $('#delete-alert').fadeOut();
                     $('#message-success').html(html);
                     $('#message-success').delay(4000).fadeOut();
                 }
@@ -569,7 +638,7 @@
 
         $('#btn-edit').on('click', function(e) {
 
-            $('#modal-label-add').text('Edit truck');
+            $('#modal-label-add').text("@lang('Edit truck')");
             $('#addTruck').prop('id', 'editTruck');
 
             var rows_selected = table.column(0).checkboxes.selected();
@@ -594,7 +663,7 @@
                     html += '<label>@lang("Description")</label>';
                     html += '<input type="text" id="description_' + id + '" class="form-control" name="description_' + id + '">'
                     html += ' <label>@lang("Deadline")</label>';
-                    html += '<input type="date" id="deadline_' + id + '" class="form-control" name="deadline_' + id + '"' + ` min="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" required>`
+                    html += '<input type="date" id="deadline_' + id + '" class="form-control" name="deadline_' + id + '"' + ` required>`
                     html += '</div>'
 
                     $('#expirations-row').before(html);
@@ -612,7 +681,7 @@
 
         $('#btn-add').on('click', function(e) {
 
-            $('#modal-label-add').text('Add truck');
+            $('#modal-label-add').text("@lang('Add truck')");
             $('#editTruck').attr('id', 'addTruck');
 
         });

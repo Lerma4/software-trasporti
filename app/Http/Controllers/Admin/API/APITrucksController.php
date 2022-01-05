@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Expiration;
+use App\Models\MaintAlreadyDone;
+use App\Models\MaintStillToDo;
+use App\Models\Trip;
 use App\Models\Truck;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -31,7 +34,7 @@ class APITrucksController extends Controller
             return $query->where('group', $group);
         })
             ->when($type != null && $type != '', function ($query) use ($type) {
-                return $query->where('type', $type);
+                return $query->where('type', 'like', $type . '%');
             })
             ->where('companyId', '=', auth('admin')->user()->companyId)
             ->with('expirations');
@@ -61,7 +64,7 @@ class APITrucksController extends Controller
             return $query->where('group', $group);
         })
             ->when($type != NULL && $type != '', function ($query) use ($type) {
-                return $query->where('type', $type);
+                return $query->where('type', 'like', $type . '%');
             })
             ->where('companyId', '=', auth('admin')->user()->companyId)
             ->whereIn('id', $truck_id)
@@ -96,6 +99,7 @@ class APITrucksController extends Controller
             ],
             'type' => ['required', 'max:30'],
             'km' => ['required'],
+            'chassis' => ['max:30'],
             'brand' => ['max:30'],
             'model' => ['max:30'],
             'group' => ['exists:groups,name', 'nullable'],
@@ -128,6 +132,7 @@ class APITrucksController extends Controller
         $truck = Truck::create([
             'plate' => $request->plate,
             'type' => $request->type,
+            'chassis' => $request->chassis,
             'brand' => $request->brand,
             'model' => $request->model,
             'km' => $request->km,
@@ -195,12 +200,14 @@ class APITrucksController extends Controller
                 ->json(['errors' => $validator->errors()->all()]);
         }
 
-
         $truck = Truck::findOrFail($request->id_truck);
+
+        $old_truck = $truck->plate;
 
         $truck->update([
             'plate' => $request->plate,
             'type' => $request->type,
+            'chassis' => $request->chassis,
             'brand' => $request->brand,
             'model' => $request->model,
             'km' => $request->km,
@@ -226,6 +233,30 @@ class APITrucksController extends Controller
             $i++;
         }
 
+        //aggiorno manutenzioni e viaggi
+
+        if ($old_truck != $request->plate) {
+            MaintStillToDo::where('plate', $old_truck)
+                ->update([
+                    'plate' => $request->plate,
+                ]);
+
+            MaintAlreadyDone::where('plate', $old_truck)
+                ->update([
+                    'plate' => $request->plate,
+                ]);
+
+            Trip::where('plate', $old_truck)
+                ->update([
+                    'plate' => $request->plate,
+                ]);
+
+            Trip::where('plate_s', $old_truck)
+                ->update([
+                    'plate_s' => $request->plate,
+                ]);
+        }
+
         return response()->json(['success' => __('Truck successfully updated!')]);
     }
 
@@ -249,8 +280,17 @@ class APITrucksController extends Controller
      */
     public function destroy(Request $request)
     {
+        $trucks_plates = [];
+        $trucks = Truck::whereIn('id', $request->trucks)->get();
+        foreach ($trucks as $truck) {
+            array_push($trucks_plates, $truck->plate);
+        };
+
         Truck::destroy($request->trucks);
         Expiration::whereIn('truck_id', $request->trucks)->delete();
+        MaintStillToDo::where('companyId', auth('admin')->user()->companyId)
+            ->whereIn('plate', $trucks_plates)
+            ->delete();
 
         return response()->json(['success' => count($request->trucks) . __(' record/s successfully deleted!')]);
     }

@@ -24,16 +24,6 @@ class CreateCrashesTable extends Migration
             $table->bigInteger('companyId');
             $table->timestamps();
         });
-
-        Schema::create('crashes_photos', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('crash_id')
-                ->nullable()
-                ->constrained()
-                ->onDelete('cascade');
-            $table->string('filename');
-            $table->timestamps();
-        });
     }
 
     /**

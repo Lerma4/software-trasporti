@@ -166,7 +166,7 @@
                     </div>
 
                     <div class="form-group">
-                        <input id="date" type="date" class="form-control" name="date"
+                        <input id="date_edit" type="date" class="form-control" name="date"
                             max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" placeholder='@lang("Date")' required>
                     </div>
 
@@ -246,6 +246,18 @@
 @endswitch
 
 <script>
+    function formatData(date) {
+        var dateAr = date.split('-');
+        var newDate = dateAr[2] + '-' + dateAr[1] + '-' + dateAr[0];
+        return newDate;
+    }
+
+    function formatInternational(date) {
+        var dateAr = date.split('-');
+        var newDate = dateAr[2] + '-' + dateAr[1] + '-' + dateAr[0];
+        return newDate;
+    }
+
     $(document).ready(function() {
         // FADE OUT DEI MESSAGGI DAI CONTROLLER
 
@@ -298,14 +310,27 @@
                     "render": function(data, type, row) {
                         var html = "";
 
-                        html += `<a href="{{ route('api.crash.download') }}/` +
-                            data + `"` +
-                            ` class="btn btn-secondary btn-sm btn-download">` +
-                            `<i class="fas fa-file-download"></i></a>`;
+                        if (row.read == true) {
+                            html += `<a href="{{ route('api.crash.download') }}/` +
+                                data + `"` +
+                                ` class="btn btn-secondary btn-sm btn-download">` +
+                                `<i class="fas fa-file-download"></i></a>`;
+                        } else {
+                            html += `<a href="{{ route('api.crash.download') }}/` +
+                                data + `"` +
+                                ` class="btn btn-secondary btn-sm btn-download">` +
+                                `<i class="fas fa-file-download"></i></a>`+
+                                '<i title="@lang('Still to be downloaded')" class="fas fa-exclamation-triangle fa-lg alert-expiration"></i>';
+                        }
 
                         return html;
                     },
                 },
+                {
+                    data: 'read',
+                    name: 'read',
+                    visible: false
+                }
             ],
             "columnDefs": [
             {
@@ -323,6 +348,15 @@
                 "url": language,
             },
             "responsive": true,
+        });
+
+        // RIAGGIORNO LA TABELLA CON 1 SECONDO DI RITARDO PER VEDERE GLI ALERT AGGIORNATI
+        $(document.body).on('click', '.btn-download' ,function(){
+            setTimeout(
+                function() 
+                {
+                    $('#datatable').DataTable().ajax.reload();
+                }, 1000);
         });
 
         // GESTIONE BUTTON EDIT E DELETE
@@ -353,6 +387,7 @@
         // DELETE DOCUMENT
 
         $('#btn-delete').on('click', function(e) {
+            if(!confirm("@lang('Are you sure?')")) return;
 
             var rows_selected = table.column(0).checkboxes.selected();
             var id = [];
@@ -390,27 +425,26 @@
         // EDIT DOCUMENT
 
         $('#btn-edit').on('click', function(e) {
-
+        
             var rows_selected = table.column(0).checkboxes.selected();
 
             if (rows_selected.length == 1) {
                 $('#id_crash').val(rows_selected[0]);
                 var row = table.row('#' + rows_selected[0]).data();
 
-                var date = new Date(row['date']);
-                var day = ("0" + date.getMonth() + 1).slice(-2); // USO IL MESE AL POSTO DEL GIORNO PERCHé DATE SI ASPETTA UNA DATA AMERICANA INVECE GLI DO UNA DATA IN FORMATO ITALIANO
-                var month = ("0" + (date.getDate())).slice(-2);
-                var format_date = date.getFullYear()+"-"+(month)+"-"+(day);
+                var date = formatData(row['date']);
 
                 $('#email').val(row['email']);
                 $('#plate').val(row['plate']);
                 $('#plate_s').val(row['plate_s']);
-                $('#date').val(format_date);
+                $('#date_edit').val(date);
             }
 
         });
 
         $('#edit-document').on('submit', function(event) {
+            if(!confirm("@lang('Are you sure?')")) return;
+
             event.preventDefault();
             var form = $(this).closest('form');
 

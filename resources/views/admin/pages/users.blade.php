@@ -12,7 +12,7 @@
     <div class="card">
         <div class="card-body">
             @include('multiauth::message')
-            <form method="post" enctype="multipart/form-data" action="{{ route('admin.users.importExcel') }}">
+            <!--<form method="post" enctype="multipart/form-data" action="{{ route('admin.users.importExcel') }}">
                 @csrf
                 <div class="form-group">
                     <table class="table">
@@ -33,7 +33,7 @@
                         </tr>
                     </table>
                 </div>
-            </form>
+            </form>-->
             <div class="row justify-content-between page-row">
                 <div class="col-sm">
                     <button id="btn-add" type="button" class="btn btn-primary" data-toggle="modal"
@@ -111,8 +111,8 @@
                         <span class="invalid-feedback" role="alert">
                             <strong id="password-error"></strong>
                         </span>
-                        <small>@lang('The password must have at least 8 characters, including an uppercase letter, a
-                            lowercase letter and a number.')</small>
+                        <small>@lang('The password must have at least 8 characters, including an uppercase letter, a')
+                            @lang('lowercase letter and a number.')</small>
                     </div>
                     <div class="form-group">
                         <label for="password_confirm">@lang('Conferma Password')</label>
@@ -496,6 +496,7 @@
             if (form.attr('id') == 'addUser') {
                 url = '{{ route("admin.users.store") }}';
             } else {
+                if(!confirm("@lang('Are you sure?')")) return;
                 url = '{{ route("admin.users.edit") }}';
             };
 
@@ -544,6 +545,7 @@
         });
 
         $('#btn-delete').on('click', function(e) {
+            if(!confirm("@lang('Are you sure?')")) return;
 
             var rows_selected = table.column(0).checkboxes.selected();
             var id = [];
@@ -580,7 +582,7 @@
 
         $('#btn-edit').on('click', function(e) {
 
-            $('#modal-label-add').text('Edit user');
+            $('#modal-label-add').text("@lang('Edit user')");
             $('#addUser').prop('id', 'editUser');
 
             $('#password').prop('required', false);

@@ -19,11 +19,11 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
 
 // HOME (LOAD TRIP)
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::post('/home/autocomplete', [App\Http\Controllers\HomeController::class, 'autocomplete'])->name('autocomplete');
-Route::post('/home/tripmerci', [App\Http\Controllers\HomeController::class, 'tripMerci'])->name('tripmerci');
-Route::post('/home/tripofficina', [App\Http\Controllers\HomeController::class, 'tripOfficina'])->name('tripofficina');
-Route::post('/home/tripvuoto', [App\Http\Controllers\HomeController::class, 'tripVuoto'])->name('tripvuoto');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::post('/autocomplete', [App\Http\Controllers\HomeController::class, 'autocomplete'])->name('autocomplete');
+Route::post('/tripmerci', [App\Http\Controllers\HomeController::class, 'tripMerci'])->name('tripmerci');
+Route::post('/tripofficina', [App\Http\Controllers\HomeController::class, 'tripOfficina'])->name('tripofficina');
+Route::post('/tripvuoto', [App\Http\Controllers\HomeController::class, 'tripVuoto'])->name('tripvuoto');
 
 // DOCUMENT
 
@@ -110,6 +110,9 @@ Route::post('/admin/APITrips/trips/autocompletecity', [\App\Http\Controllers\Adm
 Route::post('/admin/APITrips/trips/store', [\App\Http\Controllers\Admin\API\APITripsController::class, 'store'])->name('api.trips.store');
 Route::post('/admin/APITrips/trips/delete', [\App\Http\Controllers\Admin\API\APITripsController::class, 'delete'])->name('api.trips.delete');
 Route::post('/admin/APITrips/trips/edit', [\App\Http\Controllers\Admin\API\APITripsController::class, 'edit'])->name('api.trips.edit');
+
+Route::post('/admin/APITrips/trips/export', [\App\Http\Controllers\Admin\API\APITripsController::class, 'export'])->name('api.trips.export');
+Route::post('/admin/APITrips/trips/exportUser', [\App\Http\Controllers\Admin\API\APITripsController::class, 'exportUser'])->name('api.trips.exportUser');
 
 // DOCUMENTS
 

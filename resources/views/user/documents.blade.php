@@ -217,7 +217,12 @@
                         html += `<a href="{{ route('document.download') }}/` +
                         data + `"` +
                         ` class="btn btn-secondary btn-sm btn-download">` +
-                        `<i class="fas fa-file-download"></i></a>`;
+                        `<i class="fas fa-file-download"></i>` +
+                        '</a>';
+
+                        if (row.read == false) {
+                            html += '<i class="fas fa-exclamation-triangle fa-lg alert-expiration"></i>';
+                        }
                         
                         return html;
                     },
@@ -229,6 +234,11 @@
                 {
                     data: 'created_at',
                     name: 'created_at'
+                },
+                {
+                    data: 'read',
+                    name: 'read',
+                    visible: false
                 }
             ],
             "columnDefs": [{
@@ -239,6 +249,14 @@
                 "url": language,
             },
             "responsive": true,
+        });
+
+        $(document.body).on('click', '.btn-download' ,function(){
+            setTimeout(
+                function() 
+                {
+                    $('#datatable').DataTable().ajax.reload();
+                }, 1000);
         });
     });
 </script>

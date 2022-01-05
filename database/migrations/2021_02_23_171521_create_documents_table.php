@@ -22,16 +22,6 @@ class CreateDocumentsTable extends Migration
             $table->bigInteger('companyId');
             $table->timestamps();
         });
-
-        Schema::create('documents_files', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('document_id')
-                ->nullable()
-                ->constrained()
-                ->onDelete('cascade');
-            $table->string('filename');
-            $table->timestamps();
-        });
     }
 
     /**

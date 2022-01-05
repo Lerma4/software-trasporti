@@ -19,13 +19,13 @@ class CrashController extends Controller
         $plates = Truck::select('plate', 'km')
             ->where('companyId', '=', auth('admin')->user()->companyId)
             ->where(function ($q) {
-                $q->where('type', 'motrice')->orWhere('type', 'trattore');
+                $q->where('type', 'like', 'motrice%')->orWhere('type', 'trattore');
             })
             ->orderBy('plate', 'asc')
             ->get();
 
         $plates_semi = Truck::where('companyId', '=', auth('admin')->user()->companyId)
-            ->where('type', 'semirimorchio')
+            ->where('type', 'like', 'semirimorchio%')
             ->orderBy('plate', 'asc')
             ->get('plate');
 

@@ -19,7 +19,8 @@ class Crash extends Model implements HasMedia
         'plate',
         'plate_s',
         'description',
-        'companyId'
+        'companyId',
+        'read'
     ];
 
     protected $casts = [

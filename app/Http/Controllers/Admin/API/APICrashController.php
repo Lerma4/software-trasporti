@@ -24,7 +24,7 @@ class APICrashController extends Controller
     public function getCrashes()
     {
         $document = Crash::where('companyId', '=', auth('admin')->user()->companyId)
-            ->select('name', 'email', 'name', 'date', 'id', 'plate', 'plate_s', 'description');
+            ->select('name', 'email', 'name', 'date', 'id', 'plate', 'plate_s', 'description', 'read');
 
         return DataTables::eloquent($document)
             ->setRowId('id')
@@ -34,6 +34,9 @@ class APICrashController extends Controller
     public function download($id)
     {
         $doc = Crash::find($id);
+
+        $doc->read = true;
+        $doc->save();
 
         $media = Media::where('model_type', 'App\Models\Crash')
             ->where('model_id', $id)

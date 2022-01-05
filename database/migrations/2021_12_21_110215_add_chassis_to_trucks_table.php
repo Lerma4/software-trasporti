@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddTypeToTrucksTable extends Migration
+class AddChassisToTrucksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,7 @@ class AddTypeToTrucksTable extends Migration
     public function up()
     {
         Schema::table('trucks', function (Blueprint $table) {
-            $table->tinyInteger('type');
-            $table->text('description')->nullable();
+            $table->string('chassis')->nullable();
         });
     }
 
@@ -27,8 +26,7 @@ class AddTypeToTrucksTable extends Migration
     public function down()
     {
         Schema::table('trucks', function (Blueprint $table) {
-            $table->dropColumn('type');
-            $table->dropColumn('description');
+            $table->dropColumn('chassis');
         });
     }
 }
