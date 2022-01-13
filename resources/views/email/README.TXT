@@ -1,0 +1,1 @@
+ricordarsi SEMPRE di disabilitare la formattazione automatica quando si modificano le mail, se no smette di funzionare la traduzione

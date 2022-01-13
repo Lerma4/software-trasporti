@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\CheckExpirationsJob;
 use App\Models\Truck;
 use App\Models\User;
+use Bitfumes\Multiauth\Model\Admin;
 use Illuminate\Http\Request;
 
 class TripsController extends Controller

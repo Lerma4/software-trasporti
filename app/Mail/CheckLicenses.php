@@ -2,25 +2,27 @@
 
 namespace App\Mail;
 
+use App\Models\Expiration;
+use App\Models\Truck;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class CreationUserEmail extends Mailable
+class CheckLicenses extends Mailable
 {
     use Queueable, SerializesModels;
-    protected $password, $company;
+    protected $licenses;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($password, $company)
+    public function __construct($licenses)
     {
-        $this->password = $password;
-        $this->company = $company;
+        $this->licenses = $licenses;
     }
 
     /**
@@ -30,11 +32,10 @@ class CreationUserEmail extends Mailable
      */
     public function build()
     {
-        return $this->subject(__('Welcome in ') . config('app.name'))
-            ->view('email.user')
+        return $this->subject(__('Expiring licences'))
+            ->view('email.licenses')
             ->with([
-                'password' => $this->password,
-                'company' => $this->company
+                'licenses' => $this->licenses
             ]);
     }
 }

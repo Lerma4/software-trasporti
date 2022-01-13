@@ -28,7 +28,9 @@
                 <a class="navbar-brand" href="{{ route('admin.home') }}">
                     {{ config('app.name', 'Laravel') }} {{ ucfirst(config('multiauth.prefix')) }}
                 </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -42,12 +44,15 @@
                     <ul class="navbar-nav ml-auto">
                         @if(count(config('app.languages')) > 1)
                         <li class="nav-item dropdown d-md-down-none">
-                            <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                                aria-expanded="false">
                                 {{ strtoupper(app()->getLocale()) }}
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
                                 @foreach(config('app.languages') as $langLocale => $langName)
-                                <a class="dropdown-item" href="{{ url()->current() }}?change_language={{ $langLocale }}">{{ strtoupper($langLocale) }} ({{ $langName }})</a>
+                                <a class="dropdown-item"
+                                    href="{{ url()->current() }}?change_language={{ $langLocale }}">{{
+                                    strtoupper($langLocale) }} ({{ $langName }})</a>
                                 @endforeach
                             </div>
                         </li>
@@ -55,12 +60,12 @@
                         <!-- Authentication Links -->
                         @guest('admin')
                         <li class="nav-item">
-                            <a class="nav-link" href="{{route('admin.login')}}">{{ ucfirst(config('multiauth.prefix'))
-                                }} Login</a>
+                            <a class="nav-link" href="{{route('login')}}">@lang('User Side')</a>
                         </li>
                         @else
                         <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 {{ auth('admin')->user()->name }} <span class="caret"></span>
                             </a>
 
@@ -77,7 +82,8 @@
                                                      document.getElementById('logout-form').submit();">
                                     {{ __('Logout') }}
                                 </a>
-                                <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+                                <form id="logout-form" action="{{ route('admin.logout') }}" method="POST"
+                                    style="display: none;">
                                     @csrf
                                 </form>
                             </div>

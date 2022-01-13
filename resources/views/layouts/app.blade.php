@@ -46,6 +46,7 @@
             <ul class="c-header-nav mfs-auto">
                 <li class="c-header-nav-item dropdown">
                     <div class="btn-group dropleft">
+                        @if (!Auth::guest())
                         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                             <i class="far fa-bell"></i>
                             @php
@@ -67,6 +68,7 @@
                             <p>@lang('No notifications')</p>
                             @endif
                         </div>
+                        @endif
                     </div>
                 </li>
                 <li class="c-header-nav-item px-3 c-d-legacy-none">

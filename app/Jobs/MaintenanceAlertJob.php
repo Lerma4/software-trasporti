@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Mail\CreationUserEmail;
+use App\Mail\MaintenanceAlert;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -11,21 +11,20 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Mail;
 
-class CreationUserEmailJob implements ShouldQueue
+class MaintenanceAlertJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    protected $send_mail, $password, $company;
+    protected $send_mail, $maints;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($send_mail, $password, $company)
+    public function __construct($send_mail, $maints)
     {
         $this->send_mail = $send_mail;
-        $this->password = $password;
-        $this->company = $company;
+        $this->maints = $maints;
     }
 
     /**
@@ -35,7 +34,7 @@ class CreationUserEmailJob implements ShouldQueue
      */
     public function handle()
     {
-        $email = new CreationUserEmail($this->password, $this->company);
+        $email = new MaintenanceAlert($this->maints);
         Mail::to($this->send_mail)->send($email);
     }
 }

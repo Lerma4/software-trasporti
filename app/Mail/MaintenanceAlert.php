@@ -7,20 +7,19 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class CreationUserEmail extends Mailable
+class MaintenanceAlert extends Mailable
 {
     use Queueable, SerializesModels;
-    protected $password, $company;
+    protected $maints;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($password, $company)
+    public function __construct($maints)
     {
-        $this->password = $password;
-        $this->company = $company;
+        $this->maints = $maints;
     }
 
     /**
@@ -30,11 +29,10 @@ class CreationUserEmail extends Mailable
      */
     public function build()
     {
-        return $this->subject(__('Welcome in ') . config('app.name'))
-            ->view('email.user')
+        return $this->subject(__('Upcoming maintenances'))
+            ->view('email.maintenance')
             ->with([
-                'password' => $this->password,
-                'company' => $this->company
+                'maints' => $this->maints,
             ]);
     }
 }

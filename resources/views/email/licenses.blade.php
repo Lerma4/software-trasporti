@@ -383,7 +383,7 @@
                                                                                         style="Margin:0;padding-bottom:5px;padding-left:30px;padding-right:30px;padding-top:35px">
                                                                                         <h1
                                                                                             style="Margin:0;line-height:58px;mso-line-height-rule:exactly;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;font-size:48px;font-style:normal;font-weight:normal;color:#111111">
-                                                                                            @lang('Welcome')!</h1>
+                                                                                            @lang('Hello')!</h1>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr style="border-collapse:collapse">
@@ -448,52 +448,18 @@
                                                                                         style="Margin:0;padding-top:20px;padding-bottom:20px;padding-left:30px;padding-right:30px">
                                                                                         <p
                                                                                             style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:18px;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;line-height:27px;color:#666666">
-                                                                                            @lang('To complete your registration, press the button below and log in with your email and the following password:')
+                                                                                            @lang('The following drivers have expiring licenses (less than 15 days to go):')
                                                                                             <br>
                                                                                             <br>
+                                                                                            @foreach ($licenses as $license)
                                                                                             <h4>
-                                                                                                {{ $password }}
+                                                                                                @lang('Driver'): {{ $license->user->name }} <br>
+                                                                                                @lang('Name'): {{ $license->name }} <br>
+                                                                                                @lang('Deadline'): {{ $license->deadline->format('d-m-Y') }}
                                                                                             </h4>
-                                                                                            <br>
-                                                                                            <br>
-                                                                                            @lang('The name of company is:')
-                                                                                            <br>
-                                                                                            <br>
-                                                                                            <h4>
-                                                                                                {{ $company }}
-                                                                                            </h4>
-                                                                                            <br>
+                                                                                            <hr>
+                                                                                            @endforeach
                                                                                         </p>
-                                                                                    </td>
-                                                                                </tr>
-                                                                                <tr style="border-collapse:collapse">
-                                                                                    <td align="center"
-                                                                                        style="Margin:0;padding-left:10px;padding-right:10px;padding-top:35px;padding-bottom:35px">
-                                                                                        <span class="es-button-border"
-                                                                                            style="border-style:solid;border-color:#2d3748;background:1px;border-width:1px;display:inline-block;border-radius:2px;width:auto"><a
-                                                                                                href="{{ url('/login') }}"
-                                                                                                class="es-button"
-                                                                                                target="_blank"
-                                                                                                style="mso-style-priority:100 !important;text-decoration:none;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:helvetica, 'helvetica neue', arial, verdana, sans-serif;font-size:20px;color:#FFFFFF;border-style:solid;border-color:#2d3748;border-width:15px 30px;display:inline-block;background:#2d3748;border-radius:2px;font-weight:normal;font-style:normal;line-height:24px;width:auto;text-align:center">
-                                                                                                @lang('PRESS HERE')</a></span>
-                                                                                    </td>
-                                                                                </tr>
-                                                                                <tr style="border-collapse:collapse">
-                                                                                    <td class="es-m-txt-l" align="left"
-                                                                                        style="padding:0;Margin:0;padding-top:20px;padding-left:30px;padding-right:30px">
-                                                                                        <p
-                                                                                            style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:18px;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;line-height:27px;color:#666666">
-                                                                                            @lang("If that doesn't work, use the following link in your browser:")</p>
-                                                                                    </td>
-                                                                                </tr>
-                                                                                <tr style="border-collapse:collapse">
-                                                                                    <td class="es-m-txt-l" align="left"
-                                                                                        style="padding:0;Margin:0;padding-top:20px;padding-left:30px;padding-right:30px">
-                                                                                        <a target="_blank"
-                                                                                            href="{{ url('/login') }}"
-                                                                                            style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;font-size:18px;text-decoration:underline;color:#2d3748">
-                                                                                            {{ url('/login') }}
-                                                                                        </a>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr style="border-collapse:collapse">

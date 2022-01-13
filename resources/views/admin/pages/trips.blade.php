@@ -25,26 +25,26 @@
             </div>
             <div class="row page-row">
                 <div class="col-sm">
-                    <form action="{{ route('api.trips.export') }}" method="POST">
+                    <form class="form-page-trips" action="{{ route('api.trips.export') }}" method="POST">
                         @csrf
                         <label>@lang('Esportazione giornate lavorative di tutti i dipendenti:')</label>
                         <br>
                         <br>
                         <div class="form-inline">
-                            <label>@lang('mese'):</label>
+                            <label>@lang('Month'):</label>
                             <input min="1" max="12" value="{{ Carbon\Carbon::now()->format('m') }}" type="number"
                                 class="form-control" name="month" required>
-                            <label>@lang('anno'):</label>
+                            <label>@lang('Year'):</label>
                             <input min="1900" max="9999" value="{{ Carbon\Carbon::now()->format('Y') }}" type="number"
                                 class="form-control" name="year" required>
-                            <button class="btn btn-primary" type="submit">@lang("Submit")</button>
+                            <button class="btn btn-primary btn-page-trips" type="submit">@lang("Submit")</button>
                         </div>
                     </form>
                 </div>
             </div>
             <div class="row page-row">
                 <div class="col-sm">
-                    <form action="{{ route('api.trips.exportUser') }}" method="POST">
+                    <form class="form-page-trips" action="{{ route('api.trips.exportUser') }}" method="POST">
                         @csrf
                         <label>@lang('Esportazione giornate lavorative di un dipendente:')</label>
                         <br>
@@ -66,7 +66,7 @@
                             <label>@lang('To'):</label>
                             <input value="{{ Carbon\Carbon::now()->format('Y-m-d') }}" type="date" class="form-control"
                                 name="to" required>
-                            <button class="btn btn-primary" type="submit">@lang("Submit")</button>
+                            <button class="btn btn-primary btn-page-trips" type="submit">@lang("Submit")</button>
                         </div>
                     </form>
                 </div>
@@ -114,7 +114,7 @@
                     </div>
                 </div>
                 <div class="col-sm-auto">
-                    <form>
+                    <form class="form-page-trips">
                         <div class="form-inline">
                             <label id="search_type">@lang('From'):</label>
                             <input type="date" class="form-control select-input-date-from" data-column="3">
@@ -145,14 +145,15 @@
                             <th>@lang("AdBlue")</th>
                             <th>@lang("AdBlue Costs")</th>
                             <th>@lang("Total Costs")</th>
-                            <!--<th>@lang("Plate Semirimorchio")</th>
+                            <th>@lang("Email")</th>
+                            <th>@lang("Trailer's plate")</th>
                             <th>@lang("Container")</th>
                             <th>@lang("Garage")</th>
                             <th>@lang("Stops")</th>
                             <th>@lang("Petrol station")</th>
                             <th>@lang("Truck's km")</th>
                             <th>@lang("Insert date")</th>
-                            <th>@lang("Notes")</th>-->
+                            <th>@lang("Notes")</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -819,7 +820,7 @@
 
         var html = '<table class="table table-sm table-borderless table-exp"><thead class="thead-light">' +
             '<tr> <th scope = "col" > @lang("Email")' +
-            '</th> <th scope = "col" > @lang("Targa semirimorchio")' +
+            `</th> <th scope = "col" > @lang("Trailer's plate")` +
             '</th> <th scope = "col" > @lang("Container")' +
             '</th> <th scope = "col" > @lang("Garage")' +
             '</th> <th scope = "col" > @lang("Stops") </th> </tr> </thead>' +

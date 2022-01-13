@@ -64,7 +64,9 @@
                 },
                 {
                     data: 'renew',
-                    name: 'renew'
+                    "render": function(data, type, row) {
+                        return new Intl.NumberFormat('de-DE').format(data)
+                    },
                 },
                 {
                     data: 'notes',

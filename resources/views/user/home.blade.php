@@ -65,9 +65,9 @@
                 <div class="form-group">
                     <label for="petrol_station">@lang('Luogo rifornimento'):</label>
                     <select name="petrol_station" class="form-control">
-                        <option selected value="not done">@lang('Not done')</option>
-                        <option value="petrol_station">@lang('Petrol station')</option>
-                        <option value="tank">@lang('Tank')</option>
+                        <option selected value="0">@lang('Not done')</option>
+                        <option value="1">@lang('Petrol station')</option>
+                        <option value="2">@lang('Tank')</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -138,9 +138,9 @@
                 <div class="form-group">
                     <label for="petrol_station">@lang('Luogo rifornimento'):</label>
                     <select name="petrol_station" class="form-control">
-                        <option selected value="not done">@lang('Not done')</option>
-                        <option value="petrol_station">@lang('Petrol station')</option>
-                        <option value="tank">@lang('Tank')</option>
+                        <option selected value="0">@lang('Not done')</option>
+                        <option value="1">@lang('Petrol station')</option>
+                        <option value="2">@lang('Tank')</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -203,9 +203,9 @@
                 <div class="form-group">
                     <label for="petrol_station">@lang('Luogo rifornimento'):</label>
                     <select name="petrol_station" class="form-control">
-                        <option selected value="not done">@lang('Not done')</option>
-                        <option value="petrol_station">@lang('Petrol station')</option>
-                        <option value="tank">@lang('Tank')</option>
+                        <option selected value="0">@lang('Not done')</option>
+                        <option value="1">@lang('Petrol station')</option>
+                        <option value="2">@lang('Tank')</option>
                     </select>
                 </div>
                 <div class="form-group">

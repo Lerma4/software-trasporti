@@ -11083,6 +11083,20 @@ a.text-dark:focus {
   text-align: center;
 }
 
+.btn-page-trips {
+  margin-left: 10px;
+}
+
+.form-page-trips input {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.form-page-trips select {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
 #officina {
   display: none;
 }

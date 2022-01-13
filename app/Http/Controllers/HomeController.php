@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\MaintenanceAlertJob;
+use App\Mail\MaintenanceAlert;
 use App\Models\City;
 use App\Models\MaintStillToDo;
 use App\Models\Trip;
 use App\Models\Truck;
+use Bitfumes\Multiauth\Model\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Mail;
 
 class HomeController extends Controller
 {
@@ -83,6 +87,7 @@ class HomeController extends Controller
 
         $maintenances = MaintStillToDo::where('companyId', '=', auth()->user()->companyId)
             ->where('plate', $request->plate)
+            ->orWhere('plate', $request->plate_s)
             ->get();
 
         $distance = $request->km - $truck[0]->km;
@@ -96,7 +101,7 @@ class HomeController extends Controller
             'start' => ['required', 'max:40'],
             'destination' => ['required', 'max:40'],
             'km' => ['required', 'numeric', 'min:0'],
-            'petrol_station' => ['required', 'max:40'],
+            'petrol_station' => ['required'],
             'fuel' => ['required', 'numeric', 'min:0'],
             'cost' => ['required', 'numeric', 'min:0'],
             'plate' => ['required', 'exists:trucks,plate'],
@@ -129,13 +134,13 @@ class HomeController extends Controller
         $truck[0]->km = $request->km;
         $truck[0]->save();
 
-        if ($truck_s[0] != NULL) {
-            $truck_s[0]->km += $distance;
-            $truck_s[0]->save();
+        if ($truck_s != NULL) {
+            $truck_s->km += $distance;
+            $truck_s->save();
         }
 
         foreach ($maintenances as $maint) {
-            $maint->km -= $request->km;
+            $maint->km -= $distance;
             $maint->save();
         }
 
@@ -172,6 +177,24 @@ class HomeController extends Controller
             'cost' => $request->cost,
             'note' => $request->note,
         ]);
+
+        // invio mail per controllo manutenzioni
+
+        $admin = Admin::where('companyId', auth()->user()->companyId)
+            ->first();
+
+        $maints = MaintStillToDo::where('companyId', auth()->user()->companyId)
+            ->where('km', '<', 1000)
+            ->where('mail', false)
+            ->get();
+
+        if (count($maints) > 0) {
+            dispatch(new MaintenanceAlertJob($admin->email, $maints));
+            foreach ($maints as $maint) {
+                $maint->mail = true;
+                $maint->save();
+            }
+        }
 
         return response()->json(['success' => [__('Trip successfully inserted!')]]);
     }
@@ -238,17 +261,16 @@ class HomeController extends Controller
 
         // AGGIORNAMENTO VEICOLI
 
-
         $truck[0]->km = $request->km;
         $truck[0]->save();
 
         if ($truck_s != NULL) {
-            $truck_s[0]->km += $distance;
-            $truck_s[0]->save();
+            $truck_s->km += $distance;
+            $truck_s->save();
         }
 
         foreach ($maintenances as $maint) {
-            $maint->km -= $request->km;
+            $maint->km -= $distance;
             $maint->save();
         }
 
@@ -270,6 +292,24 @@ class HomeController extends Controller
             'cost' => $request->cost,
             'note' => $request->note,
         ]);
+
+        // invio mail per controllo manutenzioni
+
+        $admin = Admin::where('companyId', auth()->user()->companyId)
+            ->first();
+
+        $maints = MaintStillToDo::where('companyId', auth()->user()->companyId)
+            ->where('km', '<', 1000)
+            ->where('mail', false)
+            ->get();
+
+        if (count($maints) > 0) {
+            dispatch(new MaintenanceAlertJob($admin->email, $maints));
+            foreach ($maints as $maint) {
+                $maint->mail = true;
+                $maint->save();
+            }
+        }
 
         return response()->json(['success' => [__('Trip successfully inserted!')]]);
     }
@@ -336,17 +376,16 @@ class HomeController extends Controller
 
         // AGGIORNAMENTO VEICOLI
 
-
         $truck[0]->km = $request->km;
         $truck[0]->save();
 
         if ($truck_s != NULL) {
-            $truck_s[0]->km += $distance;
-            $truck_s[0]->save();
+            $truck_s->km += $distance;
+            $truck_s->save();
         }
 
         foreach ($maintenances as $maint) {
-            $maint->km -= $request->km;
+            $maint->km -= $distance;
             $maint->save();
         }
 
@@ -367,6 +406,24 @@ class HomeController extends Controller
             'cost' => $request->cost,
             'note' => $request->note,
         ]);
+
+        // invio mail per controllo manutenzioni
+
+        $admin = Admin::where('companyId', auth()->user()->companyId)
+            ->first();
+
+        $maints = MaintStillToDo::where('companyId', auth()->user()->companyId)
+            ->where('km', '<', 1000)
+            ->where('mail', false)
+            ->get();
+
+        if (count($maints) > 0) {
+            dispatch(new MaintenanceAlertJob($admin->email, $maints));
+            foreach ($maints as $maint) {
+                $maint->mail = true;
+                $maint->save();
+            }
+        }
 
         return response()->json(['success' => [__('Trip successfully inserted!')]]);
     }

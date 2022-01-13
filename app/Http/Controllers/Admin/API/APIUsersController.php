@@ -119,7 +119,7 @@ class APIUsersController extends Controller
 
         $send_mail = $request->email;
 
-        dispatch(new CreationUserEmailJob($send_mail));
+        dispatch(new CreationUserEmailJob($send_mail, $request->password, auth('admin')->user()->company->name));
 
         return response()->json(['success' => __('Form successfully submitted!')]);
     }
