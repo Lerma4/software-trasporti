@@ -239,21 +239,25 @@
         var today = new Date();
         var deadline;
         today.setDate(today.getDate() + 16);
-        var html = '<ul class="list-group list-group-flush list-licenses">';
+        var html = '<table class="table table-sm table-borderless table-exp"><thead class="thead-light">' +
+            '<tr> <th scope = "col" > @lang("Name")' +
+            '</th> <th scope = "col" > @lang("Deadline") </th> </thead>' +
+            '<tbody>';
         d.forEach(element => {
+            html += '<tr><td>' + element.name + '</td>'
             if (element.deadline != null) {
                 deadline = new Date(formatInternational(element.deadline));
-                html += '<li class="list-group-item">' + element.name;
-                html += ' : ' + element.deadline;
+                html += '<td>' + element.deadline;
                 if (deadline < today) {
                     html += '<i class="fas fa-exclamation-triangle"></i>';
                 }
+                html += '</td>';
             } else {
-                html += '<li class="list-group-item">' + element.name;
+                html += '<td></td>';
             }
-            html += '</li>';
+            html += '</tr>';
         });
-        html += '</ul>';
+        html += '</tbody></table>';
         return html;
     }
 

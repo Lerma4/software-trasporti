@@ -111,16 +111,29 @@
     }
 }
 
+.btn-show-licenses,
+.btn-show-exp {
+    @media screen and (max-width: 508px) {
+        margin-top: 5px;
+    }
+}
+
+.buttons-excel {
+    @media screen and (max-width: 508px) {
+        margin-bottom: 5px;
+    }
+}
+
 // PAGE USERS
 
-#search_group,
+/* #search_group,
 #search_type {
     @media (max-width: 576px) {
         position: relative;
         left: 32%;
         margin-top: 8px;
     }
-}
+} */
 
 .random_password,
 .show_password {
@@ -172,11 +185,21 @@
 .form-page-trips input {
     margin-left: 10px;
     margin-right: 10px;
+    @media (max-width: 603px) {
+        margin-bottom: 5px;
+    }
 }
 
 .form-page-trips select {
     margin-left: 10px;
     margin-right: 10px;
+}
+
+#select-type,
+#select-refuelling {
+    @media (max-width: 1199px) {
+        margin-bottom: 5px;
+    }
 }
 
 // PAGE TRIPS

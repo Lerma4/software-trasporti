@@ -44,7 +44,7 @@
                             <th>@lang('Email')</th>
                             <th>@lang("Driver's name")</th>
                             <th>@lang('Plate')</th>
-                            <th>@lang("Plate's semitrailer")</th>
+                            <th>@lang("Semitrailer's plate")</th>
                             <th>@lang("Download")</th>
                         </tr>
                     </thead>

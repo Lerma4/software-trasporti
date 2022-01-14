@@ -27,7 +27,7 @@
                 <div class="col-sm">
                     <form class="form-page-trips" action="{{ route('api.trips.export') }}" method="POST">
                         @csrf
-                        <label>@lang('Esportazione giornate lavorative di tutti i dipendenti:')</label>
+                        <h6>@lang('Esportazione giornate lavorative di tutti i dipendenti:')</h6>
                         <br>
                         <br>
                         <div class="form-inline">
@@ -42,11 +42,12 @@
                     </form>
                 </div>
             </div>
+            <hr>
             <div class="row page-row">
                 <div class="col-sm">
                     <form class="form-page-trips" action="{{ route('api.trips.exportUser') }}" method="POST">
                         @csrf
-                        <label>@lang('Esportazione giornate lavorative di un dipendente:')</label>
+                        <h6>@lang('Esportazione giornate lavorative di un dipendente:')</h6>
                         <br>
                         <br>
                         <div class="form-inline">
@@ -105,7 +106,7 @@
                         </div>
                         <div class="col-xl-5">
                             <select id="select-refuelling" class="form-control" aria-label="category">
-                                <option value="" selected>@lang('All')</option>
+                                <option value="" selected>@lang('All supplies')</option>
                                 <option value="0">@lang('Refuelling not done')</option>
                                 <option value="1">@lang('Petrol station')</option>
                                 <option value="2">@lang('Tank')</option>

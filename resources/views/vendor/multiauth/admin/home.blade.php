@@ -7,7 +7,7 @@
                 <div class="card-header">{{ ucfirst(config('multiauth.prefix')) }} Dashboard</div>
                 <div class="card-body">
                     @include('multiauth::message')
-                    You are logged in to {{ config('multiauth.prefix') }} side!
+                    Da completare con grafici/statistiche che possono essere interessanti.
                 </div>
             </div>
         </div>

@@ -332,5 +332,12 @@
     "Year": "Anno",
     "Month": "Mese",
     "From": "Da",
-    "To": "A"
+    "To": "A",
+    "Add report": "Aggiungi incidente",
+    "All supplies": "Tutti i rifornimenti",
+    "Destination": "Destinazione",
+    "Report crash": "Incidenti",
+    "Incident description": "Descrizione incidente",
+    "Incident photos": "Foto incidente",
+    "Select file format": "Selezione il formato del file"
 }
