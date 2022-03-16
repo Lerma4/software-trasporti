@@ -341,8 +341,7 @@
     "Incident photos": "Foto incidente",
     "Select file format": "Selezione il formato del file",
     "Drivers": "Autisti",
-    "The following data is for the last 30 days.": "I seguenti dati sono riferiti agli ultimi 30 giorni.",
-    "The percentage is the difference with the previous 30 days.": "La percentuale è la differenza con i 30 giorni precedenti.",
+    "The following data is for the last 30 days compared to the previous 30.": "I seguenti dati sono riferiti agli ultimi 30 giorni, confrontati con i precedenti 30.",
     "Maintenance Costs": "Spese Manutenzione",
     "Fuel Costs": "Spese Carburante"
 }

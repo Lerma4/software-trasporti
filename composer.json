@@ -21,6 +21,7 @@
         "laravel/ui": "^3.0",
         "livewire/livewire": "^2.8",
         "maatwebsite/excel": "^3.1",
+        "spatie/laravel-backup": "7.0",
         "spatie/laravel-medialibrary": "^9.9",
         "spatie/laravel-medialibrary-pro": "^1.17",
         "yajra/laravel-datatables-oracle": "^9.14"

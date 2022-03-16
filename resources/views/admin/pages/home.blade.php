@@ -11,8 +11,7 @@
                     <div class="row justify-content-between page-row">
                         <div class="col-sm">
                             <div class="alert alert-warning" role="alert">
-                                @lang('The following data is for the last 30 days.')
-                                @lang('The percentage is the difference with the previous 30 days.')
+                                @lang('The following data is for the last 30 days compared to the previous 30.')
                             </div>
                         </div>
                     </div>
