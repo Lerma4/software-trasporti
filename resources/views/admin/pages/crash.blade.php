@@ -19,16 +19,21 @@
     <div class="card">
         <div class="card-body">
             @include('multiauth::message')
-            <div class="row justify-content-between page-row">
-                <div class="col-sm">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addDocuments">
+            <div class="row">
+                <div class="col-sm mb-col">
+                    <button type="button" class="btn btn-block btn-primary" data-toggle="modal"
+                        data-target="#addDocuments">
                         @lang('Add report')
                     </button>
-                    <button id="btn-edit" type="button" class="btn btn-secondary" data-toggle="modal"
+                </div>
+                <div class="col-sm mb-col">
+                    <button id="btn-edit" type="button" class="btn btn-block btn-secondary" data-toggle="modal"
                         data-target="#editDocument" disabled>
                         @lang('Edit')
                     </button>
-                    <button type="button" class="btn btn-danger" id="btn-delete" disabled>
+                </div>
+                <div class="col-sm mb-col">
+                    <button type="button" class="btn btn-block btn-danger" id="btn-delete" disabled>
                         @lang('Delete')
                     </button>
                 </div>

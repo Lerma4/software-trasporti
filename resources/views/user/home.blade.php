@@ -79,6 +79,14 @@
                     <input type="number" class="form-control" name="cost" min="0" value="0" required>
                 </div>
                 <div class="form-group">
+                    <label for="adblue">@lang('Adblue') (@lang('litres')):</label>
+                    <input type="number" class="form-control" name="adblue" min="0" value="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="adblue_cost">@lang('Adblue cost'):</label>
+                    <input type="number" class="form-control" name="adblue_cost" min="0" value="0" required>
+                </div>
+                <div class="form-group">
                     <label for="plate_s">@lang("Semitrailer's plate") (@lang("Optional")):</label>
                     <select name="plate_s" class="form-control">
                         <option value=""></option>
@@ -95,13 +103,15 @@
                     <label for="note">@lang('Note') (@lang("Optional")):</label>
                     <textarea class="form-control" name="note" rows="3" max="200"></textarea>
                 </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary submit-merci">
-                        <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
-                            aria-hidden="true"></span>
-                        @lang('Submit')
-                    </button>
-                </div>
+
+                <hr>
+
+                <button type="submit" class="btn btn-primary submit-merci btn-block">
+                    <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
+                        aria-hidden="true"></span>
+                    @lang('Submit')
+                </button>
+
             </form>
 
             <form id="officina">
@@ -152,6 +162,14 @@
                     <input type="number" class="form-control" name="cost" min="0" value="0" required>
                 </div>
                 <div class="form-group">
+                    <label for="adblue">@lang('Adblue') (@lang('litres')):</label>
+                    <input type="number" class="form-control" name="adblue" min="0" value="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="adblue_cost">@lang('Adblue cost'):</label>
+                    <input type="number" class="form-control" name="adblue_cost" min="0" value="0" required>
+                </div>
+                <div class="form-group">
                     <label for="plate_s">@lang("Targa semirimorchio") (@lang("Optional")):</label>
                     <select name="plate_s" class="form-control">
                         <option value=""></option>
@@ -164,13 +182,15 @@
                     <label for="container">@lang('Note') (@lang("Optional")):</label>
                     <textarea class="form-control" name="note" rows="3"></textarea>
                 </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary submit-officina">
-                        <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
-                            aria-hidden="true"></span>
-                        @lang('Submit')
-                    </button>
-                </div>
+
+                <hr>
+
+                <button type="submit" class="btn btn-primary submit-officina btn-block">
+                    <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
+                        aria-hidden="true"></span>
+                    @lang('Submit')
+                </button>
+
             </form>
 
             <form id="vuoto">
@@ -217,6 +237,14 @@
                     <input type="number" class="form-control" name="cost" min="0" value="0" required>
                 </div>
                 <div class="form-group">
+                    <label for="adblue">@lang('Adblue') (@lang('litres')):</label>
+                    <input type="number" class="form-control" name="adblue" min="0" value="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="adblue_cost">@lang('Adblue cost'):</label>
+                    <input type="number" class="form-control" name="adblue_cost" min="0" value="0" required>
+                </div>
+                <div class="form-group">
                     <label for="plate_s">@lang("Targa semirimorchio") (@lang("Optional")):</label>
                     <select name="plate_s" class="form-control">
                         <option value=""></option>
@@ -229,13 +257,15 @@
                     <label for="container">@lang('Note') (@lang("Optional")):</label>
                     <textarea class="form-control" name="note" rows="3"></textarea>
                 </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary submit-vuoto">
-                        <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
-                            aria-hidden="true"></span>
-                        @lang('Submit')
-                    </button>
-                </div>
+
+                <hr>
+
+                <button type="submit" class="btn btn-primary submit-vuoto btn-block">
+                    <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
+                        aria-hidden="true"></span>
+                    @lang('Submit')
+                </button>
+
             </form>
         </div>
     </div>

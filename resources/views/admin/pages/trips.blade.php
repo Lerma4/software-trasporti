@@ -37,7 +37,9 @@
                             <label>@lang('Year'):</label>
                             <input min="1900" max="9999" value="{{ Carbon\Carbon::now()->format('Y') }}" type="number"
                                 class="form-control" name="year" required>
-                            <button class="btn btn-primary btn-page-trips" type="submit">@lang("Submit")</button>
+                            <div class="col-sm-2">
+                                <button class="btn btn-primary btn-block" type="submit">@lang("Submit")</button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -67,7 +69,9 @@
                             <label>@lang('To'):</label>
                             <input value="{{ Carbon\Carbon::now()->format('Y-m-d') }}" type="date" class="form-control"
                                 name="to" required>
-                            <button class="btn btn-primary btn-page-trips" type="submit">@lang("Submit")</button>
+                            <div class="col-sm-2">
+                                <button class="btn btn-primary btn-block" type="submit">@lang("Submit")</button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -78,17 +82,21 @@
         <h5 class="card-header">@lang("Gestione viaggi")</h5>
         <div class="card-body">
             @include('multiauth::message')
-            <div class="row justify-content-between page-row">
-                <div class="col-sm">
-                    <button id="btn-add" type="button" class="btn btn-primary" data-toggle="modal"
+            <div class="row">
+                <div class="col-sm-4 mb-col">
+                    <button id="btn-add" type="button" class="btn btn-block btn-primary" data-toggle="modal"
                         data-target="#modal-add">
                         @lang('New')
                     </button>
-                    <button id="btn-edit" type="button" class="btn btn-secondary" data-toggle="modal"
+                </div>
+                <div class="col-sm-4 mb-col">
+                    <button id="btn-edit" type="button" class="btn btn-block btn-secondary" data-toggle="modal"
                         data-target="#modal-edit" disabled>
                         @lang('Edit')
                     </button>
-                    <button type="button" class="btn btn-danger" id="btn-delete" disabled>
+                </div>
+                <div class="col-sm-4 mb-col">
+                    <button type="button" class="btn btn-block btn-danger" id="btn-delete" disabled>
                         @lang('Delete')
                     </button>
                 </div>
@@ -146,7 +154,7 @@
                             <th>@lang("AdBlue")</th>
                             <th>@lang("AdBlue Costs")</th>
                             <th>@lang("Total Costs")</th>
-                            <th>@lang("Email")</th>
+                            {{-- <th>@lang("Email")</th>
                             <th>@lang("Trailer's plate")</th>
                             <th>@lang("Container")</th>
                             <th>@lang("Garage")</th>
@@ -154,7 +162,7 @@
                             <th>@lang("Petrol station")</th>
                             <th>@lang("Truck's km")</th>
                             <th>@lang("Insert date")</th>
-                            <th>@lang("Notes")</th>
+                            <th>@lang("Notes")</th> --}}
                         </tr>
                     </thead>
                     <tbody>
@@ -178,7 +186,7 @@
 
 <div class="modal fade" id="modal-add" data-backdrop="static" data-keyboard="false" tabindex="-1"
     aria-labelledby="modal-label-add" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modal-label-add">@lang('Add trip')</h5>
@@ -199,7 +207,7 @@
                 <form id="merci">
                     <input type="hidden" name="type" value="0">
                     <div class="form-group">
-                        <label for="email">@lang('Email'):</label>
+                        <label for="email">@lang('Driver'):</label>
                         <select name="email" class="form-control" required>
                             <option value=""></option>
                             @foreach ($users as $user)
@@ -207,24 +215,44 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label for="date">@lang('Date'):</label>
-                        <input type="date" class="form-control" name="date"
-                            max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" required>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="date">@lang('Date'):</label>
+                                <input type="date" class="form-control" name="date"
+                                    max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="plate">@lang("Truck's plate"):</label>
+                                <select name="plate" class="form-control" required>
+                                    <option value=""></option>
+                                    @foreach ($plates as $plate)
+                                    <option value="{{ $plate->plate }}">{{ $plate->plate }} (km: {{ $plate->km }})
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="plate">@lang("Truck's plate"):</label>
-                        <select name="plate" class="form-control" required>
-                            <option value=""></option>
-                            @foreach ($plates as $plate)
-                            <option value="{{ $plate->plate }}">{{ $plate->plate }} (km: {{ $plate->km }})</option>
-                            @endforeach
-                        </select>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="start">@lang('Città di partenza'):</label>
+                                <input type="text" class="form-control autocompleteCity" name="start" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="destination">@lang('Destinazione finale'):</label>
+                                <input type="text" class="form-control autocompleteCity" name="destination" required>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="start">@lang('Città di partenza'):</label>
-                        <input type="text" class="form-control autocompleteCity" name="start" required>
-                    </div>
+
                     <div class="form-group">
                         <label class="label-stop">@lang('Stops') (@lang("Optional")):</label>
                         <div class="row justify-content-center row-stop">
@@ -240,61 +268,106 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="destination">@lang('Destinazione finale'):</label>
-                        <input type="text" class="form-control autocompleteCity" name="destination" required>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="km">@lang('Distance') (Km):</label>
+                                <input type="number" class="form-control" name="km" min="1" max="1000" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="petrol_station">@lang('Luogo rifornimento'):</label>
+                                <select name="petrol_station" class="form-control">
+                                    <option selected value="0">@lang('Not done')</option>
+                                    <option value="1">@lang('Petrol station')</option>
+                                    <option value="2">@lang('Tank')</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="km">@lang('Distance') (Km):</label>
-                        <input type="number" class="form-control" name="km" min="1" max="1000" required>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="fuel">@lang('Fuel') (@lang('liters')):</label>
+                                <input type="number" class="form-control" name="fuel" min="0" value="0" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="cost">@lang('Fuel cost'):</label>
+                                <input type="number" class="form-control" name="cost" min="0" value="0" required>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="petrol_station">@lang('Luogo rifornimento'):</label>
-                        <select name="petrol_station" class="form-control">
-                            <option selected value="0">@lang('Not done')</option>
-                            <option value="1">@lang('Petrol station')</option>
-                            <option value="2">@lang('Tank')</option>
-                        </select>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="adblue">@lang('Adblue') (@lang('liters')):</label>
+                                <input type="number" class="form-control" name="adblue" min="0" value="0" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="adblue_cost">@lang('Adblue cost'):</label>
+                                <input type="number" class="form-control" name="adblue_cost" min="0" value="0" required>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="fuel">@lang('Fuel'):</label>
-                        <input type="number" class="form-control" name="fuel" min="0" value="0" required>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="plate_s">@lang("Targa semirimorchio") (@lang("Optional")):</label>
+                                <select name="plate_s" class="form-control">
+                                    <option value=""></option>
+                                    @foreach ($plates_semi as $plate)
+                                    <option value="{{ $plate->plate }}">{{ $plate->plate }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="container">@lang('Sigla container') (@lang("Optional")):</label>
+                                <input type="text" class="form-control" name="container">
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="cost">@lang('Fuel cost'):</label>
-                        <input type="number" class="form-control" name="cost" min="0" value="0" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="plate_s">@lang("Targa semirimorchio") (@lang("Optional")):</label>
-                        <select name="plate_s" class="form-control">
-                            <option value=""></option>
-                            @foreach ($plates_semi as $plate)
-                            <option value="{{ $plate->plate }}">{{ $plate->plate }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="container">@lang('Sigla container') (@lang("Optional")):</label>
-                        <input type="text" class="form-control" name="container">
-                    </div>
+
                     <div class="form-group">
                         <label for="note">@lang('Note') (@lang("Optional")):</label>
                         <textarea class="form-control" name="note" rows="3" max="200"></textarea>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">@lang('Close')</button>
-                        <button type="submit" class="btn btn-primary submit">
-                            <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
-                                aria-hidden="true"></span>
-                            @lang('Submit')
-                        </button>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-secondary btn-block"
+                                    data-dismiss="modal">@lang('Close')</button>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary submit btn-block">
+                                    <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
+                                        aria-hidden="true"></span>
+                                    @lang('Submit')
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </form>
 
                 <form id="officina">
                     <input type="hidden" name="type" value="1">
                     <div class="form-group">
-                        <label for="email">@lang('Email'):</label>
+                        <label for="email">@lang('Driver'):</label>
                         <select name="email" class="form-control" required>
                             <option value=""></option>
                             @foreach ($users as $user)
@@ -302,36 +375,74 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label for="date">@lang('Date'):</label>
-                        <input type="date" class="form-control" name="date"
-                            max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" required>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="date">@lang('Date'):</label>
+                                <input type="date" class="form-control" name="date"
+                                    max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="plate">@lang("Truck's plate"):</label>
+                                <select name="plate" class="form-control" required>
+                                    <option value=""></option>
+                                    @foreach ($plates as $plate)
+                                    <option value="{{ $plate->plate }}">{{ $plate->plate }} (km: {{ $plate->km }})
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="plate">@lang("Truck's plate"):</label>
-                        <select name="plate" class="form-control" required>
-                            <option value=""></option>
-                            @foreach ($plates as $plate)
-                            <option value="{{ $plate->plate }}">{{ $plate->plate }} (km: {{ $plate->km }})</option>
-                            @endforeach
-                        </select>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="start">@lang('Città di partenza'):</label>
+                                <input type="text" class="form-control autocompleteCity" name="start" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="destination">@lang('Destinazione'):</label>
+                                <input type="text" class="form-control autocompleteCity" name="destination" required>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="start">@lang('Città di partenza'):</label>
-                        <input type="text" class="form-control autocompleteCity" name="start" required>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="km">@lang('Distance') (Km):</label>
+                                <input type="number" class="form-control" name="km" min="1" max="1000" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="garage">@lang('Garage'):</label>
+                                <input type="text" class="form-control" name="garage" required>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="destination">@lang('Destinazione'):</label>
-                        <input type="text" class="form-control autocompleteCity" name="destination" required>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="fuel">@lang('Fuel') (@lang('liters')):</label>
+                                <input type="number" class="form-control" name="fuel" min="0" value="0" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="cost">@lang('Fuel cost'):</label>
+                                <input type="number" class="form-control" name="cost" min="0" value="0" required>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="garage">@lang('Garage'):</label>
-                        <input type="text" class="form-control" name="garage" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="km">@lang('Distance') (Km):</label>
-                        <input type="number" class="form-control" name="km" min="1" max="1000" required>
-                    </div>
+
                     <div class="form-group">
                         <label for="petrol_station">@lang('Luogo rifornimento'):</label>
                         <select name="petrol_station" class="form-control">
@@ -340,14 +451,22 @@
                             <option value="2">@lang('Tank')</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label for="fuel">@lang('Fuel'):</label>
-                        <input type="number" class="form-control" name="fuel" min="0" value="0" required>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="adblue">@lang('Adblue') (@lang('liters')):</label>
+                                <input type="number" class="form-control" name="adblue" min="0" value="0" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="adblue_cost">@lang('Adblue cost'):</label>
+                                <input type="number" class="form-control" name="adblue_cost" min="0" value="0" required>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="cost">@lang('Fuel cost'):</label>
-                        <input type="number" class="form-control" name="cost" min="0" value="0" required>
-                    </div>
+
                     <div class="form-group">
                         <label for="plate_s">@lang("Targa semirimorchio") (@lang("Optional")):</label>
                         <select name="plate_s" class="form-control">
@@ -357,24 +476,37 @@
                             @endforeach
                         </select>
                     </div>
+
                     <div class="form-group">
                         <label for="container">@lang('Note') (@lang("Optional")):</label>
                         <textarea class="form-control" name="note" rows="3"></textarea>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">@lang('Close')</button>
-                        <button type="submit" class="btn btn-primary submit">
-                            <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
-                                aria-hidden="true"></span>
-                            @lang('Submit')
-                        </button>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-secondary btn-block"
+                                    data-dismiss="modal">@lang('Close')</button>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary submit btn-block">
+                                    <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
+                                        aria-hidden="true"></span>
+                                    @lang('Submit')
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </form>
 
                 <form id="vuoto">
                     <input type="hidden" name="type" value="2">
                     <div class="form-group">
-                        <label for="email">@lang('Email'):</label>
+                        <label for="email">@lang('Driver'):</label>
                         <select name="email" class="form-control" required>
                             <option value=""></option>
                             @foreach ($users as $user)
@@ -382,48 +514,93 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label for="date">@lang('Date'):</label>
-                        <input type="date" class="form-control" name="date"
-                            max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" required>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="date">@lang('Date'):</label>
+                                <input type="date" class="form-control" name="date"
+                                    max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="plate">@lang("Truck's plate"):</label>
+                                <select name="plate" class="form-control" required>
+                                    <option value=""></option>
+                                    @foreach ($plates as $plate)
+                                    <option value="{{ $plate->plate }}">{{ $plate->plate }} (km: {{ $plate->km }})
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="plate">@lang("Truck's plate"):</label>
-                        <select name="plate" class="form-control" required>
-                            <option value=""></option>
-                            @foreach ($plates as $plate)
-                            <option value="{{ $plate->plate }}">{{ $plate->plate }} (km: {{ $plate->km }})</option>
-                            @endforeach
-                        </select>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="start">@lang('Città di partenza'):</label>
+                                <input type="text" class="form-control autocompleteCity" name="start" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="destination">@lang('Destinazione'):</label>
+                                <input type="text" class="form-control autocompleteCity" name="destination" required>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="start">@lang('Città di partenza'):</label>
-                        <input type="text" class="form-control autocompleteCity" name="start" required>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="km">@lang('Distance') (Km):</label>
+                                <input type="number" class="form-control" name="km" min="1" max="1000" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="petrol_station">@lang('Luogo rifornimento'):</label>
+                                <select name="petrol_station" class="form-control">
+                                    <option selected value="0">@lang('Not done')</option>
+                                    <option value="1">@lang('Petrol station')</option>
+                                    <option value="2">@lang('Tank')</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="destination">@lang('Destinazione'):</label>
-                        <input type="text" class="form-control autocompleteCity" name="destination" required>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="fuel">@lang('Fuel') (@lang('liters')):</label>
+                                <input type="number" class="form-control" name="fuel" min="0" value="0" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="cost">@lang('Fuel cost'):</label>
+                                <input type="number" class="form-control" name="cost" min="0" value="0" required>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="km">@lang('Distance') (Km):</label>
-                        <input type="number" class="form-control" name="km" min="1" max="1000" required>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="adblue">@lang('Adblue') (@lang('liters')):</label>
+                                <input type="number" class="form-control" name="adblue" min="0" value="0" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="adblue_cost">@lang('Adblue cost'):</label>
+                                <input type="number" class="form-control" name="adblue_cost" min="0" value="0" required>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="petrol_station">@lang('Luogo rifornimento'):</label>
-                        <select name="petrol_station" class="form-control">
-                            <option selected value="0">@lang('Not done')</option>
-                            <option value="1">@lang('Petrol station')</option>
-                            <option value="2">@lang('Tank')</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="fuel">@lang('Fuel'):</label>
-                        <input type="number" class="form-control" name="fuel" min="0" value="0" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="cost">@lang('Fuel cost'):</label>
-                        <input type="number" class="form-control" name="cost" min="0" value="0" required>
-                    </div>
+
                     <div class="form-group">
                         <label for="plate_s">@lang("Targa semirimorchio") (@lang("Optional")):</label>
                         <select name="plate_s" class="form-control">
@@ -437,14 +614,27 @@
                         <label for="container">@lang('Note') (@lang("Optional")):</label>
                         <textarea class="form-control" name="note" rows="3"></textarea>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">@lang('Close')</button>
-                        <button type="submit" class="btn btn-primary submit">
-                            <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
-                                aria-hidden="true"></span>
-                            @lang('Submit')
-                        </button>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-secondary btn-block"
+                                    data-dismiss="modal">@lang('Close')</button>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary submit btn-block">
+                                    <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
+                                        aria-hidden="true"></span>
+                                    @lang('Submit')
+                                </button>
+                            </div>
+                        </div>
                     </div>
+
                 </form>
             </div>
         </div>
@@ -455,7 +645,7 @@
 
 <div class="modal fade" id="modal-edit" data-backdrop="static" data-keyboard="false" tabindex="-1"
     aria-labelledby="modal-label-edit" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modal-label-edit">@lang('Edit trip')</h5>
@@ -487,24 +677,46 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label>@lang('Date'):</label>
-                        <input type="date" class="form-control date-edit"
-                            max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" disabled required>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>@lang('Date'):</label>
+                                <input type="date" class="form-control date-edit"
+                                    max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" disabled required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>@lang("Truck's plate"):</label>
+                                <select class="form-control plate-edit" disabled required>
+                                    <option value=""></option>
+                                    @foreach ($plates as $plate)
+                                    <option value="{{ $plate->plate }}">{{ $plate->plate }} (km: {{ $plate->km }})
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>@lang("Truck's plate"):</label>
-                        <select class="form-control plate-edit" disabled required>
-                            <option value=""></option>
-                            @foreach ($plates as $plate)
-                            <option value="{{ $plate->plate }}">{{ $plate->plate }} (km: {{ $plate->km }})</option>
-                            @endforeach
-                        </select>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="start">@lang('Città di partenza'):</label>
+                                <input type="text" class="form-control autocompleteCity start-edit" name="start"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="destination">@lang('Destinazione finale'):</label>
+                                <input type="text" class="form-control autocompleteCity destination-edit"
+                                    name="destination" required>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="start">@lang('Città di partenza'):</label>
-                        <input type="text" class="form-control autocompleteCity start-edit" name="start" required>
-                    </div>
+
                     <div class="form-group">
                         <label class="label-stop">@lang('Stops') (@lang("Optional")):</label>
                         <div class="row justify-content-center row-stop row-stop-edit">
@@ -520,57 +732,102 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="destination">@lang('Destinazione finale'):</label>
-                        <input type="text" class="form-control autocompleteCity destination-edit" name="destination"
-                            required>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="km">@lang('Distance') (Km):</label>
+                                <input type="number" class="form-control km-edit" name="km" min="1" max="1000" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="petrol_station">@lang('Luogo rifornimento'):</label>
+                                <select name="petrol_station" class="form-control petrol-edit">
+                                    <option selected value="0">@lang('Not done')</option>
+                                    <option value="1">@lang('Petrol station')</option>
+                                    <option value="2">@lang('Tank')</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="km">@lang('Distance') (Km):</label>
-                        <input type="number" class="form-control km-edit" name="km" min="1" max="1000" required>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="fuel">@lang('Fuel') (@lang('liters')):</label>
+                                <input type="number" class="form-control fuel-edit" name="fuel" min="0" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="cost">@lang('Fuel cost'):</label>
+                                <input type="number" class="form-control cost-edit" name="cost" min="0" required>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="petrol_station">@lang('Luogo rifornimento'):</label>
-                        <select name="petrol_station" class="form-control petrol-edit">
-                            <option selected value="0">@lang('Not done')</option>
-                            <option value="1">@lang('Petrol station')</option>
-                            <option value="2">@lang('Tank')</option>
-                        </select>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="adblue">@lang('Adblue') (@lang('liters')):</label>
+                                <input type="number" class="form-control adblue-edit" name="adblue" min="0" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="adblue_cost">@lang('Adblue cost'):</label>
+                                <input type="number" class="form-control adblue_cost-edit" name="adblue_cost" min="0"
+                                    required>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="fuel">@lang('Fuel'):</label>
-                        <input type="number" class="form-control fuel-edit" name="fuel" min="0" required>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="plate_s">@lang("Targa semirimorchio") (@lang("Optional")):</label>
+                                <select name="plate_s" class="plate_s-edit form-control">
+                                    <option value=""></option>
+                                    @foreach ($plates_semi as $plate)
+                                    <option value="{{ $plate->plate }}">{{ $plate->plate }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="container">@lang('Sigla container') (@lang("Optional")):</label>
+                                <input type="text" class="form-control container-edit" name="container">
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="cost">@lang('Fuel cost'):</label>
-                        <input type="number" class="form-control cost-edit" name="cost" min="0" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="plate_s">@lang("Targa semirimorchio") (@lang("Optional")):</label>
-                        <select name="plate_s" class="plate_s-edit form-control">
-                            <option value=""></option>
-                            @foreach ($plates_semi as $plate)
-                            <option value="{{ $plate->plate }}">{{ $plate->plate }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="container">@lang('Sigla container') (@lang("Optional")):</label>
-                        <input type="text" class="form-control container-edit" name="container">
-                    </div>
+
                     <div class="form-group">
                         <label for="note">@lang('Note') (@lang("Optional")):</label>
                         <textarea class="form-control note-edit" name="note" rows="3" max="200"></textarea>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary btn-edit-close"
-                            data-dismiss="modal">@lang('Close')</button>
-                        <button type="submit" class="btn btn-primary submit">
-                            <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
-                                aria-hidden="true"></span>
-                            @lang('Submit')
-                        </button>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-secondary btn-block btn-edit-close"
+                                    data-dismiss="modal">@lang('Close')</button>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary submit btn-block">
+                                    <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
+                                        aria-hidden="true"></span>
+                                    @lang('Submit')
+                                </button>
+                            </div>
+                        </div>
                     </div>
+
                 </form>
 
                 <form id="officina-edit" class="hidden">
@@ -587,37 +844,61 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label>@lang('Date'):</label>
-                        <input type="date" class="form-control date-edit"
-                            max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" disabled required>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>@lang('Date'):</label>
+                                <input type="date" class="form-control date-edit"
+                                    max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" disabled required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>@lang("Truck's plate"):</label>
+                                <select class="form-control plate-edit" disabled required>
+                                    <option value=""></option>
+                                    @foreach ($plates as $plate)
+                                    <option value="{{ $plate->plate }}">{{ $plate->plate }} (km: {{ $plate->km }})
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>@lang("Truck's plate"):</label>
-                        <select class="form-control plate-edit" disabled required>
-                            <option value=""></option>
-                            @foreach ($plates as $plate)
-                            <option value="{{ $plate->plate }}">{{ $plate->plate }} (km: {{ $plate->km }})</option>
-                            @endforeach
-                        </select>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="start">@lang('Città di partenza'):</label>
+                                <input type="text" class="form-control autocompleteCity start-edit" name="start"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="destination">@lang('Destinazione'):</label>
+                                <input type="text" class="form-control autocompleteCity destination-edit"
+                                    name="destination" required>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="start">@lang('Città di partenza'):</label>
-                        <input type="text" class="form-control autocompleteCity start-edit" name="start" required>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="km">@lang('Distance') (Km):</label>
+                                <input type="number" class="form-control km-edit" name="km" min="1" max="1000" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="garage">@lang('Garage'):</label>
+                                <input type="text" class="form-control garage-edit" name="garage" required>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="destination">@lang('Destinazione'):</label>
-                        <input type="text" class="form-control autocompleteCity destination-edit" name="destination"
-                            required>
-                    </div>
-                    <div class="form-group">
-                        <label for="garage">@lang('Garage'):</label>
-                        <input type="text" class="form-control garage-edit" name="garage" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="km">@lang('Distance') (Km):</label>
-                        <input type="number" class="form-control km-edit" name="km" min="1" max="1000" required>
-                    </div>
+
                     <div class="form-group">
                         <label for="petrol_station">@lang('Luogo rifornimento'):</label>
                         <select name="petrol_station" class="form-control petrol-edit">
@@ -626,14 +907,38 @@
                             <option value="2">@lang('Tank')</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label for="fuel">@lang('Fuel'):</label>
-                        <input type="number" class="form-control fuel-edit" name="fuel" min="0" required>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="fuel">@lang('Fuel') (@lang('liters')):</label>
+                                <input type="number" class="form-control fuel-edit" name="fuel" min="0" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="cost">@lang('Fuel cost'):</label>
+                                <input type="number" class="form-control cost-edit" name="cost" min="0" required>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="cost">@lang('Fuel cost'):</label>
-                        <input type="number" class="form-control cost-edit" name="cost" min="0" required>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="adblue">@lang('Adblue') (@lang('liters')):</label>
+                                <input type="number" class="form-control adblue-edit" name="adblue" min="0" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="adblue_cost">@lang('Adblue cost'):</label>
+                                <input type="number" class="form-control adblue_cost-edit" name="adblue_cost" min="0"
+                                    required>
+                            </div>
+                        </div>
                     </div>
+
                     <div class="form-group">
                         <label for="plate_s">@lang("Targa semirimorchio") (@lang("Optional")):</label>
                         <select name="plate_s" class="plate_s-edit form-control">
@@ -647,15 +952,27 @@
                         <label for="container">@lang('Note') (@lang("Optional")):</label>
                         <textarea class="form-control note-edit" name="note" rows="3"></textarea>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary btn-edit-close"
-                            data-dismiss="modal">@lang('Close')</button>
-                        <button type="submit" class="btn btn-primary submit">
-                            <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
-                                aria-hidden="true"></span>
-                            @lang('Submit')
-                        </button>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-secondary btn-block btn-edit-close"
+                                    data-dismiss="modal">@lang('Close')</button>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary submit btn-block">
+                                    <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
+                                        aria-hidden="true"></span>
+                                    @lang('Submit')
+                                </button>
+                            </div>
+                        </div>
                     </div>
+
                 </form>
 
                 <form id="vuoto-edit" class="hidden">
@@ -672,49 +989,96 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label>@lang('Date'):</label>
-                        <input type="date" class="form-control date-edit"
-                            max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" disabled required>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>@lang('Date'):</label>
+                                <input type="date" class="form-control date-edit"
+                                    max="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" disabled required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>@lang("Truck's plate"):</label>
+                                <select class="form-control plate-edit" disabled required>
+                                    <option value=""></option>
+                                    @foreach ($plates as $plate)
+                                    <option value="{{ $plate->plate }}">{{ $plate->plate }} (km: {{ $plate->km }})
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>@lang("Truck's plate"):</label>
-                        <select class="form-control plate-edit" disabled required>
-                            <option value=""></option>
-                            @foreach ($plates as $plate)
-                            <option value="{{ $plate->plate }}">{{ $plate->plate }} (km: {{ $plate->km }})</option>
-                            @endforeach
-                        </select>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="start">@lang('Città di partenza'):</label>
+                                <input type="text" class="form-control autocompleteCity start-edit" name="start"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="destination">@lang('Destinazione'):</label>
+                                <input type="text" class="form-control autocompleteCity destination-edit"
+                                    name="destination" required>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="start">@lang('Città di partenza'):</label>
-                        <input type="text" class="form-control autocompleteCity start-edit" name="start" required>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="km">@lang('Distance') (Km):</label>
+                                <input type="number" class="form-control km-edit" name="km" min="1" max="1000" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="petrol_station">@lang('Luogo rifornimento'):</label>
+                                <select name="petrol_station" class="form-control petrol-edit">
+                                    <option selected value="0">@lang('Not done')</option>
+                                    <option value="1">@lang('Petrol station')</option>
+                                    <option value="2">@lang('Tank')</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="destination">@lang('Destinazione'):</label>
-                        <input type="text" class="form-control autocompleteCity destination-edit" name="destination"
-                            required>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="fuel">@lang('Fuel') (@lang('liters')):</label>
+                                <input type="number" class="form-control fuel-edit" name="fuel" min="0" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="cost">@lang('Fuel cost'):</label>
+                                <input type="number" class="form-control cost-edit" name="cost" min="0" required>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="km">@lang('Distance') (Km):</label>
-                        <input type="number" class="form-control km-edit" name="km" min="1" max="1000" required>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="adblue">@lang('Adblue') (@lang('liters')):</label>
+                                <input type="number" class="form-control adblue-edit" name="adblue" min="0" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="adblue_cost">@lang('Adblue cost'):</label>
+                                <input type="number" class="form-control adblue_cost-edit" name="adblue_cost" min="0"
+                                    required>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="petrol_station">@lang('Luogo rifornimento'):</label>
-                        <select name="petrol_station" class="form-control petrol-edit">
-                            <option selected value="0">@lang('Not done')</option>
-                            <option value="1">@lang('Petrol station')</option>
-                            <option value="2">@lang('Tank')</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="fuel">@lang('Fuel'):</label>
-                        <input type="number" class="form-control fuel-edit" name="fuel" min="0" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="cost">@lang('Fuel cost'):</label>
-                        <input type="number" class="form-control cost-edit" name="cost" min="0" required>
-                    </div>
+
                     <div class="form-group">
                         <label for="plate_s">@lang("Targa semirimorchio") (@lang("Optional")):</label>
                         <select name="plate_s" class="plate_s-edit form-control">
@@ -728,16 +1092,174 @@
                         <label for="container">@lang('Note') (@lang("Optional")):</label>
                         <textarea class="form-control note-edit" name="note" rows="3"></textarea>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary btn-edit-close"
-                            data-dismiss="modal">@lang('Close')</button>
-                        <button type="submit" class="btn btn-primary submit">
-                            <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
-                                aria-hidden="true"></span>
-                            @lang('Submit')
-                        </button>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-secondary btn-block btn-edit-close"
+                                    data-dismiss="modal">@lang('Close')</button>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary submit btn-block">
+                                    <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
+                                        aria-hidden="true"></span>
+                                    @lang('Submit')
+                                </button>
+                            </div>
+                        </div>
                     </div>
+
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MOSTRA VIAGGI -->
+
+<div class="modal fade" id="modal-show" data-backdrop="static" data-keyboard="false" tabindex="-1"
+    aria-labelledby="modal-label-show" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-label-show">@lang('Show trip')</h5>
+            </div>
+            <div id="show-form" class="modal-body">
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>@lang('Trip\'s type'):</label>
+                            <select class="form-control trip" id="type-show" name="type" disabled>
+                                <option value="0">@lang('Carico/scarico merci')</option>
+                                <option value="1">@lang('Officina/gommista')</option>
+                                <option value="2">@lang('A vuoto')</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="name">@lang('Driver'):</label>
+                            <input type="text" class="form-control name-show" disabled>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>@lang('Date'):</label>
+                            <input type="date" class="form-control date-show" disabled required>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>@lang("Truck's plate"):</label>
+                            <input type="text" class="form-control plate-show" disabled>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="start">@lang('Città di partenza'):</label>
+                            <input type="text" class="form-control autocompleteCity start-show" name="start" disabled>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="destination">@lang('Destinazione finale'):</label>
+                            <input type="text" class="form-control autocompleteCity destination-show" name="destination"
+                                disabled>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="label-stop">@lang('Stops'):</label>
+                    <textarea class="form-control stops-show" id="" cols="30" rows="5" disabled></textarea>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="km">@lang('Distance') (Km):</label>
+                            <input type="number" class="form-control km-show" name="km" min="1" max="1000" disabled>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="petrol_station">@lang('Luogo rifornimento'):</label>
+                            <select name="petrol_station" class="form-control petrol-show" disabled>
+                                <option selected value="0">@lang('Not done')</option>
+                                <option value="1">@lang('Petrol station')</option>
+                                <option value="2">@lang('Tank')</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="fuel">@lang('Fuel') (@lang('liters')):</label>
+                            <input type="number" class="form-control fuel-show" name="fuel" min="0" disabled>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="cost">@lang('Fuel cost'):</label>
+                            <input type="number" class="form-control cost-show" name="cost" min="0" disabled>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="adblue">@lang('Adblue') (@lang('liters')):</label>
+                            <input type="number" class="form-control adblue-show" name="adblue" min="0" disabled>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="adblue_cost">@lang('Adblue cost'):</label>
+                            <input type="number" class="form-control adblue_cost-show" name="adblue_cost" min="0"
+                                disabled>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="plate_s">@lang("Targa semirimorchio"):</label>
+                            <input type="text" class="form-control plate_s-show" disabled>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="container">@lang('Sigla container'):</label>
+                            <input type="text" class="form-control container-show" name="container" disabled>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="note">@lang('Note'):</label>
+                    <textarea class="form-control note-show" name="note" rows="3" max="200" disabled></textarea>
+                </div>
+
+                <hr>
+
+                <button type="button" class="btn btn-secondary btn-show-close btn-block"
+                    data-dismiss="modal">@lang('Close')</button>
+
             </div>
         </div>
     </div>
@@ -751,6 +1273,14 @@
 
 <script type="text/javascript" language="javascript"
     src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js" defer></script>
+
+
+{{-- <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"
+    defer>
+</script>
+
+<script type="text/javascript" language="javascript"
+    src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js" defer></script> --}}
 
 <script type="text/javascript" language="javascript"
     src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js" defer></script>
@@ -802,7 +1332,7 @@
         return newDate;
     }
 
-    function formatTripData(email, plate, container, garage, stops, km,  created_at, note, petrol_station) {
+    /* function formatTripData(email, plate, container, garage, stops, km,  created_at, note, petrol_station) {
         if (plate == null) {
             plate = '';
         }
@@ -864,7 +1394,7 @@
         html += '</tbody></table>';
 
         return html;
-    }
+    } */
 
     $(document).ready(function() {
         $(".message").delay(5000).fadeOut();
@@ -1033,7 +1563,7 @@
                     "render": function(data, type, row) {
                         var html = "";
 
-                        html = '<button id="btn-details" type="button" class="btn btn-sm btn-success">' +
+                        html = '<button id="btn-details" type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#modal-show">' +
                             '<i class="fas fa-plus"></i>' +
                             '</button>';
 
@@ -1122,6 +1652,10 @@
                     },
                 },
                 {
+                    data: 'petrol_station',
+                    name: 'petrol_station'
+                },
+                /* {
                     data: 'user_email',
                     name: 'user_email'
                 },
@@ -1142,10 +1676,6 @@
                     name: 'stops'
                 },
                 {
-                    data: 'petrol_station',
-                    name: 'petrol_station'
-                },
-                {
                     data: 'km',
                     "render": function(data, type, row) {
                         return new Intl.NumberFormat('de-DE').format(data)
@@ -1158,7 +1688,7 @@
                 {
                     data: 'note',
                     name: 'note'
-                },
+                }, */
             ],
             "columnDefs": [{
                     'targets': 0,
@@ -1182,13 +1712,13 @@
                     'targets': [2],
                     "orderable": false // colonna tipologia viaggio
                 },
-                {
+                /* {
                     'targets': [15, 16, 17, 18, 19, 21, 22, 23],
                     "searchable": false,
                     'visible': false
-                },
+                }, */
                 {
-                    'targets': [20],
+                    'targets': [15],
                     "searchable": true,
                     'visible': false // colonna luogo rifornimento
                 },
@@ -1312,13 +1842,13 @@
         }); // FILTRO TIPOLOGIA VIAGGIO
 
         $('#select-refuelling').change(function() {
-            table.column(20)
+            table.column(15)
                 .search($(this).val())
                 .draw();
         }); // FILTRO RIFORNIMENTO
 
         $('#datatable tbody').on('click', '#btn-details', function() {
-            var tr = $(this).closest('tr');
+            /* var tr = $(this).closest('tr');
             var row = table.row(tr);
 
             if (row.child.isShown()) {
@@ -1338,7 +1868,33 @@
                 $(this).find('.fas').addClass('fa-minus');
                 $(this).removeClass('btn-success');
                 $(this).addClass('btn-danger');
-            }
+            } */ //FUNZIONE NECESSARIA CON IL VECCHIO FUNZIONAMENTO (TABELLA A SCOMPARSA SOTTO ALLA RIGA CORRISPONDENTE)
+
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+            var row = row.data();
+
+            console.log(row['id']);
+            
+            $('#type-show').val(row['type']);
+            $('#modal-show').find('.id-show').val(row['id']);
+            $('#modal-show').find('.name-show').val(row['name']);
+            $('#modal-show').find('.date-show').val(formatInternational(row['date']));
+            $('#modal-show').find('.start-show').val(replaceSymbol(row['start']));
+            $('#modal-show').find('.destination-show').val(replaceSymbol(row['destination']));
+            $('#modal-show').find('.distance-show').val(row['distance']);
+            $('#modal-show').find('.petrol-show').val(row['petrol_station']);
+            $('#modal-show').find('.fuel-show').val(row['fuel']);
+            $('#modal-show').find('.garage-show').val(row['garage']);
+            $('#modal-show').find('.km-show').val(row['distance']);
+            $('#modal-show').find('.note-show').val(row['note']);
+            $('#modal-show').find('.plate-show').val(row['plate']);
+            $('#modal-show').find('.cost-show').val(row['cost']);
+            $('#modal-show').find('.adblue-show').val(row['adblue']);
+            $('#modal-show').find('.adblue_cost-show').val(row['adblue_cost']);
+            $('#modal-show').find('.container-show').val(row['container']);
+            $('#modal-show').find('.plate_s-show').val(row['plate_s']);
+            $('#modal-show').find('.stops-show').val(row['stops']);
         });
 
         $('#datatable').on('draw.dt', function() {
@@ -1601,6 +2157,8 @@
                 $('#edit-form').find('.note-edit').val(row['note']);
                 $('#edit-form').find('.plate-edit').val(row['plate']);
                 $('#edit-form').find('.cost-edit').val(row['cost']);
+                $('#edit-form').find('.adblue-edit').val(row['adblue']);
+                $('#edit-form').find('.adblue_cost-edit').val(row['adblue_cost']);
                 $('#edit-form').find('.container-edit').val(row['container']);
                 $('#edit-form').find('.plate_s-edit').val(row['plate_s']);
 

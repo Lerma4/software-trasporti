@@ -2,6 +2,31 @@
 @section('content')
 <div class="col-12 pages-content">
     <div class="card">
+        <div class="card-header">@lang("Change Email")</div>
+
+        <div class="card-body">
+            <div id="form-result-email"></div>
+            <form id="change-email">
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label text-md-right">@lang("Email")</label>
+                    <div class="col-md-3">
+                        <input id="email" type="text" class="form-control" name="email"
+                            value="{{ auth('admin')->user()->email }}" required>
+                    </div>
+                </div>
+
+                <div class="form-group row mb-0">
+                    <div class="col-md-3 offset-md-4">
+                        <button type="submit" class="btn btn-primary btn-block">
+                            {{ __("Change Email") }}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card">
         <div class="card-header">@lang("Change Company's Name")</div>
 
         <div class="card-body">
@@ -16,8 +41,8 @@
                 </div>
 
                 <div class="form-group row mb-0">
-                    <div class="col-md-6 offset-md-4">
-                        <button type="submit" class="btn btn-primary">
+                    <div class="col-md-3 offset-md-4">
+                        <button type="submit" class="btn btn-primary btn-block">
                             {{ __("Change Company's Name") }}
                         </button>
                     </div>
@@ -63,8 +88,8 @@
                 </div>
 
                 <div class="form-group row mb-0">
-                    <div class="col-md-6 offset-md-4">
-                        <button type="submit" class="btn btn-primary">
+                    <div class="col-md-3 offset-md-4">
+                        <button type="submit" class="btn btn-primary btn-block">
                             {{ __('Change Password') }}
                         </button>
                     </div>
@@ -96,8 +121,8 @@
                 </div>
 
                 <div class="form-group row mb-0">
-                    <div class="col-md-6 offset-md-4">
-                        <button type="submit" class="btn btn-primary">
+                    <div class="col-md-3 offset-md-4">
+                        <button type="submit" class="btn btn-primary btn-block">
                             {{ __('Change Language') }}
                         </button>
                     </div>
@@ -111,6 +136,40 @@
 @section('scripts')
 
 <script>
+    $(document).ready(function() {
+        $('#change-email').on('submit', function(event) {
+            if(!confirm("@lang('Are you sure?')")) return;
+            
+            event.preventDefault();
+            var form = $(this).closest('form');
+            
+            $.ajax({
+                url: "{{ route('admin.email.change') }}",
+                type: "POST",
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: $(form).serialize(),
+                dataType: "json",
+                success: function(data) {
+                var html = '';
+                if (data.errors) {
+                    html = '<div class="alert alert-danger">';
+                    for (var count = 0; count < data.errors.length; count++) 
+                    { html +='<p>' + data.errors[count] + '</p>' ; } 
+                    html +='</div>' ;
+                } 
+                if (data.success) {
+                    html='<div class="alert alert-success">' + data.success + '</div>' ;
+                }
+                $('#form-result-email').html(html);
+                $('#form-result-email').css("display", "block" );
+                $('#form-result-email').delay(4000).fadeOut(); 
+                } 
+            }); 
+        }); 
+    });
+
     $(document).ready(function() {
         $('#change-psw').on('submit', function(event) {
             if(!confirm("@lang('Are you sure?')")) return;
@@ -173,7 +232,6 @@
                     }
                     if (data.success) {
                         html = '<div class="alert alert-success">' + data.success + '</div>';
-                        $('#change-psw')[0].reset();
                     }
                     $('#form-result-company').html(html);
                     $('#form-result-company').css("display", "block");

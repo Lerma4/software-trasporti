@@ -16,18 +16,34 @@
     <div class="card">
         <div class="card-body">
             @include('multiauth::message')
-            <div class="row justify-content-between page-row">
-                <div class="col-sm">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addDocuments">
+
+            <div class="row">
+                <div class="col-sm-4 mb-col">
+                    <button type="button" class="btn btn-primary btn-block" data-toggle="modal"
+                        data-target="#addDocuments">
                         @lang('Add document')
                     </button>
-                    <button id="btn-edit" type="button" class="btn btn-secondary" data-toggle="modal"
+                </div>
+                <div class="col-sm-4 mb-col">
+                    <button id="btn-edit" type="button" class="btn btn-secondary btn-block" data-toggle="modal"
                         data-target="#editDocument" disabled>
                         @lang('Edit')
                     </button>
-                    <button type="button" class="btn btn-danger" id="btn-delete" disabled>
+                </div>
+                <div class="col-sm-4 mb-col">
+                    <button type="button" class="btn btn-danger btn-block" id="btn-delete" disabled>
                         @lang('Delete')
                     </button>
+                </div>
+            </div>
+
+            <div class="row justify-content-end page-row">
+                <div class="col-sm-3">
+                    <select id="select-author" class="form-control" aria-label="category">
+                        <option value="" selected>@lang('All')</option>
+                        <option value="1">@lang('Received')</option>
+                        <option value="0">@lang('Sent')</option>
+                    </select>
                 </div>
             </div>
 
@@ -43,6 +59,7 @@
                             <th>@lang('Date')</th>
                             <th>@lang('Download')</th>
                             <th>@lang('Read')</th>
+                            <th>@lang('Author')</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -326,6 +343,23 @@
                         return html;
                     },
                 },
+                {
+                    className: 'icon-read',
+                    orderable: false,
+                    data: 'author',
+                    "width": '1%',
+                    "render": function(data, type, row) {
+                        var html = "";
+                    
+                        if (data == false) {
+                            html += '<i class="fas fa-upload"></i>';
+                        } else {
+                            html += '<i class="fas fa-download"></i>';
+                        }
+                    
+                        return html;
+                    },
+                },
             ],
             "columnDefs": [
             {
@@ -344,6 +378,14 @@
             },
             "responsive": true,
         });
+
+        // FILTRO AUTORE
+
+        $('#select-author').change(function() {
+            table.column(7)
+            .search($(this).val())
+            .draw();
+        }); // FILTRO TIPOLOGIA VIAGGIO
 
         // GESTIONE BUTTON EDIT E DELETE
 

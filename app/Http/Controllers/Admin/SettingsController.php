@@ -33,6 +33,25 @@ class SettingsController extends Controller
         return back();
     }
 
+    public function emailChange(Request $request)
+    {
+        $validator = Admin::where('email', $request->email)
+            ->count();
+
+        if ($validator > 0) {
+            return response()
+                ->json(['errors' => [__('There is another admin with this email!')]]);
+        };
+
+        $admin = Admin::findOrFail(auth('admin')->user()->id);
+
+        $admin->email = $request->email;
+
+        $admin->save();
+
+        return response()->json(['success' => __("Email successfully changed!")]);
+    }
+
     public function companyChange(Request $request)
     {
         $validator = Company::where('name', $request->company)

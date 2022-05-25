@@ -10962,6 +10962,10 @@ a.text-dark:focus {
   }
 }
 
+.mb-col {
+  margin-bottom: 10px;
+}
+
 .dropleft .dropdown-toggle::before {
   display: none;
 }

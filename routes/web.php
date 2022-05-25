@@ -27,8 +27,10 @@ Route::post('/tripvuoto', [App\Http\Controllers\HomeController::class, 'tripVuot
 
 // DOCUMENT
 
-Route::get('/documents', [App\Http\Controllers\DocumentsController::class, 'index'])->name('documents');
-Route::get('/documents/getDocuments', [App\Http\Controllers\DocumentsController::class, 'getDocuments'])->name('getDocuments');
+Route::get('/documents/received', [App\Http\Controllers\DocumentsController::class, 'indexReceived'])->name('documents.received');
+Route::get('/documents/sent', [App\Http\Controllers\DocumentsController::class, 'indexSent'])->name('documents.sent');
+Route::get('/documents/getDocumentsR', [App\Http\Controllers\DocumentsController::class, 'getDocumentsReceived'])->name('getDocumentsReceived');
+Route::get('/documents/getDocumentsS', [App\Http\Controllers\DocumentsController::class, 'getDocumentsSent'])->name('getDocumentsSent');
 Route::post('/documents/store/pdf', [App\Http\Controllers\DocumentsController::class, 'storePdf'])->name('document.store.pdf');
 Route::post('/documents/store/photos', [App\Http\Controllers\DocumentsController::class, 'storePhotos'])->name('document.store.photos');
 Route::post('/documents/upload', [App\Http\Controllers\DocumentsController::class, 'upload'])->name('document.upload');
@@ -39,6 +41,14 @@ Route::get('/documents/download/{id?}', [App\Http\Controllers\DocumentsControlle
 Route::get('/report-crash', [App\Http\Controllers\CrashController::class, 'index'])->name('crash');
 Route::post('/report-crash/upload', [App\Http\Controllers\CrashController::class, 'upload'])->name('crash.upload');
 Route::post('/report-crash/store', [App\Http\Controllers\CrashController::class, 'store'])->name('crash.store');
+
+// REPORT MAINTENANCE
+
+Route::get('/report-maintenances', [App\Http\Controllers\ReportMaintenances::class, 'index'])->name('report.maint');
+
+// REPORTS
+
+Route::get('/reports', [App\Http\Controllers\ReportsController::class, 'index'])->name('reports');
 
 // SETTINGS
 
@@ -53,6 +63,7 @@ Route::post('/settings/psw', [\App\Http\Controllers\SettingsController::class, '
 Route::get('/admin/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'index'])->name('admin.settings');
 Route::post('/admin/settings/setLang', [\App\Http\Controllers\Admin\SettingsController::class, 'setLang'])->name('admin.lang');
 Route::post('/admin/settings/psw', [\App\Http\Controllers\Admin\SettingsController::class, 'pswChange'])->name('admin.psw.change');
+Route::post('/admin/settings/email', [\App\Http\Controllers\Admin\SettingsController::class, 'emailChange'])->name('admin.email.change');
 Route::post('/admin/settings/company', [\App\Http\Controllers\Admin\SettingsController::class, 'companyChange'])->name('admin.company.change');
 
 // GROUPS
@@ -136,6 +147,10 @@ Route::post('/admin/APICrash/crashes/upload', [\App\Http\Controllers\Admin\API\A
 Route::post('/admin/APICrash/crashes/store', [\App\Http\Controllers\Admin\API\APICrashController::class, 'store'])->name('api.crash.store');
 Route::post('/admin/APICrash/crashes/delete', [\App\Http\Controllers\Admin\API\APICrashController::class, 'delete'])->name('api.crash.delete');
 Route::post('/admin/APICrash/crashes/edit', [\App\Http\Controllers\Admin\API\APICrashController::class, 'edit'])->name('api.crash.edit');
+
+// REPORT PROBLEMS
+
+Route::get('/admin/reports', [App\Http\Controllers\Admin\ReportsController::class, 'index'])->name('admin.reports');
 
 // ROUTE DI MEDIALIBRARY
 

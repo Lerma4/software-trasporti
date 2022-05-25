@@ -53,13 +53,14 @@
 
                 <br>
 
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary submit-document">
-                        <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
-                            aria-hidden="true"></span>
-                        @lang('Submit')
-                    </button>
-                </div>
+                <hr>
+
+                <button type="submit" class="btn btn-primary submit-document btn-block">
+                    <span class="spinner-border spinner-border-sm loader-submit hidden" role="status"
+                        aria-hidden="true"></span>
+                    @lang('Submit')
+                </button>
+
             </form>
         </div>
     </div>
@@ -72,11 +73,11 @@
 @livewireScripts
 <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.6.0/dist/alpine.min.js" defer></script>
 
-<script src="{{ asset('js/fileupload/vendor/jquery.ui.widget.js') }}" defer></script>
+{{-- <script src="{{ asset('js/fileupload/vendor/jquery.ui.widget.js') }}" defer></script>
 <script src="{{ asset('js/fileupload/jquery.iframe-transport.js') }}" defer></script>
 <script src="{{ asset('js/fileupload/jquery.fileupload.js') }}" defer></script>
 <script src="{{ asset('js/fileupload/jquery.fileupload-process.js') }}" defer></script>
-<script src="{{ asset('js/fileupload/jquery.fileupload-image.js') }}" defer></script>
+<script src="{{ asset('js/fileupload/jquery.fileupload-image.js') }}" defer></script> --}}
 
 <script>
     $(document).ready(function() {

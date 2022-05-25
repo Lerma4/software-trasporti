@@ -18,13 +18,6 @@
 <div class="col-12 pages-content">
     <div class="card">
         <div class="card-body">
-            <div class="row">
-                <div class="col">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addDocuments">
-                        @lang('Add document')
-                    </button>
-                </div>
-            </div>
 
             <br>
             <div class="table-responsive ">
@@ -175,23 +168,6 @@
 
 <script>
     $(document).ready(function() {
-        $('#format').on('change', function(event) {
-            switch ($(this).val()) {
-                case "pdf":
-                    $("#document-pdf").removeClass("hidden");
-                    $("#document-photos").addClass("hidden");
-                    break;
-
-                case "photos":
-                    $("#document-photos").removeClass("hidden");
-                    $("#document-pdf").addClass("hidden");
-                    break;
-
-                default:
-                    $("#upload").prop("disabled", true);
-                    break;
-            }
-        });
 
         // DATATABLE
 
@@ -203,7 +179,7 @@
             "paging": false,
             "processing": true,
             "serverSide": true,
-            "ajax": "{{ route('getDocuments') }}",
+            "ajax": "{{ route('getDocumentsReceived') }}",
             "columns": [
                 {
                     "className": 'document-download',

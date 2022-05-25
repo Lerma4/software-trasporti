@@ -104,6 +104,8 @@ class HomeController extends Controller
             'petrol_station' => ['required'],
             'fuel' => ['required', 'numeric', 'min:0'],
             'cost' => ['required', 'numeric', 'min:0'],
+            'adblue' => ['required', 'numeric', 'min:0'],
+            'adblue_cost' => ['required', 'numeric', 'min:0'],
             'plate' => ['required', 'exists:trucks,plate'],
             'plate_s' => ['nullable', 'exists:trucks,plate'],
         ]);
@@ -175,6 +177,8 @@ class HomeController extends Controller
             'petrol_station' => $request->petrol_station,
             'fuel' => $request->fuel,
             'cost' => $request->cost,
+            'adblue' => $request->adblue,
+            'adblue_cost' => $request->adblue_cost,
             'note' => $request->note,
         ]);
 
@@ -234,6 +238,8 @@ class HomeController extends Controller
             'petrol_station' => ['required', 'max:40'],
             'fuel' => ['required', 'numeric', 'min:0'],
             'cost' => ['required', 'numeric', 'min:0'],
+            'adblue' => ['required', 'numeric', 'min:0'],
+            'adblue_cost' => ['required', 'numeric', 'min:0'],
             'plate' => ['required', 'exists:trucks,plate'],
             'plate_s' => ['nullable', 'exists:trucks,plate'],
         ]);
@@ -290,6 +296,8 @@ class HomeController extends Controller
             'petrol_station' => $request->petrol_station,
             'fuel' => $request->fuel,
             'cost' => $request->cost,
+            'adblue' => $request->adblue,
+            'adblue_cost' => $request->adblue_cost,
             'note' => $request->note,
         ]);
 
@@ -349,6 +357,8 @@ class HomeController extends Controller
             'petrol_station' => ['required', 'max:40'],
             'fuel' => ['required', 'numeric', 'min:0'],
             'cost' => ['required', 'numeric', 'min:0'],
+            'adblue' => ['required', 'numeric', 'min:0'],
+            'adblue_cost' => ['required', 'numeric', 'min:0'],
             'plate' => ['required', 'exists:trucks,plate'],
             'plate_s' => ['nullable', 'exists:trucks,plate'],
         ]);
@@ -404,6 +414,8 @@ class HomeController extends Controller
             'petrol_station' => $request->petrol_station,
             'fuel' => $request->fuel,
             'cost' => $request->cost,
+            'adblue' => $request->adblue,
+            'adblue_cost' => $request->adblue_cost,
             'note' => $request->note,
         ]);
 

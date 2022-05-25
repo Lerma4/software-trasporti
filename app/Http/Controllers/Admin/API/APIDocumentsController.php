@@ -25,7 +25,7 @@ class APIDocumentsController extends Controller
     public function getDocuments()
     {
         $document = Document::where('companyId', '=', auth('admin')->user()->companyId)
-            ->select('name', 'user_email', 'user_name', 'created_at', 'id', 'read');
+            ->select('name', 'user_email', 'user_name', 'created_at', 'id', 'read', 'author');
 
         return datatables::eloquent($document)
             ->setRowId('id')
@@ -71,6 +71,7 @@ class APIDocumentsController extends Controller
             'user_email' => $user->email,
             'user_name' => $user->name,
             'companyId' => $user->companyId,
+            'author' => 0,
         ]);
 
         $doc->addFromMediaLibraryRequest($request->pdf)
@@ -92,6 +93,7 @@ class APIDocumentsController extends Controller
             'user_email' => $user->email,
             'user_name' => $user->name,
             'companyId' => $user->companyId,
+            'author' => 0,
         ]);
 
         $doc->addFromMediaLibraryRequest($request->photos)

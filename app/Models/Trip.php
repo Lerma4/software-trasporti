@@ -26,6 +26,8 @@ class Trip extends Model
         'petrol_station',
         'fuel',
         'cost',
+        'adblue',
+        'adblue_cost',
         'note',
         'companyId',
         'created_at'

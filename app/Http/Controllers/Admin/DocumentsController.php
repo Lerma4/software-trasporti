@@ -23,6 +23,6 @@ class DocumentsController extends Controller
             ->orderBy('name', 'asc')
             ->get();
 
-        return view('admin.pages.document', ['users' => $users]);
+        return view('admin.pages.documents', ['users' => $users]);
     }
 }

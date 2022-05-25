@@ -30,15 +30,38 @@ class DocumentsController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function indexSent()
     {
-        return view('user.documents');
+        return view('user.documentsSent');
     }
 
-    public function getDocuments()
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function indexReceived()
+    {
+        return view('user.documentsReceived');
+    }
+
+    public function getDocumentsSent()
     {
         $document = Document::where('companyId', '=', auth()->user()->companyId)
             ->where('user_email', '=', auth()->user()->email)
+            ->where('author', 1)
+            ->select('name', 'created_at', 'id', 'read');
+
+        return datatables::eloquent($document)
+            ->setRowId('id')
+            ->make(true);
+    }
+
+    public function getDocumentsReceived()
+    {
+        $document = Document::where('companyId', '=', auth()->user()->companyId)
+            ->where('user_email', '=', auth()->user()->email)
+            ->where('author', 0)
             ->select('name', 'created_at', 'id', 'read');
 
         return datatables::eloquent($document)
@@ -57,6 +80,7 @@ class DocumentsController extends Controller
             'user_email' => auth()->user()->email,
             'user_name' => auth()->user()->name,
             'companyId' => auth()->user()->companyId,
+            'author' => 1,
             'read' => true
         ]);
 
@@ -77,6 +101,7 @@ class DocumentsController extends Controller
             'user_email' => auth()->user()->email,
             'user_name' => auth()->user()->name,
             'companyId' => auth()->user()->companyId,
+            'author' => 1,
             'read' => true
         ]);
 

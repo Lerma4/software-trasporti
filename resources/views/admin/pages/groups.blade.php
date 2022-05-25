@@ -13,21 +13,28 @@
         <div class="card-body">
             @include('multiauth::message')
 
-            <div class="row justify-content-between page-row">
+            <div class="row">
                 <div class="col-sm">
-                    <button id="btn-add" type="button" class="btn btn-primary" data-toggle="modal"
+                    <button id="btn-add" type="button" class="btn btn-block mb-col btn-primary" data-toggle="modal"
                         data-target="#modal-add">
                         @lang('New')
                     </button>
-                    <button id="btn-edit" type="button" class="btn btn-secondary" data-toggle="modal"
+                </div>
+                <div class="col-sm">
+                    <button id="btn-edit" type="button" class="btn btn-block mb-col btn-secondary" data-toggle="modal"
                         data-target="#modal-add" disabled>
                         @lang('Edit')
                     </button>
-                    <button type="button" class="btn btn-danger" id="btn-delete" disabled>
+                </div>
+                <div class="col-sm">
+                    <button type="button" class="btn btn-block mb-col btn-danger" id="btn-delete" disabled>
                         @lang('Delete')
                     </button>
                 </div>
             </div>
+
+            <br>
+
             <div class="table-responsive">
                 <table cellspacing="0" class="table table-bordered" id="datatable" width="100%">
                     <thead>

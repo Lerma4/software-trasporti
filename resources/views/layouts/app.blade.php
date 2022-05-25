@@ -63,7 +63,7 @@
                         </button>
                         <div class="dropdown-menu">
                             @if ($notifications > 0)
-                            <a class="dropdown-item" href="{{ route('documents') }}">@lang('New documents')</a>
+                            <a class="dropdown-item" href="{{ route('documents.received') }}">@lang('New documents')</a>
                             @else
                             <p>@lang('No notifications')</p>
                             @endif

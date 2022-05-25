@@ -37,6 +37,11 @@
         </a>
     </li>
     <li class="c-sidebar-nav-item">
+        <a class="c-sidebar-nav-link" href="{{ route('admin.reports') }}">
+            <i class="c-sidebar-nav-icon fas fa-exclamation-circle"></i> @lang('Report problem')
+        </a>
+    </li>
+    <li class="c-sidebar-nav-item">
         <a class="c-sidebar-nav-link" href="{{ route('admin.crash') }}">
             <i class="c-sidebar-nav-icon fas fa-car-crash"></i> @lang('Crashes')
         </a>
