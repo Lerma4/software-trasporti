@@ -44,6 +44,10 @@ class APICrashController extends Controller
             ->get();
 
         return response()->download($media[0]->getPath(), $doc->name . '.pdf');
+
+        /* return response()->file(
+            $media[0]->getPath()
+        ); */ // IN CASO SERVISSE VISULIZZARLO SENZA DOWNLOAD
     }
 
     public function store(Request $request)

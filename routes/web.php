@@ -152,6 +152,9 @@ Route::post('/admin/APICrash/crashes/edit', [\App\Http\Controllers\Admin\API\API
 
 Route::get('/admin/reports', [App\Http\Controllers\Admin\ReportsController::class, 'index'])->name('admin.reports');
 
+Route::get('/admin/APIReports/reports/get', [App\Http\Controllers\Admin\API\APIReportsController::class, 'getReports'])->name('api.reports');
+Route::post('/admin/APIReports/reports/delete', [App\Http\Controllers\Admin\API\APIReportsController::class, 'destroy'])->name('api.reports.delete');
+
 // ROUTE DI MEDIALIBRARY
 
 Route::mediaLibrary();

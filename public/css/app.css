@@ -10970,6 +10970,10 @@ a.text-dark:focus {
   display: none;
 }
 
+td.btn-open {
+  text-align: center;
+}
+
 .dataTables_wrapper .dataTables_processing {
   position: absolute;
   z-index: 100 !important;

@@ -1873,8 +1873,6 @@
             var tr = $(this).closest('tr');
             var row = table.row(tr);
             var row = row.data();
-
-            console.log(row['id']);
             
             $('#type-show').val(row['type']);
             $('#modal-show').find('.id-show').val(row['id']);
