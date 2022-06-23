@@ -205,9 +205,15 @@
                     "render": function(data, type, row) {
                         var html = "";
 
-                        html = '<button type="button" class="btn btn-sm btn-success btn-open" data-toggle="modal" data-target="#modal-show">' +
-                                '<i class="fas fa-plus"></i>' +
-                                '</button>';
+                        html = '<button type="button"'+
+                                'class="btn btn-sm btn-success btn-open" data-toggle="modal" data-target="#modal-show">' +
+                                '<i class="fas fa-plus"></i>';
+
+                        if (row.read == 0) {
+                            html += '<span class="ml-2 badge badge-warning"><i class="fas fa-exclamation-triangle"></i></span>';
+                        }
+
+                        html += '</button>';
 
                         return html;
                     },
@@ -312,6 +318,28 @@
                 }
             });
         });
+
+        $('#datatable tbody').on( 'click', '.btn-open', function () {
+        var d = table.row( this.closest('tr') ).data();
+        
+        if (d.read == 0) {
+            $.ajax({
+                url: '{{ route("api.reports.read") }}',
+                type: "POST",
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    id: d.id
+                },
+                success: function(data) {
+                    table.draw();
+                }
+            });
+        }
+        
+        } );
+
     });
 </script>
 @endsection

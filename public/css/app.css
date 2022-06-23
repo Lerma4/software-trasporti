@@ -10966,6 +10966,10 @@ a.text-dark:focus {
   margin-bottom: 10px;
 }
 
+.ml-2 {
+  margin-left: 2px;
+}
+
 .dropleft .dropdown-toggle::before {
   display: none;
 }

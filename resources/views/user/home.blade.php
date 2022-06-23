@@ -60,7 +60,7 @@
                 </div>
                 <div class="form-group">
                     <label for="km">@lang('Km finali'):</label>
-                    <input type="number" class="form-control" name="km" min="0" required>
+                    <input type="number" step=".01" class="form-control" name="km" min="0" required>
                 </div>
                 <div class="form-group">
                     <label for="petrol_station">@lang('Luogo rifornimento'):</label>
@@ -72,19 +72,19 @@
                 </div>
                 <div class="form-group">
                     <label for="fuel">@lang('Fuel') (@lang('litres')):</label>
-                    <input type="number" class="form-control" name="fuel" min="0" value="0" required>
+                    <input type="number" step=".01" class="form-control" name="fuel" min="0" value="0" required>
                 </div>
                 <div class="form-group">
                     <label for="cost">@lang('Fuel cost'):</label>
-                    <input type="number" class="form-control" name="cost" min="0" value="0" required>
+                    <input type="number" step=".01" class="form-control" name="cost" min="0" value="0" required>
                 </div>
                 <div class="form-group">
                     <label for="adblue">@lang('Adblue') (@lang('litres')):</label>
-                    <input type="number" class="form-control" name="adblue" min="0" value="0" required>
+                    <input type="number" step=".01" class="form-control" name="adblue" min="0" value="0" required>
                 </div>
                 <div class="form-group">
                     <label for="adblue_cost">@lang('Adblue cost'):</label>
-                    <input type="number" class="form-control" name="adblue_cost" min="0" value="0" required>
+                    <input type="number" step=".01" class="form-control" name="adblue_cost" min="0" value="0" required>
                 </div>
                 <div class="form-group">
                     <label for="plate_s">@lang("Semitrailer's plate") (@lang("Optional")):</label>
@@ -143,7 +143,7 @@
                 </div>
                 <div class="form-group">
                     <label for="km">@lang('Km finali'):</label>
-                    <input type="number" class="form-control" name="km" min="0" required>
+                    <input type="number" step=".01" class="form-control" name="km" min="0" required>
                 </div>
                 <div class="form-group">
                     <label for="petrol_station">@lang('Luogo rifornimento'):</label>
@@ -155,19 +155,19 @@
                 </div>
                 <div class="form-group">
                     <label for="fuel">@lang('Fuel') (@lang('litres')):</label>
-                    <input type="number" class="form-control" name="fuel" min="0" value="0" required>
+                    <input type="number" step=".01" class="form-control" name="fuel" min="0" value="0" required>
                 </div>
                 <div class="form-group">
                     <label for="cost">@lang('Fuel cost'):</label>
-                    <input type="number" class="form-control" name="cost" min="0" value="0" required>
+                    <input type="number" step=".01" class="form-control" name="cost" min="0" value="0" required>
                 </div>
                 <div class="form-group">
                     <label for="adblue">@lang('Adblue') (@lang('litres')):</label>
-                    <input type="number" class="form-control" name="adblue" min="0" value="0" required>
+                    <input type="number" step=".01" class="form-control" name="adblue" min="0" value="0" required>
                 </div>
                 <div class="form-group">
                     <label for="adblue_cost">@lang('Adblue cost'):</label>
-                    <input type="number" class="form-control" name="adblue_cost" min="0" value="0" required>
+                    <input type="number" step=".01" class="form-control" name="adblue_cost" min="0" value="0" required>
                 </div>
                 <div class="form-group">
                     <label for="plate_s">@lang("Targa semirimorchio") (@lang("Optional")):</label>
@@ -218,7 +218,7 @@
                 </div>
                 <div class="form-group">
                     <label for="km">@lang('Km finali'):</label>
-                    <input type="number" class="form-control" name="km" min="0" required>
+                    <input type="number" step=".01" class="form-control" name="km" min="0" required>
                 </div>
                 <div class="form-group">
                     <label for="petrol_station">@lang('Luogo rifornimento'):</label>
@@ -230,19 +230,19 @@
                 </div>
                 <div class="form-group">
                     <label for="fuel">@lang('Fuel') (@lang('litres')):</label>
-                    <input type="number" class="form-control" name="fuel" min="0" value="0" required>
+                    <input type="number" step=".01" class="form-control" name="fuel" min="0" value="0" required>
                 </div>
                 <div class="form-group">
                     <label for="cost">@lang('Fuel cost'):</label>
-                    <input type="number" class="form-control" name="cost" min="0" value="0" required>
+                    <input type="number" step=".01" class="form-control" name="cost" min="0" value="0" required>
                 </div>
                 <div class="form-group">
                     <label for="adblue">@lang('Adblue') (@lang('litres')):</label>
-                    <input type="number" class="form-control" name="adblue" min="0" value="0" required>
+                    <input type="number" step=".01" class="form-control" name="adblue" min="0" value="0" required>
                 </div>
                 <div class="form-group">
                     <label for="adblue_cost">@lang('Adblue cost'):</label>
-                    <input type="number" class="form-control" name="adblue_cost" min="0" value="0" required>
+                    <input type="number" step=".01" class="form-control" name="adblue_cost" min="0" value="0" required>
                 </div>
                 <div class="form-group">
                     <label for="plate_s">@lang("Targa semirimorchio") (@lang("Optional")):</label>

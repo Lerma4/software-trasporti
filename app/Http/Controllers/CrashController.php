@@ -25,14 +25,14 @@ class CrashController extends Controller
             ->where('companyId', '=', auth()->user()->companyId)
             ->where('group', auth()->user()->group)
             ->where(function ($q) {
-                $q->where('type', 'motrice')->orWhere('type', 'trattore');
+                $q->where('type', '1')->orWhere('type', '0');
             })
             ->orderBy('plate', 'asc')
             ->get();
 
         $plates_semi = Truck::where('companyId', '=', auth()->user()->companyId)
             ->where('group', auth()->user()->group)
-            ->where('type', 'semirimorchio')
+            ->where('type', '2')
             ->orderBy('plate', 'asc')
             ->get('plate');
 
@@ -61,6 +61,11 @@ class CrashController extends Controller
         $data = Media::where('model_id', $crash->id)
             ->where('collection_name', 'pdf_temp')
             ->get();
+
+        foreach ($data as $photo) {
+            $image = Image::make($photo->getPath());
+            $image->save($photo->getPath(), 20);
+        }
 
         $pdf = PDF::loadView('pdf.crash', compact('crash', 'data'))->save('pdf_temp/' . $data[0]->id . '.pdf');
 

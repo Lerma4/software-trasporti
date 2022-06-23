@@ -7,6 +7,7 @@ use App\Models\Document;
 use App\Models\Expiration;
 use App\Models\License;
 use App\Models\MaintStillToDo;
+use App\Models\Report;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
@@ -69,5 +70,12 @@ class AppServiceProvider extends ServiceProvider
             ->get();
 
         View::share('crash_notifications', $crash);
+
+        // NOTIFICHE INCIDENTI
+        $reports = Report::select('companyId')
+            ->where('read', false)
+            ->get();
+
+        View::share('reports_notifications', $reports);
     }
 }

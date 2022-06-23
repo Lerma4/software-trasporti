@@ -103,6 +103,11 @@ class APIDocumentsController extends Controller
             ->where('collection_name', 'pdf_temp')
             ->get();
 
+        foreach ($data as $photo) {
+            $image = Image::make($photo->getPath());
+            $image->save($photo->getPath(), 20);
+        }
+
         $pdf = PDF::loadView('pdf.document', compact('data'))->save('pdf_temp/' . $data[0]->id . '.pdf');
 
         foreach ($data as $img) {

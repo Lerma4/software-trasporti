@@ -69,8 +69,14 @@
                             foreach ($crash_notifications as $crash) {
                             if ($crash->companyId == auth('admin')->user()->companyId) $crash_count++;
                             }
+                            // notifiche segnalazioni
+                            $reports_count = 0;
+                            foreach ($reports_notifications as $report) {
+                            if ($report->companyId == auth('admin')->user()->companyId) $reports_count++;
+                            }
 
-                            $notifications = $licenses_count + $expirations_count + $maint_count + $crash_count;
+                            $notifications = $licenses_count + $expirations_count + $maint_count + $crash_count +
+                            $reports_count;
 
                             @endphp
                             @if ($notifications > 0)
@@ -96,6 +102,10 @@
                             @if ($crash_count > 0)
                             <a class="dropdown-item" href="{{ route('admin.crash') }}">{{ $crash_count }}
                                 @lang('new incident/s')</a>
+                            @endif
+                            @if ($reports_count > 0)
+                            <a class="dropdown-item" href="{{ route('admin.reports') }}">{{ $reports_count }}
+                                @lang('new report/s')</a>
                             @endif
                         </div>
                     </div>

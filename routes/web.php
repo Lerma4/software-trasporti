@@ -154,6 +154,7 @@ Route::get('/admin/reports', [App\Http\Controllers\Admin\ReportsController::clas
 
 Route::get('/admin/APIReports/reports/get', [App\Http\Controllers\Admin\API\APIReportsController::class, 'getReports'])->name('api.reports');
 Route::post('/admin/APIReports/reports/delete', [App\Http\Controllers\Admin\API\APIReportsController::class, 'destroy'])->name('api.reports.delete');
+Route::post('/admin/APIReports/reports/read', [App\Http\Controllers\Admin\API\APIReportsController::class, 'read'])->name('api.reports.read');
 
 // ROUTE DI MEDIALIBRARY
 

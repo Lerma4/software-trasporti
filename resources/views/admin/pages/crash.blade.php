@@ -126,7 +126,7 @@
                             required></textarea>
                     </div>
 
-                    <x-media-library-attachment multiple max-items="5" rules="mimes:png,jpg,jpeg,heif|max:2000"
+                    <x-media-library-attachment multiple max-items="5" rules="mimes:png,jpg,jpeg,heif|max:10000"
                         name="photos" />
 
                     <div class="modal-footer">

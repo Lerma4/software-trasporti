@@ -33,10 +33,10 @@
                         <div class="form-inline">
                             <label>@lang('Month'):</label>
                             <input min="1" max="12" value="{{ Carbon\Carbon::now()->format('m') }}" type="number"
-                                class="form-control" name="month" required>
+                                step=".01" class="form-control" name="month" required>
                             <label>@lang('Year'):</label>
                             <input min="1900" max="9999" value="{{ Carbon\Carbon::now()->format('Y') }}" type="number"
-                                class="form-control" name="year" required>
+                                step=".01" class="form-control" name="year" required>
                             <div class="col-sm-2">
                                 <button class="btn btn-primary btn-block" type="submit">@lang("Submit")</button>
                             </div>
@@ -273,7 +273,8 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="km">@lang('Distance') (Km):</label>
-                                <input type="number" class="form-control" name="km" min="1" max="1000" required>
+                                <input type="number" step=".01" class="form-control" name="km" min="1" max="1000"
+                                    required>
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -292,13 +293,15 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="fuel">@lang('Fuel') (@lang('liters')):</label>
-                                <input type="number" class="form-control" name="fuel" min="0" value="0" required>
+                                <input type="number" step=".01" class="form-control" name="fuel" min="0" value="0"
+                                    required>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="cost">@lang('Fuel cost'):</label>
-                                <input type="number" class="form-control" name="cost" min="0" value="0" required>
+                                <input type="number" step=".01" class="form-control" name="cost" min="0" value="0"
+                                    required>
                             </div>
                         </div>
                     </div>
@@ -307,13 +310,15 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="adblue">@lang('Adblue') (@lang('liters')):</label>
-                                <input type="number" class="form-control" name="adblue" min="0" value="0" required>
+                                <input type="number" step=".01" class="form-control" name="adblue" min="0" value="0"
+                                    required>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="adblue_cost">@lang('Adblue cost'):</label>
-                                <input type="number" class="form-control" name="adblue_cost" min="0" value="0" required>
+                                <input type="number" step=".01" class="form-control" name="adblue_cost" min="0"
+                                    value="0" required>
                             </div>
                         </div>
                     </div>
@@ -417,7 +422,8 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="km">@lang('Distance') (Km):</label>
-                                <input type="number" class="form-control" name="km" min="1" max="1000" required>
+                                <input type="number" step=".01" class="form-control" name="km" min="1" max="1000"
+                                    required>
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -432,13 +438,15 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="fuel">@lang('Fuel') (@lang('liters')):</label>
-                                <input type="number" class="form-control" name="fuel" min="0" value="0" required>
+                                <input type="number" step=".01" class="form-control" name="fuel" min="0" value="0"
+                                    required>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="cost">@lang('Fuel cost'):</label>
-                                <input type="number" class="form-control" name="cost" min="0" value="0" required>
+                                <input type="number" step=".01" class="form-control" name="cost" min="0" value="0"
+                                    required>
                             </div>
                         </div>
                     </div>
@@ -456,13 +464,15 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="adblue">@lang('Adblue') (@lang('liters')):</label>
-                                <input type="number" class="form-control" name="adblue" min="0" value="0" required>
+                                <input type="number" step=".01" class="form-control" name="adblue" min="0" value="0"
+                                    required>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="adblue_cost">@lang('Adblue cost'):</label>
-                                <input type="number" class="form-control" name="adblue_cost" min="0" value="0" required>
+                                <input type="number" step=".01" class="form-control" name="adblue_cost" min="0"
+                                    value="0" required>
                             </div>
                         </div>
                     </div>
@@ -556,7 +566,8 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="km">@lang('Distance') (Km):</label>
-                                <input type="number" class="form-control" name="km" min="1" max="1000" required>
+                                <input type="number" step=".01" class="form-control" name="km" min="1" max="1000"
+                                    required>
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -575,13 +586,15 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="fuel">@lang('Fuel') (@lang('liters')):</label>
-                                <input type="number" class="form-control" name="fuel" min="0" value="0" required>
+                                <input type="number" step=".01" class="form-control" name="fuel" min="0" value="0"
+                                    required>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="cost">@lang('Fuel cost'):</label>
-                                <input type="number" class="form-control" name="cost" min="0" value="0" required>
+                                <input type="number" step=".01" class="form-control" name="cost" min="0" value="0"
+                                    required>
                             </div>
                         </div>
                     </div>
@@ -590,13 +603,15 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="adblue">@lang('Adblue') (@lang('liters')):</label>
-                                <input type="number" class="form-control" name="adblue" min="0" value="0" required>
+                                <input type="number" step=".01" class="form-control" name="adblue" min="0" value="0"
+                                    required>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="adblue_cost">@lang('Adblue cost'):</label>
-                                <input type="number" class="form-control" name="adblue_cost" min="0" value="0" required>
+                                <input type="number" step=".01" class="form-control" name="adblue_cost" min="0"
+                                    value="0" required>
                             </div>
                         </div>
                     </div>
@@ -737,7 +752,8 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="km">@lang('Distance') (Km):</label>
-                                <input type="number" class="form-control km-edit" name="km" min="1" max="1000" required>
+                                <input type="number" step=".01" class="form-control km-edit" name="km" min="1"
+                                    max="1000" required>
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -756,13 +772,15 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="fuel">@lang('Fuel') (@lang('liters')):</label>
-                                <input type="number" class="form-control fuel-edit" name="fuel" min="0" required>
+                                <input type="number" step=".01" class="form-control fuel-edit" name="fuel" min="0"
+                                    required>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="cost">@lang('Fuel cost'):</label>
-                                <input type="number" class="form-control cost-edit" name="cost" min="0" required>
+                                <input type="number" step=".01" class="form-control cost-edit" name="cost" min="0"
+                                    required>
                             </div>
                         </div>
                     </div>
@@ -771,14 +789,15 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="adblue">@lang('Adblue') (@lang('liters')):</label>
-                                <input type="number" class="form-control adblue-edit" name="adblue" min="0" required>
+                                <input type="number" step=".01" class="form-control adblue-edit" name="adblue" min="0"
+                                    required>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="adblue_cost">@lang('Adblue cost'):</label>
-                                <input type="number" class="form-control adblue_cost-edit" name="adblue_cost" min="0"
-                                    required>
+                                <input type="number" step=".01" class="form-control adblue_cost-edit" name="adblue_cost"
+                                    min="0" required>
                             </div>
                         </div>
                     </div>
@@ -888,7 +907,8 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="km">@lang('Distance') (Km):</label>
-                                <input type="number" class="form-control km-edit" name="km" min="1" max="1000" required>
+                                <input type="number" step=".01" class="form-control km-edit" name="km" min="1"
+                                    max="1000" required>
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -912,13 +932,15 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="fuel">@lang('Fuel') (@lang('liters')):</label>
-                                <input type="number" class="form-control fuel-edit" name="fuel" min="0" required>
+                                <input type="number" step=".01" class="form-control fuel-edit" name="fuel" min="0"
+                                    required>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="cost">@lang('Fuel cost'):</label>
-                                <input type="number" class="form-control cost-edit" name="cost" min="0" required>
+                                <input type="number" step=".01" class="form-control cost-edit" name="cost" min="0"
+                                    required>
                             </div>
                         </div>
                     </div>
@@ -927,14 +949,15 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="adblue">@lang('Adblue') (@lang('liters')):</label>
-                                <input type="number" class="form-control adblue-edit" name="adblue" min="0" required>
+                                <input type="number" step=".01" class="form-control adblue-edit" name="adblue" min="0"
+                                    required>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="adblue_cost">@lang('Adblue cost'):</label>
-                                <input type="number" class="form-control adblue_cost-edit" name="adblue_cost" min="0"
-                                    required>
+                                <input type="number" step=".01" class="form-control adblue_cost-edit" name="adblue_cost"
+                                    min="0" required>
                             </div>
                         </div>
                     </div>
@@ -1033,7 +1056,8 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="km">@lang('Distance') (Km):</label>
-                                <input type="number" class="form-control km-edit" name="km" min="1" max="1000" required>
+                                <input type="number" step=".01" class="form-control km-edit" name="km" min="1"
+                                    max="1000" required>
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -1052,13 +1076,15 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="fuel">@lang('Fuel') (@lang('liters')):</label>
-                                <input type="number" class="form-control fuel-edit" name="fuel" min="0" required>
+                                <input type="number" step=".01" class="form-control fuel-edit" name="fuel" min="0"
+                                    required>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="cost">@lang('Fuel cost'):</label>
-                                <input type="number" class="form-control cost-edit" name="cost" min="0" required>
+                                <input type="number" step=".01" class="form-control cost-edit" name="cost" min="0"
+                                    required>
                             </div>
                         </div>
                     </div>
@@ -1067,14 +1093,15 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="adblue">@lang('Adblue') (@lang('liters')):</label>
-                                <input type="number" class="form-control adblue-edit" name="adblue" min="0" required>
+                                <input type="number" step=".01" class="form-control adblue-edit" name="adblue" min="0"
+                                    required>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="adblue_cost">@lang('Adblue cost'):</label>
-                                <input type="number" class="form-control adblue_cost-edit" name="adblue_cost" min="0"
-                                    required>
+                                <input type="number" step=".01" class="form-control adblue_cost-edit" name="adblue_cost"
+                                    min="0" required>
                             </div>
                         </div>
                     </div>
@@ -1189,7 +1216,8 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label for="km">@lang('Distance') (Km):</label>
-                            <input type="number" class="form-control km-show" name="km" min="1" max="1000" disabled>
+                            <input type="number" step=".01" class="form-control km-show" name="km" min="1" max="1000"
+                                disabled>
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -1208,13 +1236,13 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label for="fuel">@lang('Fuel') (@lang('liters')):</label>
-                            <input type="number" class="form-control fuel-show" name="fuel" min="0" disabled>
+                            <input type="number" step=".01" class="form-control fuel-show" name="fuel" min="0" disabled>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label for="cost">@lang('Fuel cost'):</label>
-                            <input type="number" class="form-control cost-show" name="cost" min="0" disabled>
+                            <input type="number" step=".01" class="form-control cost-show" name="cost" min="0" disabled>
                         </div>
                     </div>
                 </div>
@@ -1223,14 +1251,15 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label for="adblue">@lang('Adblue') (@lang('liters')):</label>
-                            <input type="number" class="form-control adblue-show" name="adblue" min="0" disabled>
+                            <input type="number" step=".01" class="form-control adblue-show" name="adblue" min="0"
+                                disabled>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label for="adblue_cost">@lang('Adblue cost'):</label>
-                            <input type="number" class="form-control adblue_cost-show" name="adblue_cost" min="0"
-                                disabled>
+                            <input type="number" step=".01" class="form-control adblue_cost-show" name="adblue_cost"
+                                min="0" disabled>
                         </div>
                     </div>
                 </div>
