@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Expiration;
 use App\Models\MaintAlreadyDone;
 use App\Models\MaintStillToDo;
+use App\Models\Report;
 use App\Models\Trip;
 use App\Models\Truck;
 use Carbon\Carbon;
@@ -291,6 +292,7 @@ class APITrucksController extends Controller
         MaintStillToDo::where('companyId', auth('admin')->user()->companyId)
             ->whereIn('plate', $trucks_plates)
             ->delete();
+        Report::whereIn('truck_id', $request->trucks)->delete();
 
         return response()->json(['success' => count($request->trucks) . __(' record/s successfully deleted!')]);
     }
